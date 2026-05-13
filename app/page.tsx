@@ -1,5 +1,5 @@
-import Hero from "@/app/components/hero";
+import { CinematicScrollExperience } from "@/app/components/cinematic-experience";
 
 export default function Home() {
-  return <Hero />;
+  return <CinematicScrollExperience />;
 }
