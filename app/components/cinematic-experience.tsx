@@ -75,6 +75,30 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       smoothWheel: true,
     });
 
+    const html = document.documentElement;
+    const body = document.body;
+    const previousHtmlOverflow = html.style.overflow;
+    const previousBodyOverflow = body.style.overflow;
+    let introScrollUnlocked = false;
+
+    html.style.overflow = "hidden";
+    body.style.overflow = "hidden";
+    window.scrollTo(0, 0);
+    lenis.stop();
+
+    const unlockIntroScroll = (shouldRefresh = true) => {
+      if (introScrollUnlocked) return;
+
+      introScrollUnlocked = true;
+      html.style.overflow = previousHtmlOverflow;
+      body.style.overflow = previousBodyOverflow;
+      lenis.start();
+
+      if (shouldRefresh) {
+        ScrollTrigger.refresh();
+      }
+    };
+
     function raf(time: number) {
       lenis.raf(time);
       requestAnimationFrame(raf);
@@ -91,7 +115,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       panelElements.forEach((panel, index) => {
         gsap.set(panel, {
           yPercent: index === 0 ? 0 : 100,
-          zIndex: panels.length - index,
+          zIndex: index + 1,
           autoAlpha: 1,
           clipPath: "inset(0% 0% 0% 0%)",
           transformOrigin: "center center",
@@ -104,7 +128,9 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       // ==========================================
       // TAMBAHAN: INTRO ANIMATION (READY FOR INTERNSHIP)
       // ==========================================
-      const introTl = gsap.timeline();
+      const introTl = gsap.timeline({
+        onComplete: () => unlockIntroScroll(),
+      });
       introTl.set(".intro-content-group", {
         autoAlpha: 0,
         y: 36,
@@ -203,6 +229,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     }, root);
 
     return () => {
+      unlockIntroScroll(false);
       ctx.revert();
       lenis.destroy();
     };
