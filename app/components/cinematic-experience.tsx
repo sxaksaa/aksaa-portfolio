@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -252,6 +253,37 @@ function PanelShell({
   );
 }
 
+function AksaScreenshot({
+  src,
+  alt,
+  label,
+  className,
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  className: string;
+}) {
+  return (
+    <figure
+      className={`absolute aspect-[1290/2796] overflow-hidden rounded-lg border border-white/14 bg-[#0b0811] shadow-[0_32px_90px_rgba(0,0,0,0.45)] ${className}`}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes="(max-width: 640px) 42vw, (max-width: 1024px) 24vw, 18vw"
+        quality={76}
+        className="object-cover object-top"
+      />
+      <figcaption className="absolute bottom-3 left-3 right-3 hidden items-center justify-between border-t border-white/10 bg-black/55 px-3 py-2 font-mono text-[0.52rem] uppercase tracking-[0.22em] text-white/54 sm:flex">
+        <span>{label}</span>
+        <span>Aksa Xiterz</span>
+      </figcaption>
+    </figure>
+  );
+}
+
 // ===============================
 // INTRO PANEL
 // ===============================
@@ -309,11 +341,11 @@ function AksaPanel() {
     <PanelShell className="bg-[#12081a]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
 
-      <p className="absolute right-5 top-[11vh] z-10 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
+      <p className="absolute right-5 top-[11vh] z-20 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
         Chapter 01 / Commercial System
       </p>
 
-      <div className="absolute left-5 top-[11vh] z-10 max-w-[calc(100vw-2.5rem)] sm:left-10 sm:max-w-md lg:left-16">
+      <div className="absolute left-5 top-[11vh] z-20 max-w-[calc(100vw-2.5rem)] sm:left-10 sm:max-w-md lg:left-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">
           Aksa Xiterz • Payment Automation
         </p>
@@ -331,22 +363,44 @@ function AksaPanel() {
         </div>
       </div>
 
-      <div className="absolute left-1/2 top-[36vh] z-10 w-[84vw] max-w-6xl -translate-x-1/2 sm:top-[24vh]">
-        <div className="relative h-[28vh] overflow-hidden rounded-t-lg border border-white/14 bg-[#110817] shadow-[0_30px_80px_rgba(0,0,0,0.34)] sm:h-[48vh]">
-          <div className="absolute inset-0 bg-[linear-gradient(145deg,rgba(78,36,104,0.48),rgba(12,8,17,0.98)_55%,rgba(117,86,101,0.28))]" />
-          <div className="absolute left-[8%] top-[18%] h-px w-[52%] bg-white/18" />
-          <div className="absolute left-[8%] top-[30%] h-px w-[34%] bg-white/10" />
-          <div className="absolute bottom-[18%] left-[8%] h-12 w-[22%] border border-white/14 bg-white/[0.045]" />
-          <div className="absolute bottom-[18%] right-[8%] h-[46%] w-[32%] border border-white/12 bg-black/18" />
+      <div className="absolute left-1/2 top-[39vh] z-10 h-[30vh] w-[116vw] -translate-x-1/2 sm:left-auto sm:right-[-12vw] sm:top-[21vh] sm:h-[63vh] sm:w-[78vw] sm:max-w-[68rem] sm:translate-x-0 lg:right-[2vw] lg:w-[63vw]">
+        <div className="absolute inset-x-[18%] bottom-[6%] top-[2%] bg-violet-500/18 blur-3xl" />
 
-          <div className="absolute bottom-7 left-8 right-8 flex justify-between font-mono text-[0.62rem] uppercase tracking-[0.3em] text-white/34">
-            <span>Checkout Engine</span>
-            <span>Laravel Operations</span>
-          </div>
+        <AksaScreenshot
+          src="/projects/aksa-xiterz/orders-mobile.png"
+          alt="Aksa Xiterz mobile order history screen"
+          label="Order Flow"
+          className="left-[5%] top-[12%] h-[24vh] rotate-[-9deg] opacity-65 sm:left-[6%] sm:top-[12%] sm:h-[50vh] sm:opacity-70"
+        />
+
+        <AksaScreenshot
+          src="/projects/aksa-xiterz/qris-mobile.png"
+          alt="Aksa Xiterz QRIS payment invoice screen"
+          label="QRIS Invoice"
+          className="left-[36%] top-0 h-[31vh] -translate-x-1/2 rotate-[2deg] sm:left-[31%] sm:h-[62vh] sm:translate-x-0"
+        />
+
+        <AksaScreenshot
+          src="/projects/aksa-xiterz/crypto-address-mobile.png"
+          alt="Aksa Xiterz USDT crypto payment address screen"
+          label="Crypto Payment"
+          className="right-[13%] top-[8%] h-[27vh] rotate-[8deg] opacity-85 sm:right-[9%] sm:top-[8%] sm:h-[54vh]"
+        />
+
+        <AksaScreenshot
+          src="/projects/aksa-xiterz/licenses-mobile.png"
+          alt="Aksa Xiterz license delivery and copy screen"
+          label="License Delivery"
+          className="hidden sm:block sm:bottom-[3%] sm:left-[55%] sm:h-[36vh] sm:rotate-[-4deg] sm:opacity-90"
+        />
+
+        <div className="absolute bottom-1 left-[12%] right-[12%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.26em] text-white/34 sm:bottom-0 sm:left-[16%] sm:right-[12%] sm:text-[0.62rem] sm:tracking-[0.3em]">
+          <span>Checkout Engine</span>
+          <span>Laravel Operations</span>
         </div>
       </div>
 
-      <h2 className="absolute bottom-[6vh] left-5 z-10 max-w-[min(42rem,calc(100vw-2.5rem))] font-display text-[clamp(4.8rem,13vw,12rem)] font-semibold leading-[0.84] tracking-normal text-white sm:left-10 lg:left-16">
+      <h2 className="absolute bottom-[6vh] left-5 z-20 max-w-[min(42rem,calc(100vw-2.5rem))] font-display text-[clamp(4.8rem,13vw,12rem)] font-semibold leading-[0.84] tracking-normal text-white sm:left-10 lg:left-16">
         Aksa Xiterz
       </h2>
     </PanelShell>
