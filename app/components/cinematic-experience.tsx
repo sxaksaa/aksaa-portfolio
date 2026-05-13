@@ -6,12 +6,155 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
 const panels = ["intro", "aksa", "siemola", "fashion", "closing"] as const;
+type PanelName = (typeof panels)[number];
+
+const panelTransitions: Array<{
+  incoming: Exclude<PanelName, "intro">;
+  at: number;
+  incomingFrom: gsap.TweenVars;
+  incomingTo: gsap.TweenVars;
+  outgoingTo: gsap.TweenVars;
+  outgoingAt: number;
+}> = [
+  {
+    incoming: "aksa",
+    at: 0,
+    incomingFrom: {
+      borderRadius: "24px",
+      boxShadow: "0 34px 110px rgba(0,0,0,0.42)",
+      clipPath: "inset(9% 7% 11% 7%)",
+      filter: "brightness(0.82) contrast(1.12) saturate(0.78)",
+      scale: 0.92,
+      xPercent: 0,
+      yPercent: 96,
+    },
+    incomingTo: {
+      borderRadius: "0px",
+      boxShadow: "0 0 0 rgba(0,0,0,0)",
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 1.48,
+      ease: "none",
+      filter: "brightness(1) contrast(1) saturate(1)",
+      scale: 1,
+      yPercent: 0,
+    },
+    outgoingTo: {
+      clipPath: "inset(5% 5% 8% 5%)",
+      duration: 1.24,
+      ease: "none",
+      filter: "brightness(0.64) contrast(1.08) saturate(0.62)",
+      scale: 0.95,
+      yPercent: -5,
+    },
+    outgoingAt: 0.06,
+  },
+  {
+    incoming: "siemola",
+    at: 1.32,
+    incomingFrom: {
+      borderRadius: "8px",
+      clipPath: "inset(0% 17% 0% 17%)",
+      filter: "grayscale(0.42) brightness(0.7) contrast(1.22)",
+      scale: 0.98,
+      xPercent: 5,
+      yPercent: 92,
+    },
+    incomingTo: {
+      borderRadius: "0px",
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 1.24,
+      ease: "none",
+      filter: "grayscale(0) brightness(1) contrast(1)",
+      scale: 1,
+      xPercent: 0,
+      yPercent: 0,
+    },
+    outgoingTo: {
+      clipPath: "inset(7% 4% 7% 4%)",
+      duration: 1.02,
+      ease: "none",
+      filter: "grayscale(0.88) brightness(0.42) contrast(1.2)",
+      scale: 0.96,
+      xPercent: -2,
+      yPercent: -4,
+    },
+    outgoingAt: 1.38,
+  },
+  {
+    incoming: "fashion",
+    at: 2.68,
+    incomingFrom: {
+      borderRadius: "18px",
+      clipPath: "inset(24% 26% 12% 8%)",
+      filter: "brightness(0.82) contrast(0.94) saturate(0.82)",
+      scale: 0.96,
+      xPercent: -2,
+      yPercent: 88,
+    },
+    incomingTo: {
+      borderRadius: "0px",
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 1.56,
+      ease: "none",
+      filter: "brightness(1) contrast(1) saturate(1)",
+      scale: 1,
+      xPercent: 0,
+      yPercent: 0,
+    },
+    outgoingTo: {
+      clipPath: "inset(4% 12% 4% 0%)",
+      duration: 1.2,
+      ease: "none",
+      filter: "grayscale(0.34) brightness(0.52) contrast(1.08)",
+      scale: 0.98,
+      xPercent: 0,
+      yPercent: -3,
+    },
+    outgoingAt: 2.74,
+  },
+  {
+    incoming: "closing",
+    at: 4.22,
+    incomingFrom: {
+      borderRadius: "20px",
+      clipPath: "inset(10% 8% 10% 8%)",
+      filter: "brightness(0.78) contrast(1.04)",
+      scale: 0.96,
+      xPercent: 0,
+      yPercent: 90,
+    },
+    incomingTo: {
+      borderRadius: "0px",
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 1.32,
+      ease: "none",
+      filter: "brightness(1) contrast(1)",
+      scale: 1,
+      yPercent: 0,
+    },
+    outgoingTo: {
+      clipPath: "inset(8% 6% 8% 6%)",
+      duration: 1.16,
+      ease: "none",
+      filter: "brightness(0.5) contrast(0.98) saturate(0.72)",
+      scale: 0.96,
+      yPercent: -4,
+    },
+    outgoingAt: 4.28,
+  },
+];
 
 function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const root = rootRef.current;
 
     if (!root) {
+      return;
+    }
+
+    const stage = root.querySelector<HTMLElement>(".panel-stage");
+
+    if (!stage) {
       return;
     }
 
@@ -28,6 +171,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       });
       gsap.set(root.querySelector(".panel-stage"), {
         clearProps: "all",
+        clipPath: "inset(0% 0% 0% 0%)",
         minHeight: "auto",
         overflow: "visible",
         position: "relative",
@@ -76,14 +220,31 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
     const ctx = gsap.context(() => {
       const panelElements = gsap.utils.toArray<HTMLElement>(".cinematic-panel");
+      const panelByName = new Map<PanelName, HTMLElement>(
+        panels.map((panel, index) => [panel, panelElements[index]]),
+      );
 
       panelElements.forEach((panel, index) => {
         gsap.set(panel, {
+          borderRadius: "0px",
+          boxShadow: "0 0 0 rgba(0,0,0,0)",
+          clipPath: "inset(0% 0% 0% 0%)",
+          filter: "brightness(1) contrast(1) saturate(1) grayscale(0)",
           scale: 1,
           transformOrigin: "center top",
+          willChange: "transform, clip-path, filter",
+          xPercent: 0,
           yPercent: index === 0 ? 0 : 100,
-          zIndex: index + 1,
+          zIndex: panels.length - index,
         });
+      });
+
+      panelTransitions.forEach((transition) => {
+        const panel = panelByName.get(transition.incoming);
+
+        if (panel) {
+          gsap.set(panel, transition.incomingFrom);
+        }
       });
 
       const film = gsap.timeline({
@@ -95,28 +256,32 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         },
       });
 
-      panelElements.slice(1).forEach((panel, index) => {
-        const previousPanel = panelElements[index];
-        const time = index * 1.25;
+      panelTransitions.forEach((transition) => {
+        const incomingPanel = panelByName.get(transition.incoming);
+        const incomingIndex = panels.indexOf(transition.incoming);
+        const outgoingPanel = panelElements[incomingIndex - 1];
+
+        if (!incomingPanel || !outgoingPanel) {
+          return;
+        }
 
         film
-          .to(
-            panel,
+          .set(
+            incomingPanel,
             {
-              duration: 1,
-              ease: "none",
-              yPercent: 0,
+              zIndex: panels.length + incomingIndex + 1,
             },
-            time,
+            transition.at + 0.001,
           )
           .to(
-            previousPanel,
-            {
-              duration: 0.78,
-              ease: "none",
-              yPercent: -18,
-            },
-            time + 0.22,
+            incomingPanel,
+            transition.incomingTo,
+            transition.at,
+          )
+          .to(
+            outgoingPanel,
+            transition.outgoingTo,
+            transition.outgoingAt,
           );
       });
 
@@ -134,6 +299,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       });
 
       ScrollTrigger.refresh();
+      gsap.set(stage, { clipPath: "inset(0% 0% 0% 0%)" });
       wake();
     }, root);
 
@@ -339,7 +505,10 @@ export function CinematicScrollExperience() {
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
 
       <section className="panel-scroll relative z-10 h-[620vh]">
-        <div className="panel-stage sticky top-0 h-screen overflow-hidden">
+        <div
+          className="panel-stage sticky top-0 h-screen overflow-hidden"
+          style={{ clipPath: "inset(0% 0% 100% 0%)" }}
+        >
           {panels.map((panel) => (
             <span key={panel} className="sr-only">
               {panel}
