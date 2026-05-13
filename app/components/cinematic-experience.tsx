@@ -12,89 +12,33 @@ const panelTransitions = [
   {
     incoming: "aksa",
     at: 1,
-    incomingFrom: {
-      yPercent: 100,
-      scale: 1,
-      clipPath: "inset(0% 0% 0% 0%)",
-    },
-    incomingTo: {
-      yPercent: 0,
-      scale: 1,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
-    outgoingTo: {
-      scale: 0.9,
-      autoAlpha: 0,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
+    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
+    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "power2.inOut" },
+    outgoingTo: { scale: 0.9, autoAlpha: 0, duration: 1.5, ease: "power2.inOut" },
     outgoingAt: 1,
   },
   {
     incoming: "siemola",
     at: 2.5,
-    incomingFrom: {
-      yPercent: 100,
-      scale: 1,
-      clipPath: "inset(0% 0% 0% 0%)",
-    },
-    incomingTo: {
-      yPercent: 0,
-      scale: 1,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
-    outgoingTo: {
-      scale: 0.9,
-      autoAlpha: 0,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
+    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
+    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "power2.inOut" },
+    outgoingTo: { scale: 0.9, autoAlpha: 0, duration: 1.5, ease: "power2.inOut" },
     outgoingAt: 2.5,
   },
   {
     incoming: "fashion",
     at: 4,
-    incomingFrom: {
-      yPercent: 100,
-      scale: 1,
-      clipPath: "inset(0% 0% 0% 0%)",
-    },
-    incomingTo: {
-      yPercent: 0,
-      scale: 1,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
-    outgoingTo: {
-      scale: 0.9,
-      autoAlpha: 0,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
+    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
+    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "power2.inOut" },
+    outgoingTo: { scale: 0.9, autoAlpha: 0, duration: 1.5, ease: "power2.inOut" },
     outgoingAt: 4,
   },
   {
     incoming: "closing",
     at: 5.5,
-    incomingFrom: {
-      yPercent: 100,
-      scale: 1,
-      clipPath: "inset(0% 0% 0% 0%)",
-    },
-    incomingTo: {
-      yPercent: 0,
-      scale: 1,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
-    outgoingTo: {
-      scale: 0.9,
-      autoAlpha: 0,
-      duration: 1.5,
-      ease: "power2.inOut",
-    },
+    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
+    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "power2.inOut" },
+    outgoingTo: { scale: 0.9, autoAlpha: 0, duration: 1.5, ease: "power2.inOut" },
     outgoingAt: 5.5,
   },
 ];
@@ -104,13 +48,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     const root = rootRef.current;
     if (!root) return;
 
-    const stage = root.querySelector<HTMLElement>(".panel-stage");
-    if (!stage) return;
-
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.08, // Sedikit lebih responsif
+      lerp: 0.08,
       smoothWheel: true,
     });
 
@@ -126,23 +67,27 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         panels.map((panel, index) => [panel, panelElements[index]]),
       );
 
-      // Initial State: Tumpuk berdasarkan urutan (Intro paling atas)
+      // 1. SETUP AWAL (Ini yang bikin rapi)
       panelElements.forEach((panel, index) => {
         gsap.set(panel, {
           yPercent: index === 0 ? 0 : 100,
           zIndex: 10 + index,
+          autoAlpha: index === 0 ? 1 : 1, // Pastikan kelihatan tapi di posisi benar
           clipPath: "inset(0% 0% 0% 0%)",
           transformOrigin: "center center",
           willChange: "transform, opacity",
         });
       });
 
+      // 2. TAMPILKAN MAIN CONTAINER (Setelah set selesai)
+      gsap.to(root, { autoAlpha: 1, duration: 0.3, ease: "power1.in" });
+
       const film = gsap.timeline({
         scrollTrigger: {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.5, // Smooth scrolling transition
+          scrub: 1.5,
         },
       });
 
@@ -153,32 +98,12 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
         if (!incomingPanel || !outgoingPanel) return;
 
-        // Pastikan z-index incoming selalu di atas outgoing saat animasi
         film
-          .fromTo(
-            incomingPanel,
-            { ...transition.incomingFrom },
-            { ...transition.incomingTo },
-            transition.at
-          )
-          .to(
-            outgoingPanel,
-            { ...transition.outgoingTo },
-            transition.at
-          );
+          .fromTo(incomingPanel, { ...transition.incomingFrom }, { ...transition.incomingTo }, transition.at)
+          .to(outgoingPanel, { ...transition.outgoingTo }, transition.at);
       });
 
-      // Animasi background gradient global
-      gsap.to(".world-gradient", {
-        backgroundPosition: "50% 100%",
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".panel-scroll",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 1,
-        },
-      });
+      ScrollTrigger.refresh();
     }, root);
 
     return () => {
@@ -188,28 +113,18 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
   }, [rootRef]);
 }
 
-// Komponen PanelShell dan lainnya tetap sama
-function PanelShell({
-  children,
-  className,
-  index,
-}: {
-  children: React.ReactNode;
-  className: string;
-  index: number;
-}) {
+function PanelShell({ children, className }: { children: React.ReactNode; className: string }) {
   return (
-    <article
-      className={`cinematic-panel absolute inset-0 overflow-hidden px-5 py-8 sm:px-8 md:py-10 lg:px-12 ${className}`}
-    >
+    <article className={`cinematic-panel absolute inset-0 overflow-hidden px-5 py-8 sm:px-10 md:py-10 lg:px-16 ${className}`}>
       {children}
     </article>
   );
 }
 
+// ... (IntroPanel, AksaPanel, SiemolaPanel Tetap Sama)
 function IntroPanel() {
   return (
-    <PanelShell className="bg-[#050409]" index={0}>
+    <PanelShell className="bg-[#050409]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(116,65,151,0.25),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(13,10,17,0.98)_52%,rgba(4,6,8,1))]" />
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-40" />
       <div className="relative z-10 flex h-full items-center">
@@ -225,10 +140,10 @@ function IntroPanel() {
 
 function AksaPanel() {
   return (
-    <PanelShell className="bg-[#12081a]" index={1}>
+    <PanelShell className="bg-[#12081a]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
-      <p className="absolute right-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:right-8 lg:right-12">01 / Commerce</p>
-      <div className="absolute left-5 top-[11vh] z-10 max-w-sm sm:left-8 lg:left-12">
+      <p className="absolute right-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:right-10 lg:right-16">01 / Commerce</p>
+      <div className="absolute left-5 top-[11vh] z-10 max-w-sm sm:left-10 lg:left-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">Luxury digital commerce</p>
         <p className="mt-5 text-xl leading-8 text-slate-300">A digital commerce experience designed with restraint.</p>
       </div>
@@ -241,18 +156,18 @@ function AksaPanel() {
           </div>
         </div>
       </div>
-      <h2 className="absolute bottom-[6vh] left-5 z-10 max-w-[14ch] text-[clamp(5.2rem,15vw,14rem)] font-semibold uppercase leading-[0.74] tracking-normal text-white sm:left-8 lg:left-12">Aksa Xiterz</h2>
+      <h2 className="absolute bottom-[6vh] left-5 z-10 max-w-[14ch] text-[clamp(5.2rem,15vw,14rem)] font-semibold uppercase leading-[0.74] tracking-normal text-white sm:left-10 lg:left-16">Aksa Xiterz</h2>
     </PanelShell>
   );
 }
 
 function SiemolaPanel() {
   return (
-    <PanelShell className="bg-[#061019]" index={2}>
+    <PanelShell className="bg-[#061019]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(64,104,134,0.25),transparent_34%),linear-gradient(135deg,rgba(7,17,26,1),rgba(4,8,13,1)_58%,rgba(17,30,42,0.92))]" />
-      <p className="absolute right-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-blue-100/34 sm:right-8 lg:right-12">02 / Operations</p>
-      <h2 className="absolute left-5 top-[10vh] z-10 text-[clamp(5rem,17vw,15rem)] font-semibold uppercase leading-[0.72] tracking-normal text-white sm:left-8 lg:left-12">Siemola</h2>
-      <div className="absolute bottom-[12vh] left-5 z-10 max-w-md sm:left-8 lg:left-12">
+      <p className="absolute right-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-blue-100/34 sm:right-10 lg:right-16">02 / Operations</p>
+      <h2 className="absolute left-5 top-[10vh] z-10 text-[clamp(5rem,17vw,15rem)] font-semibold uppercase leading-[0.72] tracking-normal text-white sm:left-10 lg:left-16">Siemola</h2>
+      <div className="absolute bottom-[12vh] left-5 z-10 max-w-md sm:left-10 lg:left-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-blue-100/38">Industrial operational systems</p>
         <p className="mt-5 text-xl leading-8 text-slate-300">Systems moving in real space.</p>
       </div>
@@ -262,21 +177,21 @@ function SiemolaPanel() {
 
 function FashionPanel() {
   return (
-    <PanelShell className="bg-[#1b1114]" index={3}>
+    <PanelShell className="bg-[#1b1114]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
-      <p className="absolute left-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-8 lg:left-12">03 / Retail</p>
-      <div className="absolute right-5 top-[13vh] z-10 max-w-[46rem] text-right sm:right-8 lg:right-12">
+      <p className="absolute left-5 top-[11vh] z-10 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">03 / Retail</p>
+      <div className="absolute right-5 top-[13vh] z-10 max-w-[calc(100%-2rem)] text-right sm:right-10 lg:right-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-rose-100/40">Fashion editorial retail</p>
-        <h2 className="mt-7 text-[clamp(4.8rem,13vw,12rem)] font-semibold uppercase leading-[0.74] tracking-normal text-white">BRL Fashion</h2>
+        <h2 className="mt-7 text-[clamp(4rem,12vw,11.5rem)] font-semibold uppercase leading-[0.8] tracking-tighter text-white">BRL Fashion</h2>
       </div>
-      <p className="absolute bottom-[12vh] right-5 z-10 max-w-md text-right text-xl leading-8 text-slate-300 sm:right-8 lg:right-12">Retail reduced to clarity.</p>
+      <p className="absolute bottom-[12vh] right-5 z-10 max-w-md text-right text-xl leading-8 text-slate-300 sm:right-10 lg:right-16">Retail reduced to clarity.</p>
     </PanelShell>
   );
 }
 
 function ClosingPanel() {
   return (
-    <PanelShell className="bg-[#050409]" index={4}>
+    <PanelShell className="bg-[#050409]">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(100,82,141,0.18),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(9,8,17,1)_54%,rgba(7,9,12,1))]" />
       <div className="relative z-10 mx-auto grid h-full w-full max-w-7xl items-center gap-10 lg:grid-cols-[1fr_0.8fr]">
         <h2 className="text-[clamp(5rem,14vw,13rem)] font-semibold uppercase leading-[0.74] tracking-normal text-white">Quiet systems. Clear direction.</h2>
@@ -297,7 +212,11 @@ export function CinematicScrollExperience() {
   useCinematicScroll(rootRef);
 
   return (
-    <main ref={rootRef} className="experience relative min-h-screen overflow-x-clip bg-[#050505] text-white">
+    /* opacity-0 dan invisible ditambahkan di sini untuk mencegah flash */
+    <main 
+      ref={rootRef} 
+      className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
+    >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
       <section className="panel-scroll relative z-10 h-[700vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-hidden">
