@@ -9,14 +9,6 @@ import Lenis from "lenis";
 const panels = ["intro", "aksa", "siemola", "fashion", "closing"] as const;
 type PanelName = (typeof panels)[number];
 
-const depthMotion = {
-  background: { enterY: 4, exitY: -3 },
-  secondary: { enterY: 10, exitY: -7 },
-  foreground: { enterY: 16, exitY: -11 },
-  text: { enterY: 7, exitY: -5 },
-  title: { enterY: 11, exitY: -8 },
-} as const;
-
 const transitionAt = {
   aksa: 1,
   siemola: 4.35,
@@ -26,60 +18,49 @@ const transitionAt = {
 
 const aksaSequenceAt = 2.05;
 
+const bottomUpPanelMotion = {
+  incomingFrom: {
+    yPercent: 100,
+    scale: 1,
+    clipPath: "inset(0% 0% 0% 0%)",
+  },
+  incomingTo: {
+    yPercent: 0,
+    scale: 1,
+    duration: 1.5,
+    ease: "none",
+    immediateRender: false,
+  },
+  outgoingTo: {
+    scale: 0.985,
+    yPercent: -2,
+    duration: 1.5,
+    ease: "none",
+  },
+} as const;
+
 const panelTransitions = [
   {
     incoming: "aksa",
     at: transitionAt.aksa,
-    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
-    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "none" },
-    outgoingTo: {
-      scale: 0.985,
-      yPercent: -2,
-      duration: 1.5,
-      ease: "none",
-    },
-    goingAt: 1,
+    ...bottomUpPanelMotion,
   },
   {
     incoming: "siemola",
     at: transitionAt.siemola,
-    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
-    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "none" },
-    outgoingTo: {
-      scale: 0.985,
-      yPercent: -2,
-      duration: 1.5,
-      ease: "none",
-    },
-    outgoingAt: transitionAt.siemola,
+    ...bottomUpPanelMotion,
   },
   {
     incoming: "fashion",
     at: transitionAt.fashion,
-    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
-    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "none" },
-    outgoingTo: {
-      scale: 0.985,
-      yPercent: -2,
-      duration: 1.5,
-      ease: "none",
-    },
-    outgoingAt: transitionAt.fashion,
+    ...bottomUpPanelMotion,
   },
   {
     incoming: "closing",
     at: transitionAt.closing,
-    incomingFrom: { yPercent: 100, scale: 1, clipPath: "inset(0% 0% 0% 0%)" },
-    incomingTo: { yPercent: 0, scale: 1, duration: 1.5, ease: "none" },
-    outgoingTo: {
-      scale: 0.985,
-      yPercent: -2,
-      duration: 1.5,
-      ease: "none",
-    },
-    ingAt: transitionAt.closing,
+    ...bottomUpPanelMotion,
   },
-];
+] as const;
 
 function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
@@ -135,9 +116,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           yPercent: index === 0 ? 0 : 100,
           zIndex: index + 1,
           autoAlpha: 1,
+          scale: 1,
           clipPath: "inset(0% 0% 0% 0%)",
           transformOrigin: "center center",
-          willChange: "transform, opacity",
+          willChange: "transform",
           force3D: true,
           backfaceVisibility: "hidden",
         });
@@ -226,36 +208,71 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         },
       });
 
-      const addDepthMotion = (
+      const addCameraDepth = (
         panel: HTMLElement,
         at: number,
         direction: "enter" | "exit",
       ) => {
-        Object.entries(depthMotion).forEach(([depth, offset]) => {
-          const elements = panel.querySelectorAll<HTMLElement>(
-            `[data-depth="${depth}"]`,
-          );
+        const scene = panel.querySelector<HTMLElement>(".camera-scene");
+        const visual = panel.querySelector<HTMLElement>(".camera-visual");
+        const copy = gsap.utils.toArray<HTMLElement>(
+          panel.querySelectorAll<HTMLElement>(".camera-copy"),
+        );
+        const duration = 1.75;
 
-          if (!elements.length) return;
+        const targets = [scene, visual, ...copy].filter(
+          Boolean,
+        ) as HTMLElement[];
+        if (targets.length) {
+          gsap.set(targets, {
+            willChange: "transform, opacity",
+            force3D: true,
+            backfaceVisibility: "hidden",
+          });
+        }
 
-          gsap.set(elements, { willChange: "transform", force3D: true });
-
-          if (direction === "enter") {
+        if (direction === "enter") {
+          if (scene) {
             film.fromTo(
-              elements,
-              { y: offset.enterY },
-              { y: 0, duration: 1.5, ease: "none" },
+              scene,
+              { scale: 1.08 },
+              { scale: 1, duration, ease: "none" },
               at,
             );
-            return;
           }
 
-          film.to(
-            elements,
-            { y: offset.exitY, duration: 1.5, ease: "none" },
-            at,
-          );
-        });
+          if (visual) {
+            film.fromTo(
+              visual,
+              { scale: 1.045 },
+              { scale: 1, duration, ease: "none" },
+              at,
+            );
+          }
+
+          if (copy.length) {
+            film.fromTo(
+              copy,
+              { y: 10 },
+              { y: 0, duration: 1.25, ease: "none" },
+              at + 0.16,
+            );
+          }
+
+          return;
+        }
+
+        if (scene) {
+          film.to(scene, { scale: 1.07, duration, ease: "none" }, at);
+        }
+
+        if (visual) {
+          film.to(visual, { scale: 1.055, duration, ease: "none" }, at);
+        }
+
+        if (copy.length) {
+          film.to(copy, { y: -8, duration: 1.25, ease: "none" }, at);
+        }
       };
 
       const aksaPanel = panelByName.get("aksa");
@@ -287,6 +304,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           gsap.set([...sequenceShots, sequenceLine], {
             willChange: "transform, opacity",
             force3D: true,
+            backfaceVisibility: "hidden",
           });
           gsap.set(qrisShot, {
             autoAlpha: 1,
@@ -424,8 +442,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           )
           .to(outgoingPanel, { ...transition.outgoingTo }, transition.at);
 
-        addDepthMotion(incomingPanel, transition.at, "enter");
-        addDepthMotion(outgoingPanel, transition.at, "exit");
+        addCameraDepth(incomingPanel, transition.at, "enter");
+        addCameraDepth(outgoingPanel, transition.at, "exit");
       });
 
       ScrollTrigger.refresh();
@@ -470,7 +488,6 @@ function AksaFeatureShot({
 }) {
   return (
     <figure
-      data-depth="foreground"
       className={`aksa-sequence-shot absolute left-1/2 top-0 h-full w-[min(74vw,34rem)] overflow-hidden rounded-lg border border-white/12 bg-[#0a0610] shadow-[0_42px_130px_rgba(0,0,0,0.56)] sm:w-[min(42vw,36rem)] ${className}`}
     >
       <Image
@@ -546,19 +563,71 @@ function IntroPanel() {
 function AksaPanel() {
   return (
     <PanelShell className="bg-[#12081a]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
+      <div className="camera-scene absolute inset-0 origin-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
 
-      <p
-        data-depth="text"
-        className="absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16"
-      >
+        <div className="camera-visual aksa-visual-stage absolute left-1/2 top-[28vh] z-10 h-[52vh] w-[116vw] -translate-x-1/2 sm:left-[22vw] sm:top-[16vh] sm:h-[68vh] sm:w-[78vw] sm:translate-x-0 lg:left-[24vw] lg:w-[70vw]">
+          <div className="absolute inset-x-[8%] bottom-[4%] top-[4%] bg-violet-500/10 blur-2xl" />
+
+          <AksaFeatureShot
+            src="/projects/aksa-xiterz/qris-mobile.png"
+            alt="Close crop of the Aksa Xiterz QRIS payment screen"
+            label="QRIS Invoice"
+            objectPosition="center 43%"
+            className="aksa-shot-qris"
+          />
+
+          <AksaFeatureShot
+            src="/projects/aksa-xiterz/crypto-address-mobile.png"
+            alt="Close crop of the Aksa Xiterz USDT payment details screen"
+            label="Crypto Payment"
+            objectPosition="center 38%"
+            className="aksa-shot-crypto"
+          />
+
+          <AksaFeatureShot
+            src="/projects/aksa-xiterz/checkout-network-mobile.png"
+            alt="Close crop of the Aksa Xiterz checkout network selection screen"
+            label="Checkout Logic"
+            objectPosition="center 35%"
+            className="aksa-shot-checkout"
+          />
+
+          <AksaFeatureShot
+            src="/projects/aksa-xiterz/orders-mobile.png"
+            alt="Close crop of the Aksa Xiterz transaction order screen"
+            label="Order Tracking"
+            objectPosition="center 32%"
+            className="aksa-shot-orders"
+          />
+
+          <div className="aksa-sequence-line absolute left-[8%] top-[54%] h-px w-[74%] origin-left rotate-[-7deg] bg-white/30" />
+
+          <div className="absolute left-[7%] top-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block">
+            Automated Commerce
+          </div>
+          <div className="absolute right-[8%] top-[72%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block">
+            Operational Payments
+          </div>
+        </div>
+
+        <div className="absolute inset-x-[16vw] top-[18vh] hidden h-px bg-white/14 sm:block" />
+        <div className="absolute bottom-[16vh] left-[28vw] hidden h-px w-[46vw] bg-violet-100/18 sm:block" />
+        <div className="absolute right-[9vw] top-[18vh] hidden h-[64vh] w-px bg-white/10 sm:block" />
+
+        <div className="absolute left-[48vw] top-[18vh] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/36 lg:block">
+          QRIS Invoice
+        </div>
+        <div className="absolute right-[8vw] bottom-[20vh] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/36 sm:block">
+          Transaction Logic
+        </div>
+      </div>
+
+      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
         Chapter 01 / Commercial System
       </p>
 
-      <div
-        data-depth="text"
-        className="absolute left-5 top-[10vh] z-30 max-w-[calc(100vw-2.5rem)] sm:left-10 sm:max-w-[25rem] lg:left-16"
-      >
+      <div className="camera-copy absolute left-5 top-[10vh] z-30 max-w-[calc(100vw-2.5rem)] sm:left-10 sm:max-w-[25rem] lg:left-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">
           Aksa Xiterz • Payment Automation
         </p>
@@ -569,74 +638,14 @@ function AksaPanel() {
         </p>
       </div>
 
-      <div className="aksa-visual-stage absolute left-1/2 top-[28vh] z-10 h-[52vh] w-[116vw] -translate-x-1/2 sm:left-[22vw] sm:top-[16vh] sm:h-[68vh] sm:w-[78vw] sm:translate-x-0 lg:left-[24vw] lg:w-[70vw]">
-        <div
-          data-depth="background"
-          className="absolute inset-x-[8%] bottom-[4%] top-[4%] bg-violet-500/10 blur-2xl"
-        />
-
-        <AksaFeatureShot
-          src="/projects/aksa-xiterz/qris-mobile.png"
-          alt="Close crop of the Aksa Xiterz QRIS payment screen"
-          label="QRIS Invoice"
-          objectPosition="center 43%"
-          className="aksa-shot-qris"
-        />
-
-        <AksaFeatureShot
-          src="/projects/aksa-xiterz/crypto-address-mobile.png"
-          alt="Close crop of the Aksa Xiterz USDT payment details screen"
-          label="Crypto Payment"
-          objectPosition="center 38%"
-          className="aksa-shot-crypto"
-        />
-
-        <AksaFeatureShot
-          src="/projects/aksa-xiterz/checkout-network-mobile.png"
-          alt="Close crop of the Aksa Xiterz checkout network selection screen"
-          label="Checkout Logic"
-          objectPosition="center 35%"
-          className="aksa-shot-checkout"
-        />
-
-        <AksaFeatureShot
-          src="/projects/aksa-xiterz/orders-mobile.png"
-          alt="Close crop of the Aksa Xiterz transaction order screen"
-          label="Order Tracking"
-          objectPosition="center 32%"
-          className="aksa-shot-orders"
-        />
-
-        <div className="aksa-sequence-line absolute left-[8%] top-[54%] h-px w-[74%] origin-left rotate-[-7deg] bg-white/30" />
-
-        <div
-          data-depth="text"
-          className="absolute left-[7%] top-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block"
-        >
-          Automated Commerce
-        </div>
-        <div
-          data-depth="text"
-          className="absolute right-[8%] top-[72%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block"
-        >
-          Operational Payments
-        </div>
-      </div>
-
-      <div
-        data-depth="text"
-        className="absolute bottom-[25vh] left-5 z-30 hidden flex-wrap gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/46 sm:flex sm:left-10 lg:left-16"
-      >
+      <div className="camera-copy absolute bottom-[25vh] left-5 z-30 hidden flex-wrap gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/46 sm:flex sm:left-10 lg:left-16">
         <span>QRIS</span>
         <span>Crypto Flow</span>
         <span>Digital Delivery</span>
         <span>Ops Logic</span>
       </div>
 
-      <h2
-        data-depth="title"
-        className="absolute bottom-[6vh] left-5 z-30 max-w-[min(54rem,calc(100vw-2.5rem))] font-display text-[clamp(4.8rem,13vw,12rem)] font-semibold leading-[0.84] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16"
-      >
+      <h2 className="camera-copy absolute bottom-[6vh] left-5 z-30 max-w-[min(54rem,calc(100vw-2.5rem))] font-display text-[clamp(4.8rem,13vw,12rem)] font-semibold leading-[0.84] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16">
         Aksa Xiterz
       </h2>
     </PanelShell>
@@ -650,39 +659,24 @@ function AksaPanel() {
 function SiemolaPanel() {
   return (
     <PanelShell className="bg-[#061019]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(64,104,134,0.25),transparent_34%),linear-gradient(135deg,rgba(7,17,26,1),rgba(4,8,13,1)_58%,rgba(17,30,42,0.92))]" />
+      <div className="camera-scene absolute inset-0 origin-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(64,104,134,0.25),transparent_34%),linear-gradient(135deg,rgba(7,17,26,1),rgba(4,8,13,1)_58%,rgba(17,30,42,0.92))]" />
 
-      <p
-        data-depth="text"
-        className="absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-blue-100/34 sm:block sm:right-10 lg:right-16"
-      >
-        Chapter 02 / Structured Systems
-      </p>
-
-      <div className="absolute left-[6vw] top-[20vh] z-10 h-[58vh] w-[94vw] sm:left-[11vw] sm:top-[15vh] sm:h-[68vh] sm:w-[78vw]">
-        <div
-          data-depth="background"
-          className="absolute inset-y-[8%] left-[12%] right-[4%] border-y border-white/12 bg-[linear-gradient(120deg,rgba(13,30,45,0.78),rgba(5,10,16,0.38)_54%,rgba(26,43,56,0.5))]"
-        />
+        <div className="camera-visual absolute left-[6vw] top-[20vh] z-10 h-[58vh] w-[94vw] sm:left-[11vw] sm:top-[15vh] sm:h-[68vh] sm:w-[78vw]">
+        <div className="absolute inset-y-[8%] left-[12%] right-[4%] border-y border-white/12 bg-[linear-gradient(120deg,rgba(13,30,45,0.78),rgba(5,10,16,0.38)_54%,rgba(26,43,56,0.5))]" />
         <div className="absolute inset-x-[20%] top-[12%] h-px bg-white/14" />
         <div className="absolute inset-x-[4%] top-[44%] h-px bg-white/10" />
         <div className="absolute inset-x-[15%] bottom-[18%] h-px bg-white/14" />
         <div className="absolute bottom-[12%] left-[24%] top-[7%] w-px bg-white/12" />
         <div className="absolute bottom-[6%] right-[18%] top-[14%] w-px bg-white/12" />
 
-        <pre
-          data-depth="secondary"
-          className="absolute left-[8%] top-[16%] max-w-[78vw] whitespace-pre-wrap border-l border-blue-100/22 pl-5 font-mono text-[0.64rem] uppercase leading-6 tracking-[0.18em] text-blue-100/58 sm:left-[10%] sm:max-w-none sm:text-[0.74rem] sm:leading-7"
-        >
+        <pre className="absolute left-[8%] top-[16%] max-w-[78vw] whitespace-pre-wrap border-l border-blue-100/22 pl-5 font-mono text-[0.64rem] uppercase leading-6 tracking-[0.18em] text-blue-100/58 sm:left-[10%] sm:max-w-none sm:text-[0.74rem] sm:leading-7">
 {`RFID_TAP      AUTH_WINDOW
 SWITCH_OPEN   BORROW_ACTIVE
 SWITCH_CLOSE  RETURN_SYNC`}
         </pre>
 
-        <div
-          data-depth="secondary"
-          className="absolute right-[8%] top-[20%] hidden w-[28vw] min-w-[17rem] border border-white/12 bg-black/18 p-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:block"
-        >
+        <div className="absolute right-[8%] top-[20%] hidden w-[28vw] min-w-[17rem] border border-white/12 bg-black/18 p-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:block">
           <div className="mb-4 text-blue-100/68">locker_accesses</div>
           <div className="flex justify-between border-t border-white/10 py-3">
             <span>student_id</span>
@@ -698,10 +692,7 @@ SWITCH_CLOSE  RETURN_SYNC`}
           </div>
         </div>
 
-        <div
-          data-depth="foreground"
-          className="absolute bottom-[16%] left-[18%] flex w-[62vw] max-w-xl flex-col gap-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:left-[16%]"
-        >
+        <div className="absolute bottom-[16%] left-[18%] flex w-[62vw] max-w-xl flex-col gap-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:left-[16%]">
           <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
             <span>api/tab</span>
             <span className="text-blue-100/68">RFID event</span>
@@ -712,25 +703,21 @@ SWITCH_CLOSE  RETURN_SYNC`}
           </div>
         </div>
 
-        <div
-          data-depth="text"
-          className="absolute right-[8%] bottom-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/34 sm:block"
-        >
+        <div className="absolute right-[8%] bottom-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/34 sm:block">
           infrastructure logic
+        </div>
         </div>
       </div>
 
-      <h2
-        data-depth="title"
-        className="absolute left-5 top-[10vh] z-30 font-display text-[clamp(4.8rem,14vw,12.5rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16"
-      >
+      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-blue-100/34 sm:block sm:right-10 lg:right-16">
+        Chapter 02 / Structured Systems
+      </p>
+
+      <h2 className="camera-copy absolute left-5 top-[10vh] z-30 font-display text-[clamp(4.8rem,14vw,12.5rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16">
         Siemola
       </h2>
 
-      <div
-        data-depth="text"
-        className="absolute bottom-[9vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-10 sm:max-w-md lg:right-16"
-      >
+      <div className="camera-copy absolute bottom-[9vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-10 sm:max-w-md lg:right-16">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-blue-100/38">
           Backend Workflows • Process Logic
         </p>
@@ -757,37 +744,30 @@ SWITCH_CLOSE  RETURN_SYNC`}
 function FashionPanel() {
   return (
     <PanelShell className="bg-[#1b1114]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
+      <div className="camera-scene absolute inset-0 origin-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
 
-      <p
-        data-depth="text"
-        className="absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16"
-      >
-        Chapter 03 / Editorial Interface
-      </p>
-
-      <div
-        data-depth="foreground"
-        className="absolute left-[-28vw] top-[25vh] z-10 h-[48vh] w-[118vw] overflow-hidden border border-white/10 bg-[#130d10] sm:left-[-8vw] sm:top-[14vh] sm:h-[72vh] sm:w-[72vw] lg:left-[-4vw]"
-      >
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(119,74,70,0.42),rgba(19,13,16,0.9)_42%,rgba(156,124,93,0.25))]" />
-        <div className="absolute inset-y-0 left-[24%] w-px bg-white/12" />
-        <div className="absolute inset-y-0 left-[56%] w-px bg-white/10" />
-        <div className="absolute inset-x-[10%] top-[26%] h-px bg-white/14" />
-        <div className="absolute inset-x-[22%] bottom-[21%] h-px bg-white/12" />
-        <div className="absolute left-[11%] top-[15%] h-[42%] w-[28%] border border-white/10 bg-black/16" />
-        <div className="absolute bottom-[14%] left-[38%] h-[34%] w-[22%] border border-white/10 bg-white/[0.035]" />
-        <div className="absolute right-[9%] top-[11%] h-[68%] w-[18%] border border-white/10 bg-black/14" />
-        <div className="absolute bottom-7 left-[11%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/36 sm:text-[0.62rem]">
-          <span>Product Rhythm</span>
-          <span>Visual System</span>
+        <div className="camera-visual absolute left-[-28vw] top-[25vh] z-10 h-[48vh] w-[118vw] overflow-hidden border border-white/10 bg-[#130d10] sm:left-[-8vw] sm:top-[14vh] sm:h-[72vh] sm:w-[72vw] lg:left-[-4vw]">
+          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(119,74,70,0.42),rgba(19,13,16,0.9)_42%,rgba(156,124,93,0.25))]" />
+          <div className="absolute inset-y-0 left-[24%] w-px bg-white/12" />
+          <div className="absolute inset-y-0 left-[56%] w-px bg-white/10" />
+          <div className="absolute inset-x-[10%] top-[26%] h-px bg-white/14" />
+          <div className="absolute inset-x-[22%] bottom-[21%] h-px bg-white/12" />
+          <div className="absolute left-[11%] top-[15%] h-[42%] w-[28%] border border-white/10 bg-black/16" />
+          <div className="absolute bottom-[14%] left-[38%] h-[34%] w-[22%] border border-white/10 bg-white/[0.035]" />
+          <div className="absolute right-[9%] top-[11%] h-[68%] w-[18%] border border-white/10 bg-black/14" />
+          <div className="absolute bottom-7 left-[11%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/36 sm:text-[0.62rem]">
+            <span>Product Rhythm</span>
+            <span>Visual System</span>
+          </div>
         </div>
       </div>
 
-      <div
-        data-depth="title"
-        className="absolute right-5 top-[16vh] z-30 max-w-[min(50rem,calc(100vw-2.5rem))] text-right sm:right-12 sm:top-[13vh] lg:right-20"
-      >
+      <p className="camera-copy absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">
+        Chapter 03 / Editorial Interface
+      </p>
+
+      <div className="camera-copy absolute right-5 top-[16vh] z-30 max-w-[min(50rem,calc(100vw-2.5rem))] text-right sm:right-12 sm:top-[13vh] lg:right-20">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-rose-100/40">
           Visual Systems • Product Mood
         </p>
@@ -797,10 +777,7 @@ function FashionPanel() {
         </h2>
       </div>
 
-      <div
-        data-depth="text"
-        className="absolute bottom-[10vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-12 sm:max-w-md lg:right-20"
-      >
+      <div className="camera-copy absolute bottom-[10vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-12 sm:max-w-md lg:right-20">
         <p className="text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
           Editorial storefront composition shaped around rhythm, hierarchy, and
           product mood.
@@ -822,9 +799,11 @@ function FashionPanel() {
 function ClosingPanel() {
   return (
     <PanelShell className="bg-[#050409]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(100,82,141,0.18),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(9,8,17,1)_54%,rgba(7,9,12,1))]" />
+      <div className="camera-scene absolute inset-0 origin-center">
+        <div className="camera-visual absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(100,82,141,0.18),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(9,8,17,1)_54%,rgba(7,9,12,1))]" />
+      </div>
 
-      <div className="relative z-10 mx-auto grid h-full w-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-[1fr_0.8fr] lg:px-16">
+      <div className="camera-copy relative z-10 mx-auto grid h-full w-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-[1fr_0.8fr] lg:px-16">
         <h2 className="font-display text-[clamp(4.6rem,12vw,11rem)] font-semibold leading-[0.86] tracking-normal text-white">
           Build quietly.
           <br />
