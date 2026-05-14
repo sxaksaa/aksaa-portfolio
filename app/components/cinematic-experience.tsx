@@ -11,12 +11,12 @@ type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 1,
-  siemola: 4.35,
-  fashion: 5.85,
-  closing: 7.35,
+  siemola: 5.45,
+  fashion: 7.15,
+  closing: 8.85,
 } as const;
 
-const aksaSequenceAt = 2.05;
+const aksaSequenceAt = 2.72;
 
 const bottomUpPanelMotion = {
   incomingFrom: {
@@ -281,9 +281,6 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           aksaPanel.querySelector<HTMLElement>(".aksa-gallery-shell");
         const galleryFrame =
           aksaPanel.querySelector<HTMLElement>(".aksa-gallery-frame");
-        const galleryMeta = gsap.utils.toArray<HTMLElement>(
-          aksaPanel.querySelectorAll<HTMLElement>(".aksa-gallery-meta"),
-        );
         const qrisShot = aksaPanel.querySelector<HTMLElement>(".aksa-shot-qris");
         const cryptoShot =
           aksaPanel.querySelector<HTMLElement>(".aksa-shot-crypto");
@@ -291,8 +288,6 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           aksaPanel.querySelector<HTMLElement>(".aksa-shot-checkout");
         const ordersShot =
           aksaPanel.querySelector<HTMLElement>(".aksa-shot-orders");
-        const sequenceLine =
-          aksaPanel.querySelector<HTMLElement>(".aksa-sequence-line");
 
         if (
           galleryShell &&
@@ -300,8 +295,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           qrisShot &&
           cryptoShot &&
           checkoutShot &&
-          ordersShot &&
-          sequenceLine
+          ordersShot
         ) {
           const sequenceShots = [
             qrisShot,
@@ -315,14 +309,14 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             transformStyle: "preserve-3d",
           });
           gsap.set(galleryFrame, {
-            x: "0vw",
+            x: "2vw",
             y: "0vh",
             z: 0,
             xPercent: -50,
             yPercent: -50,
-            scale: 0.78,
+            scale: 0.94,
             rotateX: 0,
-            rotateY: -5,
+            rotateY: 0,
             transformPerspective: 1400,
             transformStyle: "preserve-3d",
             transformOrigin: "center center",
@@ -330,220 +324,113 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             force3D: true,
             backfaceVisibility: "hidden",
           });
-          gsap.set([...sequenceShots, sequenceLine], {
+          gsap.set(sequenceShots, {
             willChange: "transform, opacity",
             force3D: true,
             backfaceVisibility: "hidden",
           });
-          gsap.set(galleryMeta, { autoAlpha: 0.32, y: 0 });
-          gsap.set(qrisShot, {
+          gsap.set(checkoutShot, {
             autoAlpha: 1,
             scale: 1,
             x: "0vw",
             y: "0vh",
-            z: 0,
+            z: 140,
             xPercent: -50,
             yPercent: -50,
             rotateX: 0,
             rotateY: 0,
             filter: "blur(0px)",
           });
-          gsap.set([cryptoShot, checkoutShot, ordersShot], {
-            autoAlpha: 0,
+          gsap.set(qrisShot, {
+            autoAlpha: 0.3,
             scale: 0.86,
-            x: "0vw",
+            x: "8vw",
             y: "0vh",
-            z: -420,
+            z: -90,
+            xPercent: -50,
+            yPercent: -50,
+            rotateX: 0,
+            rotateY: 7,
+            filter: "blur(0px)",
+          });
+          gsap.set(cryptoShot, {
+            autoAlpha: 0.14,
+            scale: 0.76,
+            x: "13vw",
+            y: "0vh",
+            z: -220,
             xPercent: -50,
             yPercent: -50,
             rotateX: 0,
             rotateY: 10,
-            filter: "blur(8px)",
+            filter: "blur(0px)",
           });
-          gsap.set(sequenceLine, {
+          gsap.set(ordersShot, {
             autoAlpha: 0,
-            scaleX: 0.18,
-            transformOrigin: "left center",
+            scale: 0.72,
+            x: "15vw",
+            y: "0vh",
+            z: -300,
+            xPercent: -50,
+            yPercent: -50,
+            rotateX: 0,
+            rotateY: 11,
+            filter: "blur(0px)",
           });
 
           const aksaSequence = gsap.timeline();
 
-          // Aksa moves from a single product card into a layered depth gallery.
+          // Active screenshots stay sharp; only the leaving/background layers blur.
           aksaSequence
             .to(galleryFrame, {
-              x: "-7vw",
-              y: "-1vh",
-              z: 180,
-              scale: 1.18,
-              rotateY: 0,
-              duration: 0.34,
+              x: "1vw",
+              y: "0vh",
+              z: 50,
+              scale: 0.98,
+              duration: 0.36,
               ease: "none",
             })
             .to(
-              sequenceLine,
+              checkoutShot,
               {
-                autoAlpha: 0.44,
-                scaleX: 1,
-                duration: 0.34,
+                x: "-9vw",
+                y: "0vh",
+                z: -120,
+                scale: 0.82,
+                rotateY: -8,
+                autoAlpha: 0.26,
+                filter: "blur(6px)",
+                duration: 0.5,
                 ease: "none",
               },
               "<",
             )
-            .to(
-              galleryMeta,
-              { autoAlpha: 0.68, y: -8, duration: 0.34, ease: "none" },
-              "<",
-            )
-            .set([cryptoShot, checkoutShot, ordersShot], { autoAlpha: 1 })
-            .to(galleryFrame, {
-              x: "-14vw",
-              y: "-3vh",
-              z: 360,
-              scale: 1.58,
-              duration: 0.46,
-              ease: "none",
-            })
             .to(
               qrisShot,
               {
-                x: "-18vw",
-                y: "-1vh",
-                z: 360,
-                scale: 1.06,
-                rotateY: -12,
-                autoAlpha: 1,
-                filter: "blur(0px)",
-                duration: 0.46,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              cryptoShot,
-              {
-                x: "6vw",
-                y: "-2vh",
-                z: 60,
-                scale: 0.94,
-                rotateY: 8,
-                autoAlpha: 0.88,
-                filter: "blur(2px)",
-                duration: 0.46,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              checkoutShot,
-              {
-                x: "19vw",
-                y: "3vh",
-                z: -260,
-                scale: 0.78,
-                rotateY: 13,
-                autoAlpha: 0.54,
-                filter: "blur(6px)",
-                duration: 0.46,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              ordersShot,
-              {
-                x: "27vw",
-                y: "-5vh",
-                z: -520,
-                scale: 0.66,
-                rotateY: 17,
-                autoAlpha: 0.34,
-                filter: "blur(10px)",
-                duration: 0.46,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(qrisShot, {
-              x: "-31vw",
-              y: "2vh",
-              z: 120,
-              scale: 0.82,
-              rotateY: -22,
-              autoAlpha: 0.28,
-              filter: "blur(5px)",
-              duration: 0.42,
-              ease: "none",
-            })
-            .to(
-              cryptoShot,
-              {
-                x: "-8vw",
-                y: "-1vh",
-                z: 400,
-                scale: 1.08,
-                rotateY: -7,
-                autoAlpha: 1,
-                filter: "blur(0px)",
-                duration: 0.42,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              checkoutShot,
-              {
-                x: "12vw",
-                y: "2vh",
-                z: 70,
-                scale: 0.9,
-                rotateY: 8,
-                autoAlpha: 0.86,
-                filter: "blur(2px)",
-                duration: 0.42,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              ordersShot,
-              {
-                x: "24vw",
-                y: "-2vh",
-                z: -250,
-                scale: 0.74,
-                rotateY: 14,
-                autoAlpha: 0.48,
-                filter: "blur(6px)",
-                duration: 0.42,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              cryptoShot,
-              {
-                x: "-27vw",
-                y: "-4vh",
-                z: 120,
-                scale: 0.82,
-                rotateY: -20,
-                autoAlpha: 0.3,
-                filter: "blur(5px)",
-                duration: 0.42,
-                ease: "none",
-              },
-            )
-            .to(
-              checkoutShot,
-              {
-                x: "-6vw",
+                x: "0vw",
                 y: "0vh",
-                z: 420,
-                scale: 1.08,
-                rotateY: -6,
+                z: 150,
+                scale: 1,
+                rotateY: 0,
                 autoAlpha: 1,
                 filter: "blur(0px)",
-                duration: 0.42,
+                duration: 0.5,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              cryptoShot,
+              {
+                x: "8vw",
+                y: "0vh",
+                z: -90,
+                scale: 0.86,
+                rotateY: 7,
+                autoAlpha: 0.3,
+                filter: "blur(0px)",
+                duration: 0.5,
                 ease: "none",
               },
               "<",
@@ -551,40 +438,14 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             .to(
               ordersShot,
               {
-                x: "14vw",
-                y: "-2vh",
-                z: 80,
-                scale: 0.92,
-                rotateY: 8,
-                autoAlpha: 0.9,
-                filter: "blur(2px)",
-                duration: 0.42,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(ordersShot, {
-              x: "-4vw",
-              y: "-1vh",
-              z: 440,
-              scale: 1.08,
-              rotateY: -5,
-              autoAlpha: 1,
-              filter: "blur(0px)",
-              duration: 0.42,
-              ease: "none",
-            })
-            .to(
-              checkoutShot,
-              {
-                x: "-25vw",
-                y: "2vh",
-                z: 120,
-                scale: 0.82,
-                rotateY: -18,
-                autoAlpha: 0.3,
-                filter: "blur(5px)",
-                duration: 0.42,
+                x: "13vw",
+                y: "0vh",
+                z: -220,
+                scale: 0.76,
+                rotateY: 10,
+                autoAlpha: 0.14,
+                filter: "blur(0px)",
+                duration: 0.5,
                 ease: "none",
               },
               "<",
@@ -592,19 +453,134 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             .to(
               galleryFrame,
               {
-                x: "-18vw",
-                y: "-3vh",
-                z: 430,
-                scale: 1.68,
-                duration: 0.42,
+                x: "0vw",
+                y: "0vh",
+                z: 68,
+                scale: 1,
+                duration: 0.5,
+                ease: "none",
+              },
+            )
+            .to(
+              checkoutShot,
+              {
+                x: "-15vw",
+                y: "0vh",
+                z: -270,
+                scale: 0.66,
+                autoAlpha: 0,
+                filter: "blur(10px)",
+                duration: 0.52,
                 ease: "none",
               },
               "<",
             )
-            .to(galleryMeta, {
-              autoAlpha: 0.46,
-              y: -16,
-              duration: 0.42,
+            .to(
+              qrisShot,
+              {
+                x: "-9vw",
+                y: "0vh",
+                z: -120,
+                scale: 0.82,
+                rotateY: -8,
+                autoAlpha: 0.26,
+                filter: "blur(6px)",
+                duration: 0.52,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              cryptoShot,
+              {
+                x: "0vw",
+                y: "0vh",
+                z: 150,
+                scale: 1,
+                rotateY: 0,
+                autoAlpha: 1,
+                filter: "blur(0px)",
+                duration: 0.52,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              ordersShot,
+              {
+                x: "8vw",
+                y: "0vh",
+                z: -90,
+                scale: 0.86,
+                rotateY: 7,
+                autoAlpha: 0.3,
+                filter: "blur(0px)",
+                duration: 0.52,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              galleryFrame,
+              {
+                x: "-1vw",
+                y: "0vh",
+                z: 82,
+                scale: 1.02,
+                duration: 0.52,
+                ease: "none",
+              },
+            )
+            .to(
+              qrisShot,
+              {
+                x: "-15vw",
+                y: "0vh",
+                z: -280,
+                scale: 0.64,
+                autoAlpha: 0,
+                filter: "blur(10px)",
+                duration: 0.54,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              cryptoShot,
+              {
+                x: "-9vw",
+                y: "0vh",
+                z: -120,
+                scale: 0.82,
+                rotateY: -8,
+                autoAlpha: 0.26,
+                filter: "blur(6px)",
+                duration: 0.54,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(
+              ordersShot,
+              {
+                x: "0vw",
+                y: "0vh",
+                z: 150,
+                scale: 1,
+                rotateY: 0,
+                autoAlpha: 1,
+                filter: "blur(0px)",
+                duration: 0.54,
+                ease: "none",
+              },
+              "<",
+            )
+            .to(galleryFrame, {
+              x: "-2vw",
+              y: "0vh",
+              z: 90,
+              scale: 1.03,
+              duration: 0.36,
               ease: "none",
             });
 
@@ -662,19 +638,17 @@ function PanelShell({
 function AksaFeatureShot({
   src,
   alt,
-  label,
   className,
   objectPosition = "center top",
 }: {
   src: string;
   alt: string;
-  label: string;
   className: string;
   objectPosition?: string;
 }) {
   return (
     <figure
-      className={`aksa-depth-shot absolute left-1/2 top-1/2 h-[min(64vh,42rem)] w-[min(74vw,34rem)] overflow-hidden rounded-lg border border-white/12 bg-[#0a0610] shadow-[0_42px_130px_rgba(0,0,0,0.56)] sm:w-[min(38vw,34rem)] ${className}`}
+      className={`aksa-depth-shot absolute left-1/2 top-1/2 h-[min(56vh,38rem)] w-[min(72vw,31rem)] overflow-hidden rounded-md bg-[#0a0610] shadow-[0_34px_100px_rgba(0,0,0,0.5)] sm:w-[min(29vw,31rem)] ${className}`}
       style={{ transformStyle: "preserve-3d" }}
     >
       <Image
@@ -686,11 +660,6 @@ function AksaFeatureShot({
         className="object-cover"
         style={{ objectPosition }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(18,8,26,0.7),rgba(18,8,26,0.18)_42%,rgba(5,4,8,0.28)),linear-gradient(0deg,rgba(5,4,8,0.56),transparent_46%,rgba(5,4,8,0.18))]" />
-      <figcaption className="absolute bottom-6 left-[7%] right-[8%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/42 sm:text-[0.62rem]">
-        <span>{label}</span>
-        <span>Aksa Xiterz</span>
-      </figcaption>
     </figure>
   );
 }
@@ -754,22 +723,18 @@ function AksaPanel() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
 
         <div
-          className="camera-visual aksa-gallery-shell absolute inset-y-[11vh] left-[18vw] right-[-2vw] z-10 overflow-visible sm:left-[24vw] sm:right-[3vw] lg:left-[27vw] lg:right-[5vw]"
+          className="camera-visual aksa-gallery-shell absolute inset-y-[13vh] left-[36vw] right-[2vw] z-10 overflow-visible sm:left-[40vw] sm:right-[4vw] lg:left-[43vw] lg:right-[6vw]"
           style={{ perspective: "1400px", transformStyle: "preserve-3d" }}
         >
-          <div className="absolute inset-x-[10%] bottom-[8%] top-[8%] rounded-full bg-violet-500/12 blur-3xl" />
+          <div className="absolute inset-x-[8%] bottom-[10%] top-[10%] rounded-full bg-violet-500/12 blur-3xl" />
 
           <div
-            className="aksa-gallery-frame absolute left-1/2 top-1/2 h-[74vh] w-[min(84vw,78rem)] overflow-visible rounded-lg border border-white/10 bg-[radial-gradient(circle_at_50%_50%,rgba(119,58,157,0.18),rgba(8,5,14,0.42)_54%,rgba(2,1,5,0.72))] shadow-[0_50px_150px_rgba(0,0,0,0.54)]"
+            className="aksa-gallery-frame absolute left-1/2 top-1/2 h-[68vh] w-[min(54vw,54rem)] overflow-visible"
             style={{ transformStyle: "preserve-3d" }}
           >
-            <div className="absolute inset-0 rounded-lg bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.08)_50%,transparent),linear-gradient(0deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100%_100%,100%_18vh] opacity-42" />
-            <div className="absolute inset-x-[8%] top-1/2 h-px bg-violet-100/24" />
-
             <AksaFeatureShot
               src="/projects/aksa-xiterz/qris-mobile.png"
               alt="Close crop of the Aksa Xiterz QRIS payment screen"
-              label="QRIS Invoice"
               objectPosition="center 43%"
               className="aksa-shot-qris"
             />
@@ -777,7 +742,6 @@ function AksaPanel() {
             <AksaFeatureShot
               src="/projects/aksa-xiterz/crypto-address-mobile.png"
               alt="Close crop of the Aksa Xiterz USDT payment details screen"
-              label="Crypto Payment"
               objectPosition="center 38%"
               className="aksa-shot-crypto"
             />
@@ -785,7 +749,6 @@ function AksaPanel() {
             <AksaFeatureShot
               src="/projects/aksa-xiterz/checkout-network-mobile.png"
               alt="Close crop of the Aksa Xiterz checkout network selection screen"
-              label="Checkout Logic"
               objectPosition="center 35%"
               className="aksa-shot-checkout"
             />
@@ -793,31 +756,10 @@ function AksaPanel() {
             <AksaFeatureShot
               src="/projects/aksa-xiterz/orders-mobile.png"
               alt="Close crop of the Aksa Xiterz transaction order screen"
-              label="Order Tracking"
               objectPosition="center 32%"
               className="aksa-shot-orders"
             />
-
-            <div className="aksa-sequence-line absolute left-[12%] top-[54%] h-px w-[72%] origin-left rotate-[-7deg] bg-white/30" />
-
-            <div className="aksa-gallery-meta absolute left-[7%] top-[10%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block">
-              Automated Commerce
-            </div>
-            <div className="aksa-gallery-meta absolute right-[7%] bottom-[10%] hidden font-mono text-[0.62rem] uppercase tracking-[0.28em] text-white/42 sm:block">
-              Operational Payments
-            </div>
           </div>
-        </div>
-
-        <div className="absolute inset-x-[16vw] top-[18vh] hidden h-px bg-white/14 sm:block" />
-        <div className="absolute bottom-[16vh] left-[28vw] hidden h-px w-[46vw] bg-violet-100/18 sm:block" />
-        <div className="absolute right-[9vw] top-[18vh] hidden h-[64vh] w-px bg-white/10 sm:block" />
-
-        <div className="absolute left-[48vw] top-[18vh] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/36 lg:block">
-          QRIS Invoice
-        </div>
-        <div className="absolute right-[8vw] bottom-[20vh] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/36 sm:block">
-          Transaction Logic
         </div>
       </div>
 
@@ -1050,7 +992,7 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[700vh]">
+      <section className="panel-scroll relative z-10 h-[820vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
