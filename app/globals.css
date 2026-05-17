@@ -61,12 +61,18 @@ a {
 
 .aksa-showcase-step {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr);
   align-items: center;
   gap: 1.25rem;
+  width: 100%;
+  overflow-x: clip;
 }
 
 .aksa-step-copy {
+  min-width: 0;
+  width: min(100%, 30rem);
+  max-width: min(100%, 30rem);
   text-wrap: balance;
 }
 
@@ -80,6 +86,8 @@ a {
 
 .aksa-visual-composition {
   align-self: center;
+  justify-self: start;
+  width: min(100%, 52rem);
 }
 
 .aksa-phone-stage {
@@ -111,26 +119,37 @@ a {
 
 @media (min-width: 64rem) {
   .aksa-showcase-step {
-    grid-template-columns: minmax(0, 0.7fr) minmax(25rem, 0.95fr);
+    grid-template-columns: minmax(38rem, 52vw) minmax(23rem, 33vw);
     grid-template-rows: 1fr;
-    gap: 1.5rem;
+    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 5.5rem);
+    transform: translateX(-4vw);
   }
 
   .aksa-step-copy {
-    margin-right: -6vw;
-    padding-top: 3vh;
+    justify-self: end;
+    margin-right: 0;
+    padding-top: 0;
+    padding-right: 0;
+  }
+
+  .aksa-visual-composition {
+    justify-self: start;
+    width: min(52vw, 58rem);
+    transform: translateX(4.2vw);
   }
 
   .aksa-editorial-title {
-    font-size: clamp(5rem, 8.4vw, 8.6rem);
+    max-width: 100%;
+    font-size: clamp(4.4rem, 7.2vw, 7.4rem);
   }
 
   .aksa-editorial-subtitle {
-    font-size: clamp(1.95rem, 3.1vw, 3.2rem);
+    font-size: clamp(1.75rem, 2.55vw, 2.7rem);
   }
 
   .aksa-phone-stage {
-    width: clamp(25rem, 33vw, 28rem);
+    width: clamp(25rem, 30vw, 29rem);
   }
 }
 

@@ -77,23 +77,33 @@ const aksaShowcaseFrames = [
   },
 ] as const;
 
-const bottomUpPanelMotion = {
+const connectedPanelMotion = {
   incomingFrom: {
-    yPercent: 100,
-    scale: 1,
+    yPercent: 7,
+    scale: 1.012,
     clipPath: "inset(0% 0% 0% 0%)",
   },
   incomingTo: {
     yPercent: 0,
     scale: 1,
-    duration: 1.36,
+    duration: 1.62,
     ease: "none",
     immediateRender: false,
   },
+  incomingFadeTo: {
+    autoAlpha: 1,
+    duration: 0.82,
+    ease: "none",
+  },
   outgoingTo: {
-    scale: 0.992,
+    scale: 0.988,
     yPercent: -0.8,
-    duration: 1.36,
+    duration: 1.62,
+    ease: "none",
+  },
+  outgoingFadeTo: {
+    autoAlpha: 0,
+    duration: 0.96,
     ease: "none",
   },
 } as const;
@@ -102,22 +112,22 @@ const panelTransitions = [
   {
     incoming: "aksa",
     at: transitionAt.aksa,
-    ...bottomUpPanelMotion,
+    ...connectedPanelMotion,
   },
   {
     incoming: "siemola",
     at: transitionAt.siemola,
-    ...bottomUpPanelMotion,
+    ...connectedPanelMotion,
   },
   {
     incoming: "fashion",
     at: transitionAt.fashion,
-    ...bottomUpPanelMotion,
+    ...connectedPanelMotion,
   },
   {
     incoming: "closing",
     at: transitionAt.closing,
-    ...bottomUpPanelMotion,
+    ...connectedPanelMotion,
   },
 ] as const;
 
@@ -156,10 +166,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       // 1. SETUP AWAL
       panelElements.forEach((panel, index) => {
         gsap.set(panel, {
-          yPercent: index === 0 ? 0 : 100,
+          yPercent: index === 0 ? 0 : connectedPanelMotion.incomingFrom.yPercent,
           zIndex: index + 1,
-          autoAlpha: 1,
-          scale: 1,
+          autoAlpha: index === 0 ? 1 : 0,
+          scale: index === 0 ? 1 : connectedPanelMotion.incomingFrom.scale,
           clipPath: "inset(0% 0% 0% 0%)",
           transformOrigin: "center center",
           willChange: "transform",
@@ -169,7 +179,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       });
 
       // ==========================================
-      // TAMBAHAN: INTRO ANIMATION
+      // INTRO ANIMATION (Peningkatan: Lebih Cepat)
       // ==========================================
       const introTl = gsap.timeline({
         onComplete: () => unlockIntroScroll(),
@@ -181,11 +191,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       });
       introTl.set(".intro-words-container", { autoAlpha: 1 });
 
-      introTl.to(root, { autoAlpha: 1, duration: 0.3, ease: "power1.in" });
-
-      // ==========================================
-      // CINEMATIC INTRO WORD SEQUENCE
-      // ==========================================
+      introTl.to(root, { autoAlpha: 1, duration: 0.2, ease: "power1.in" });
 
       const words = gsap.utils.toArray(".intro-word");
 
@@ -195,26 +201,18 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         introTl
           .fromTo(
             el,
-            {
-              yPercent: 38,
-              autoAlpha: 0,
-            },
-            {
-              yPercent: 0,
-              autoAlpha: 1,
-              duration: 0.9,
-              ease: "power3.out",
-            },
+            { yPercent: 38, autoAlpha: 0 },
+            { yPercent: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
           )
           .to(
             el,
             {
               yPercent: -38,
               autoAlpha: 0,
-              duration: 0.72,
+              duration: 0.55,
               ease: "power3.in",
             },
-            "+=0.38",
+            "+=0.25",
           );
       });
 
@@ -223,10 +221,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         {
           autoAlpha: 0,
           y: -8,
-          duration: 0.55,
+          duration: 0.45,
           ease: "power2.out",
         },
-        "-=0.18",
+        "-=0.1",
       );
 
       // Reveal main hero
@@ -236,10 +234,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           autoAlpha: 1,
           y: 0,
           scale: 1,
-          duration: 1.2,
+          duration: 1.0,
           ease: "power3.out",
         },
-        "-=0.12",
+        "-=0.08",
       );
 
       const film = gsap.timeline({
@@ -340,7 +338,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             force3D: true,
             backfaceVisibility: "hidden",
           });
-          gsap.set(steps, { willChange: "opacity" });
+          gsap.set(steps, { autoAlpha: 0, willChange: "opacity" });
+          gsap.set(steps[0], { autoAlpha: 1 });
 
           aksaSequence.to(
             verticalTrack,
@@ -365,35 +364,33 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             );
           }
 
-          steps.forEach((step, index) => {
-            const at = index * stepDuration;
-            const enterAt = Math.max(0, at - 0.46);
-            const exitAt = at + 0.54;
-            const isLastStep = index === steps.length - 1;
+          steps.slice(0, -1).forEach((step, index) => {
+            const nextStep = steps[index + 1];
+            const nextStepCenterAt = (index + 1) * stepDuration;
+            const fadeDuration = 0.48;
+            const crossfadeAt = nextStepCenterAt - fadeDuration;
 
-            if (step) {
-              aksaSequence.to(
+            aksaSequence
+              .to(
                 step,
                 {
-                  autoAlpha: 1,
-                  duration: 0.42,
+                  autoAlpha: 0,
+                  duration: fadeDuration,
                   ease: "none",
                 },
-                enterAt,
+                crossfadeAt,
+              )
+              .fromTo(
+                nextStep,
+                { autoAlpha: 0 },
+                {
+                  autoAlpha: 1,
+                  duration: fadeDuration,
+                  ease: "none",
+                  immediateRender: false,
+                },
+                crossfadeAt,
               );
-
-              if (!isLastStep) {
-                aksaSequence.to(
-                  step,
-                  {
-                    autoAlpha: 0.9,
-                    duration: 0.5,
-                    ease: "none",
-                  },
-                  exitAt,
-                );
-              }
-            }
           });
 
           film.add(aksaSequence, aksaSequenceAt);
@@ -414,10 +411,20 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             { ...transition.incomingTo },
             transition.at,
           )
-          .to(outgoingPanel, { ...transition.outgoingTo }, transition.at);
+          .to(incomingPanel, { ...transition.incomingFadeTo }, transition.at)
+          .to(
+            outgoingPanel,
+            { ...transition.outgoingTo },
+            transition.at + 0.16,
+          )
+          .to(
+            outgoingPanel,
+            { ...transition.outgoingFadeTo },
+            transition.at + 0.24,
+          );
 
         addCameraDepth(incomingPanel, transition.at, "enter");
-        addCameraDepth(outgoingPanel, transition.at, "exit");
+        addCameraDepth(outgoingPanel, transition.at + 0.16, "exit");
       });
 
       ScrollTrigger.refresh();
@@ -455,49 +462,72 @@ function AksaShowcaseStep({
   index: number;
 }) {
   return (
-    <section className="aksa-showcase-step relative h-screen min-h-[44rem] px-5 py-[6vh] sm:px-10 lg:px-16">
-      <div className="aksa-step-copy relative z-20 max-w-[31rem] lg:self-center">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/38">
-          {frame.label}
-        </p>
-
-        <h2 className="aksa-editorial-title mt-5 font-display font-semibold leading-[0.84] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
-          Aksa Xiterz
-        </h2>
-
-        <h3 className="aksa-editorial-subtitle mt-5 max-w-[29rem] font-display font-semibold leading-[1] tracking-normal text-white">
-          {frame.title}
-        </h3>
-
-        <p className="mt-5 max-w-md text-sm leading-6 text-slate-300/82 sm:text-base sm:leading-7">
-          {frame.body}
-        </p>
-
-        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-violet-100/42">
+    <section className="aksa-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
+      
+      {/* SISI KIRI: VISUAL STAGE (Layout Arsitektural & Garis Tipis ala Editorial) */}
+      <div className="aksa-visual-composition relative z-10 w-full h-[60vh] lg:h-[70vh] border border-white/10 bg-black/10 overflow-hidden hidden sm:block">
+        {/* Garis Pembagi Internal */}
+        <div className="absolute inset-y-0 left-[30%] w-px bg-white/10" />
+        <div className="absolute inset-y-0 left-[70%] w-px bg-white/5" />
+        <div className="absolute inset-x-0 top-[25%] h-px bg-white/10" />
+        <div className="absolute inset-x-0 bottom-[20%] h-px bg-white/10" />
+        
+        {/* Konten Metadata Tekstual Pojok */}
+        <div className="absolute bottom-4 left-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-white/30">
+          SYSTEM ENVIRONMENT // INTERACTION
+        </div>
+        <div className="absolute top-4 right-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-violet-100/30">
           {frame.meta}
-        </p>
-      </div>
+        </div>
 
-      <div className="aksa-visual-composition relative z-10 mx-auto grid w-full max-w-[44rem] place-items-center lg:justify-self-center">
-        <AksaScreenWall activeIndex={index} />
+        {/* Latar Belakang Mini Wall-Tiles */}
+        <div className="absolute left-[6%] top-[35%] opacity-25 scale-90 pointer-events-none hidden lg:block">
+          <AksaScreenWall activeIndex={index} />
+        </div>
 
-        <div className="aksa-phone-stage relative z-10">
-          <span className="pointer-events-none absolute -inset-[7%] bg-[linear-gradient(135deg,rgba(168,85,247,0.26),rgba(236,72,153,0.1)_42%,rgba(14,165,233,0.08)_78%,rgba(255,255,255,0.035))] opacity-45 blur-3xl" />
-
-          <figure className="aksa-phone-frame relative h-full overflow-hidden rounded-[1.15rem] border border-violet-300/22 bg-[#07050c] shadow-[0_34px_110px_rgba(0,0,0,0.62),0_0_70px_rgba(147,51,234,0.18)]">
+        {/* Stage Utama: iPhone Frame Centered Asymmetrically */}
+        <div className="aksa-phone-stage absolute left-[45%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-20 h-[85%] aspect-[1290/2796]">
+          <span className="pointer-events-none absolute -inset-[15%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.15),transparent_60%)] blur-2xl" />
+          
+          <figure className="relative w-full h-full overflow-hidden rounded-[1rem] border border-white/15 bg-[#0a0712] shadow-[0_24px_80px_rgba(0,0,0,0.8)]">
             <Image
               src={frame.src}
               alt={`Aksa Xiterz ${frame.title}`}
               fill
               unoptimized
-              sizes="(max-width: 1024px) 82vw, 38vw"
-              className="object-contain"
+              sizes="(max-width: 1024px) 50vw, 25vw"
+              className="object-contain p-1"
               loading={index === 0 ? "eager" : "lazy"}
             />
-            <span className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]" />
           </figure>
         </div>
       </div>
+
+      {/* SISI KANAN: EDITORIAL COPY (Konsisten Rata Kanan Mengikuti Pola BRL Fashion) */}
+      <div className="aksa-step-copy relative z-20 text-left lg:text-right">
+        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/40">
+          {frame.label}
+        </p>
+
+        <h2 className="aksa-editorial-title mt-6 font-display text-[clamp(2.5rem,5vw,4.5rem)] font-semibold leading-[0.9] tracking-normal text-white">
+          Aksa Xiterz
+        </h2>
+
+        <h3 className="aksa-editorial-subtitle mt-4 font-display text-lg font-medium leading-[1.3] text-violet-200/90">
+          {frame.title}
+        </h3>
+
+        <p className="mt-5 text-sm leading-6 text-slate-400 font-light">
+          {frame.body}
+        </p>
+
+        <div className="mt-8 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
+          <span>{frame.meta.split(', ')[0]}</span>
+          <span>•</span>
+          <span>{frame.meta.split(', ')[1] || 'Secure Delivery'}</span>
+        </div>
+      </div>
+
     </section>
   );
 }
@@ -506,15 +536,15 @@ function AksaScreenWall({ activeIndex }: { activeIndex: number }) {
   return (
     <div
       aria-hidden="true"
-      className="aksa-screen-wall pointer-events-none absolute z-0 hidden grid-cols-4 gap-2 lg:grid"
+      className="aksa-screen-wall pointer-events-none grid grid-cols-2 gap-3"
     >
-      {aksaShowcaseFrames.map((screen, screenIndex) => (
+      {aksaShowcaseFrames.slice(0, 4).map((screen, screenIndex) => (
         <div
           key={screen.src}
-          className={`aksa-screen-tile relative aspect-[1290/2796] overflow-hidden rounded-[0.55rem] border bg-[#08050d] shadow-[0_18px_60px_rgba(0,0,0,0.34)] ${
-            screenIndex === activeIndex
-              ? "aksa-screen-tile-active border-violet-100/18"
-              : "border-white/8"
+          className={`aksa-screen-tile relative w-16 aspect-[1290/2796] overflow-hidden rounded-[0.3rem] border transition-all duration-500 ${
+            screenIndex === activeIndex % 4
+              ? "border-violet-500/40 bg-violet-950/20 opacity-100 scale-105"
+              : "border-white/5 bg-black/40 opacity-40"
           }`}
         >
           <Image
@@ -522,9 +552,9 @@ function AksaScreenWall({ activeIndex }: { activeIndex: number }) {
             alt=""
             fill
             unoptimized
-            sizes="8vw"
-            className="object-contain"
-            loading={screenIndex === 0 ? "eager" : "lazy"}
+            sizes="4vw"
+            className="object-contain opacity-60"
+            loading="lazy"
           />
         </div>
       ))}
@@ -628,49 +658,49 @@ function SiemolaPanel() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(64,104,134,0.25),transparent_34%),linear-gradient(135deg,rgba(7,17,26,1),rgba(4,8,13,1)_58%,rgba(17,30,42,0.92))]" />
 
         <div className="camera-visual absolute left-[6vw] top-[20vh] z-10 h-[58vh] w-[94vw] sm:left-[11vw] sm:top-[15vh] sm:h-[68vh] sm:w-[78vw]">
-        <div className="absolute inset-y-[8%] left-[12%] right-[4%] border-y border-white/12 bg-[linear-gradient(120deg,rgba(13,30,45,0.78),rgba(5,10,16,0.38)_54%,rgba(26,43,56,0.5))]" />
-        <div className="absolute inset-x-[20%] top-[12%] h-px bg-white/14" />
-        <div className="absolute inset-x-[4%] top-[44%] h-px bg-white/10" />
-        <div className="absolute inset-x-[15%] bottom-[18%] h-px bg-white/14" />
-        <div className="absolute bottom-[12%] left-[24%] top-[7%] w-px bg-white/12" />
-        <div className="absolute bottom-[6%] right-[18%] top-[14%] w-px bg-white/12" />
+          <div className="absolute inset-y-[8%] left-[12%] right-[4%] border-y border-white/12 bg-[linear-gradient(120deg,rgba(13,30,45,0.78),rgba(5,10,16,0.38)_54%,rgba(26,43,56,0.5))]" />
+          <div className="absolute inset-x-[20%] top-[12%] h-px bg-white/14" />
+          <div className="absolute inset-x-[4%] top-[44%] h-px bg-white/10" />
+          <div className="absolute inset-x-[15%] bottom-[18%] h-px bg-white/14" />
+          <div className="absolute bottom-[12%] left-[24%] top-[7%] w-px bg-white/12" />
+          <div className="absolute bottom-[6%] right-[18%] top-[14%] w-px bg-white/12" />
 
-        <pre className="absolute left-[8%] top-[16%] max-w-[78vw] whitespace-pre-wrap border-l border-blue-100/22 pl-5 font-mono text-[0.64rem] uppercase leading-6 tracking-[0.18em] text-blue-100/58 sm:left-[10%] sm:max-w-none sm:text-[0.74rem] sm:leading-7">
+          <pre className="absolute left-[8%] top-[16%] max-w-[78vw] whitespace-pre-wrap border-l border-blue-100/22 pl-5 font-mono text-[0.64rem] uppercase leading-6 tracking-[0.18em] text-blue-100/58 sm:left-[10%] sm:max-w-none sm:text-[0.74rem] sm:leading-7">
 {`RFID_TAP      AUTH_WINDOW
 SWITCH_OPEN   BORROW_ACTIVE
 SWITCH_CLOSE  RETURN_SYNC`}
-        </pre>
+          </pre>
 
-        <div className="absolute right-[8%] top-[20%] hidden w-[28vw] min-w-[17rem] border border-white/12 bg-black/18 p-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:block">
-          <div className="mb-4 text-blue-100/68">locker_accesses</div>
-          <div className="flex justify-between border-t border-white/10 py-3">
-            <span>student_id</span>
-            <span>indexed</span>
+          <div className="absolute right-[8%] top-[20%] hidden w-[28vw] min-w-[17rem] border border-white/12 bg-black/18 p-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:block">
+            <div className="mb-4 text-blue-100/68">locker_accesses</div>
+            <div className="flex justify-between border-t border-white/10 py-3">
+              <span>student_id</span>
+              <span>indexed</span>
+            </div>
+            <div className="flex justify-between border-t border-white/10 py-3">
+              <span>locker_id</span>
+              <span>mapped</span>
+            </div>
+            <div className="flex justify-between border-t border-white/10 py-3">
+              <span>status</span>
+              <span>synced</span>
+            </div>
           </div>
-          <div className="flex justify-between border-t border-white/10 py-3">
-            <span>locker_id</span>
-            <span>mapped</span>
-          </div>
-          <div className="flex justify-between border-t border-white/10 py-3">
-            <span>status</span>
-            <span>synced</span>
-          </div>
-        </div>
 
-        <div className="absolute bottom-[16%] left-[18%] flex w-[62vw] max-w-xl flex-col gap-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:left-[16%]">
-          <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
-            <span>api/tab</span>
-            <span className="text-blue-100/68">RFID event</span>
+          <div className="absolute bottom-[16%] left-[18%] flex w-[62vw] max-w-xl flex-col gap-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:left-[16%]">
+            <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
+              <span>api/tab</span>
+              <span className="text-blue-100/68">RFID event</span>
+            </div>
+            <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
+              <span>borrowLocker()</span>
+              <span className="text-blue-100/68">state guard</span>
+            </div>
           </div>
-          <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
-            <span>borrowLocker()</span>
-            <span className="text-blue-100/68">state guard</span>
-          </div>
-        </div>
 
-        <div className="absolute right-[8%] bottom-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/34 sm:block">
-          infrastructure logic
-        </div>
+          <div className="absolute right-[8%] bottom-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/34 sm:block">
+            infrastructure logic
+          </div>
         </div>
       </div>
 
