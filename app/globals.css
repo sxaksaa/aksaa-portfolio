@@ -49,6 +49,51 @@ a {
   text-decoration: none;
 }
 
+.aksa-showcase-step {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.aksa-visual-composition {
+  align-self: center;
+}
+
+.aksa-phone-stage {
+  aspect-ratio: 1290 / 2796;
+  width: clamp(16rem, 74vw, 18rem);
+}
+
+.aksa-screen-wall {
+  inset-inline: 0;
+  bottom: -5%;
+}
+
+@media (min-width: 40rem) {
+  .aksa-phone-stage {
+    width: clamp(18rem, 48vw, 21rem);
+  }
+}
+
+@media (min-width: 64rem) {
+  .aksa-showcase-step {
+    grid-template-columns: minmax(0, 0.68fr) minmax(22rem, 0.9fr);
+    grid-template-rows: 1fr;
+    gap: 2.5rem;
+  }
+
+  .aksa-phone-stage {
+    width: clamp(22rem, 31vw, 25rem);
+  }
+}
+
+@media (min-width: 80rem) {
+  .aksa-phone-stage {
+    width: clamp(24rem, 29vw, 27rem);
+  }
+}
+
 ::selection {
   background: rgba(168, 85, 247, 0.42);
   color: #ffffff;

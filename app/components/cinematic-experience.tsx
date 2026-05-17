@@ -11,65 +11,65 @@ type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 1,
-  siemola: 9.4,
-  fashion: 11.15,
-  closing: 12.9,
+  siemola: 9.72,
+  fashion: 11.52,
+  closing: 13.28,
 } as const;
 
-const aksaSequenceAt = 1.9;
+const aksaSequenceAt = 2.55;
 
 const aksaShowcaseFrames = [
   {
-    src: "/projects/aksa-xiterz/home-mobile.png",
+    src: "/projects/aksa-xiterz/Dashboard.png",
     label: "01 / Platform",
     title: "Premium tools and instant licenses.",
     body: "The homepage sets the promise first: trusted digital tools, license access, setup support, and a clear product path.",
     meta: "Hero, trust numbers, product search",
   },
   {
-    src: "/projects/aksa-xiterz/products-mobile.png",
+    src: "/projects/aksa-xiterz/list%20product.png",
     label: "02 / Storefront",
     title: "Products stay easy to scan.",
     body: "Cards keep platform, stock status, pricing, and auto-delivery availability visible before a buyer enters checkout.",
     meta: "Catalog, pricing, stock signal",
   },
   {
-    src: "/projects/aksa-xiterz/qris-mobile.png",
+    src: "/projects/aksa-xiterz/Contoh%20Qris%20Payment.png",
     label: "03 / QRIS",
     title: "QRIS stays inside the flow.",
     body: "The invoice opens as a native payment state with order ID, fee, total, expiry, and a direct check-payment action.",
     meta: "QR invoice, exact total, expiry",
   },
   {
-    src: "/projects/aksa-xiterz/crypto-address-mobile.png",
+    src: "/projects/aksa-xiterz/Contoh%20Crypto%20Payment.png",
     label: "04 / Crypto",
     title: "USDT checkout is explicit.",
     body: "Network, amount, address, token contract, and warning copy are shown together so customers know what must match.",
     meta: "BSC RPC, exact amount, copy actions",
   },
   {
-    src: "/projects/aksa-xiterz/licenses-mobile.png",
+    src: "/projects/aksa-xiterz/license%20section.png",
     label: "05 / Licenses",
     title: "Delivery lands in one place.",
     body: "Paid keys are grouped with purchase details, active state, copy action, and support shortcuts for setup help.",
     meta: "License key, support, delivery",
   },
   {
-    src: "/projects/aksa-xiterz/orders-mobile.png",
+    src: "/projects/aksa-xiterz/order%20history.png",
     label: "06 / Orders",
     title: "Order history keeps state visible.",
     body: "Customers can track totals, paid orders, waiting payments, cancelled invoices, methods, prices, and timestamps.",
     meta: "History, status, payment method",
   },
   {
-    src: "/projects/aksa-xiterz/guides-mobile.png",
+    src: "/projects/aksa-xiterz/Guides%20Blog.png",
     label: "07 / Guides",
     title: "Guides reduce setup friction.",
     body: "A public knowledge base gives step-by-step Windows fixes before support has to answer the same setup questions.",
     meta: "Knowledge base, setup fixes",
   },
   {
-    src: "/projects/aksa-xiterz/downloads-mobile.png",
+    src: "/projects/aksa-xiterz/Download%20Section.png",
     label: "08 / Downloads",
     title: "Files are collected neatly.",
     body: "The downloads page keeps public tools and required files organized by product so buyers can continue after purchase.",
@@ -86,14 +86,14 @@ const bottomUpPanelMotion = {
   incomingTo: {
     yPercent: 0,
     scale: 1,
-    duration: 1.5,
+    duration: 1.75,
     ease: "none",
     immediateRender: false,
   },
   outgoingTo: {
-    scale: 0.985,
-    yPercent: -2,
-    duration: 1.5,
+    scale: 0.992,
+    yPercent: -0.8,
+    duration: 1.75,
     ease: "none",
   },
 } as const;
@@ -129,7 +129,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.08,
+      lerp: 0.064,
       smoothWheel: true,
     });
 
@@ -192,8 +192,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
       });
       introTl.set(".intro-content-group", {
         autoAlpha: 0,
-        y: 36,
-        scale: 0.98,
+        y: 20,
+        scale: 0.99,
       });
       introTl.set(".intro-words-container", { autoAlpha: 1 });
 
@@ -212,25 +212,25 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           .fromTo(
             el,
             {
-              yPercent: 100,
+              yPercent: 38,
               autoAlpha: 0,
             },
             {
               yPercent: 0,
               autoAlpha: 1,
-              duration: 0.8,
-              ease: "power4.out",
+              duration: 0.9,
+              ease: "power3.out",
             },
           )
           .to(
             el,
             {
-              yPercent: -100,
+              yPercent: -38,
               autoAlpha: 0,
-              duration: 0.6,
-              ease: "power4.in",
+              duration: 0.72,
+              ease: "power3.in",
             },
-            "+=0.45",
+            "+=0.38",
           );
       });
 
@@ -238,8 +238,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         ".intro-words-container",
         {
           autoAlpha: 0,
-          y: -20,
-          duration: 0.45,
+          y: -8,
+          duration: 0.55,
           ease: "power2.out",
         },
         "-=0.18",
@@ -263,7 +263,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.8,
+          scrub: 2.75,
         },
       });
 
@@ -277,14 +277,14 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         const copy = gsap.utils.toArray<HTMLElement>(
           panel.querySelectorAll<HTMLElement>(".camera-copy"),
         );
-        const duration = 1.75;
+        const duration = 2.15;
 
         const targets = [scene, visual, ...copy].filter(
           Boolean,
         ) as HTMLElement[];
         if (targets.length) {
           gsap.set(targets, {
-            willChange: "transform, opacity",
+            willChange: "transform",
             force3D: true,
             backfaceVisibility: "hidden",
           });
@@ -294,7 +294,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           if (scene) {
             film.fromTo(
               scene,
-              { scale: 1.08 },
+              { scale: 1.03 },
               { scale: 1, duration, ease: "none" },
               at,
             );
@@ -303,7 +303,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           if (visual) {
             film.fromTo(
               visual,
-              { scale: 1.045 },
+              { scale: 1.018 },
               { scale: 1, duration, ease: "none" },
               at,
             );
@@ -312,8 +312,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           if (copy.length) {
             film.fromTo(
               copy,
-              { y: 10 },
-              { y: 0, duration: 1.25, ease: "none" },
+              { y: 4 },
+              { y: 0, duration: 1.65, ease: "none" },
               at + 0.16,
             );
           }
@@ -322,15 +322,15 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         }
 
         if (scene) {
-          film.to(scene, { scale: 1.07, duration, ease: "none" }, at);
+          film.to(scene, { scale: 1.026, duration, ease: "none" }, at);
         }
 
         if (visual) {
-          film.to(visual, { scale: 1.055, duration, ease: "none" }, at);
+          film.to(visual, { scale: 1.018, duration, ease: "none" }, at);
         }
 
         if (copy.length) {
-          film.to(copy, { y: -8, duration: 1.25, ease: "none" }, at);
+          film.to(copy, { y: -4, duration: 1.65, ease: "none" }, at);
         }
       };
 
@@ -342,30 +342,21 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         const steps = gsap.utils.toArray<HTMLElement>(
           aksaPanel.querySelectorAll<HTMLElement>(".aksa-showcase-step"),
         );
-        const phoneFrames = gsap.utils.toArray<HTMLElement>(
-          aksaPanel.querySelectorAll<HTMLElement>(".aksa-phone-frame"),
-        );
-        const copyCards = gsap.utils.toArray<HTMLElement>(
-          aksaPanel.querySelectorAll<HTMLElement>(".aksa-step-copy"),
-        );
 
         if (verticalTrack && steps.length > 1) {
           const aksaSequence = gsap.timeline();
-          const stepDuration = 0.78;
+          const stepDuration = 0.98;
           const sequenceDuration = stepDuration * (steps.length - 1);
-          const aksaMotionTargets = [
-            verticalTrack,
-            aurora,
-            ...steps,
-            ...phoneFrames,
-            ...copyCards,
-          ].filter(Boolean) as HTMLElement[];
+          const aksaDepthTargets = [verticalTrack, aurora].filter(
+            Boolean,
+          ) as HTMLElement[];
 
-          gsap.set(aksaMotionTargets, {
-            willChange: "transform, opacity",
+          gsap.set(aksaDepthTargets, {
+            willChange: "transform",
             force3D: true,
             backfaceVisibility: "hidden",
           });
+          gsap.set(steps, { willChange: "opacity" });
 
           aksaSequence.to(
             verticalTrack,
@@ -381,8 +372,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             aksaSequence.to(
               aurora,
               {
-                yPercent: 14,
-                scale: 1.08,
+                yPercent: 7,
+                scale: 1.045,
                 duration: sequenceDuration,
                 ease: "none",
               },
@@ -392,42 +383,32 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
           steps.forEach((step, index) => {
             const at = index * stepDuration;
-            const copyCard = copyCards[index];
-            const phoneFrame = phoneFrames[index];
+            const enterAt = Math.max(0, at - 0.46);
+            const exitAt = at + 0.54;
+            const isLastStep = index === steps.length - 1;
 
-            if (copyCard && phoneFrame && index > 0) {
-              aksaSequence.fromTo(
-                [copyCard, phoneFrame],
-                {
-                  autoAlpha: 0.5,
-                  y: 46,
-                  scale: 0.98,
-                },
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  scale: 1,
-                  duration: 0.32,
-                  stagger: 0.04,
-                  ease: "none",
-                  immediateRender: false,
-                },
-                Math.max(0, at - 0.18),
-              );
-            }
-
-            if (step && index > 0) {
-              aksaSequence.fromTo(
+            if (step) {
+              aksaSequence.to(
                 step,
-                { autoAlpha: 0.78 },
                 {
                   autoAlpha: 1,
-                  duration: 0.24,
+                  duration: 0.42,
                   ease: "none",
-                  immediateRender: false,
                 },
-                Math.max(0, at - 0.12),
+                enterAt,
               );
+
+              if (!isLastStep) {
+                aksaSequence.to(
+                  step,
+                  {
+                    autoAlpha: 0.9,
+                    duration: 0.5,
+                    ease: "none",
+                  },
+                  exitAt,
+                );
+              }
             }
           });
 
@@ -490,41 +471,80 @@ function AksaShowcaseStep({
   index: number;
 }) {
   return (
-    <section className="aksa-showcase-step grid h-screen min-h-[42rem] items-center gap-7 px-5 py-[7vh] sm:px-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(18rem,0.5fr)] lg:px-16">
-      <div className="aksa-step-copy max-w-[33rem]">
+    <section className="aksa-showcase-step relative h-screen min-h-[44rem] px-5 py-[6vh] sm:px-10 lg:px-16">
+      <div className="aksa-step-copy relative z-20 max-w-[31rem] lg:self-center">
         <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/45">
           {frame.label}
         </p>
 
-        <h2 className="mt-5 font-display text-[clamp(3.25rem,5.6vw,5.8rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
+        <h2 className="mt-5 font-display text-[clamp(2.9rem,4.6vw,5rem)] font-semibold leading-[0.88] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
           Aksa Xiterz
         </h2>
 
-        <h3 className="mt-6 max-w-[30rem] font-display text-[clamp(2rem,3.5vw,3.4rem)] font-semibold leading-[0.96] tracking-normal text-white">
+        <h3 className="mt-5 max-w-[29rem] font-display text-[clamp(1.65rem,2.7vw,2.75rem)] font-semibold leading-[1] tracking-normal text-white">
           {frame.title}
         </h3>
 
-        <p className="mt-5 max-w-lg text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+        <p className="mt-5 max-w-md text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
           {frame.body}
         </p>
 
-        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.66rem] uppercase tracking-[0.22em] text-violet-100/50">
+        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-violet-100/50">
           {frame.meta}
         </p>
       </div>
 
-      <figure className="aksa-phone-frame relative mx-auto aspect-[1290/2796] h-[min(76vh,44rem)] w-auto overflow-hidden rounded-[1.15rem] border border-violet-300/22 bg-[#07050c] shadow-[0_34px_110px_rgba(0,0,0,0.62),0_0_70px_rgba(147,51,234,0.18)]">
-        <Image
-          src={frame.src}
-          alt={`Aksa Xiterz ${frame.title}`}
-          fill
-          unoptimized
-          sizes="(max-width: 1024px) 82vw, 32vw"
-          className="object-contain"
-          loading={index === 0 ? "eager" : "lazy"}
-        />
-      </figure>
+      <div className="aksa-visual-composition relative z-10 mx-auto grid w-full max-w-[44rem] place-items-center lg:justify-self-center">
+        <AksaScreenWall activeIndex={index} />
+
+        <div className="aksa-phone-stage relative z-10">
+          <span className="pointer-events-none absolute -inset-[7%] bg-[linear-gradient(135deg,rgba(168,85,247,0.26),rgba(236,72,153,0.1)_42%,rgba(14,165,233,0.08)_78%,rgba(255,255,255,0.035))] opacity-45 blur-3xl" />
+
+          <figure className="aksa-phone-frame relative h-full overflow-hidden rounded-[1.15rem] border border-violet-300/22 bg-[#07050c] shadow-[0_34px_110px_rgba(0,0,0,0.62),0_0_70px_rgba(147,51,234,0.18)]">
+            <Image
+              src={frame.src}
+              alt={`Aksa Xiterz ${frame.title}`}
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 82vw, 34vw"
+              className="object-contain"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+            <span className="pointer-events-none absolute inset-x-0 top-0 h-1/3 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),transparent)]" />
+          </figure>
+        </div>
+      </div>
     </section>
+  );
+}
+
+function AksaScreenWall({ activeIndex }: { activeIndex: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="aksa-screen-wall pointer-events-none absolute z-0 hidden grid-cols-4 gap-2 lg:grid"
+    >
+      {aksaShowcaseFrames.map((screen, screenIndex) => (
+        <div
+          key={screen.src}
+          className={`relative aspect-[1290/2796] overflow-hidden rounded-[0.55rem] border bg-[#08050d] shadow-[0_18px_60px_rgba(0,0,0,0.34)] ${
+            screenIndex === activeIndex
+              ? "border-violet-100/30 opacity-70"
+              : "border-white/10 opacity-[0.24]"
+          }`}
+        >
+          <Image
+            src={screen.src}
+            alt=""
+            fill
+            unoptimized
+            sizes="8vw"
+            className="object-contain"
+            loading={screenIndex === 0 ? "eager" : "lazy"}
+          />
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -589,8 +609,9 @@ function AksaPanel() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_42%,rgba(147,51,234,0.32),transparent_34%),radial-gradient(circle_at_22%_18%,rgba(236,72,153,0.13),transparent_30%),linear-gradient(135deg,rgba(19,8,35,1),rgba(5,4,10,1)_58%,rgba(29,14,40,0.96))]" />
         <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,3,8,0.9)_0%,rgba(8,5,13,0.64)_44%,rgba(6,4,10,0.86)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-35" />
-        <div className="aksa-aurora absolute -left-[18vw] top-[8vh] h-[78vh] w-[70vw] rounded-full bg-violet-500/16 blur-3xl" />
-        <div className="absolute -right-[10vw] bottom-[-12vh] h-[56vh] w-[48vw] rounded-full bg-fuchsia-500/10 blur-3xl" />
+        <div className="aksa-aurora absolute -left-[18vw] top-[6vh] h-[78vh] w-[70vw] rounded-full bg-violet-500/14 blur-3xl" />
+        <div className="absolute -right-[10vw] bottom-[-12vh] h-[56vh] w-[48vw] rounded-full bg-fuchsia-500/8 blur-3xl" />
+        <div className="absolute inset-y-[12vh] right-[7vw] w-px bg-[linear-gradient(180deg,transparent,rgba(221,214,254,0.22),transparent)] opacity-60" />
 
         <div className="camera-visual aksa-showcase-window absolute inset-0 z-10 overflow-hidden">
           <div className="aksa-vertical-track absolute inset-x-0 top-0">
@@ -817,7 +838,7 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[1180vh]">
+      <section className="panel-scroll relative z-10 h-[1280vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
