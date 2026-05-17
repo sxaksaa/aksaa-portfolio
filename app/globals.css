@@ -49,6 +49,16 @@ a {
   text-decoration: none;
 }
 
+.experience {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.experience img {
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
 .aksa-showcase-step {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);

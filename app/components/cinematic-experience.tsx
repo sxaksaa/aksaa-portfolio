@@ -11,12 +11,12 @@ type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 0.12,
-  siemola: 9.56,
-  fashion: 11.36,
-  closing: 13.12,
+  siemola: 10.46,
+  fashion: 12.22,
+  closing: 13.94,
 } as const;
 
-const aksaSequenceAt = 2.08;
+const aksaSequenceAt = 1.52;
 
 const aksaShowcaseFrames = [
   {
@@ -86,14 +86,14 @@ const bottomUpPanelMotion = {
   incomingTo: {
     yPercent: 0,
     scale: 1,
-    duration: 1.75,
+    duration: 1.36,
     ease: "none",
     immediateRender: false,
   },
   outgoingTo: {
     scale: 0.992,
     yPercent: -0.8,
-    duration: 1.75,
+    duration: 1.36,
     ease: "none",
   },
 } as const;
@@ -129,29 +129,13 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.095,
+      lerp: 0.12,
       smoothWheel: true,
     });
 
-    const html = document.documentElement;
-    const body = document.body;
-    const previousHtmlOverflow = html.style.overflow;
-    const previousBodyOverflow = body.style.overflow;
-    let introScrollUnlocked = false;
-
-    html.style.overflow = "hidden";
-    body.style.overflow = "hidden";
     window.scrollTo(0, 0);
-    lenis.stop();
 
     const unlockIntroScroll = (shouldRefresh = true) => {
-      if (introScrollUnlocked) return;
-
-      introScrollUnlocked = true;
-      html.style.overflow = previousHtmlOverflow;
-      body.style.overflow = previousBodyOverflow;
-      lenis.start();
-
       if (shouldRefresh) {
         ScrollTrigger.refresh();
       }
@@ -263,7 +247,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.35,
+          scrub: true,
         },
       });
 
@@ -336,37 +320,16 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
       const aksaPanel = panelByName.get("aksa");
       if (aksaPanel) {
-        const showcaseWindow =
-          aksaPanel.querySelector<HTMLElement>(".aksa-showcase-window");
         const verticalTrack =
           aksaPanel.querySelector<HTMLElement>(".aksa-vertical-track");
         const aurora = aksaPanel.querySelector<HTMLElement>(".aksa-aurora");
         const steps = gsap.utils.toArray<HTMLElement>(
           aksaPanel.querySelectorAll<HTMLElement>(".aksa-showcase-step"),
         );
-        const contentRevealAt =
-          transitionAt.aksa + 0.34;
-
-        if (showcaseWindow) {
-          gsap.set(showcaseWindow, {
-            autoAlpha: 1,
-            yPercent: 38,
-            transformOrigin: "center bottom",
-          });
-          film.to(
-            showcaseWindow,
-            {
-              yPercent: 0,
-              duration: 1.22,
-              ease: "none",
-            },
-            contentRevealAt,
-          );
-        }
 
         if (verticalTrack && steps.length > 1) {
           const aksaSequence = gsap.timeline();
-          const stepDuration = 0.98;
+          const stepDuration = 1.24;
           const sequenceDuration = stepDuration * (steps.length - 1);
           const aksaDepthTargets = [verticalTrack, aurora].filter(
             Boolean,
@@ -859,7 +822,7 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[1280vh]">
+      <section className="panel-scroll relative z-10 h-[1180vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
