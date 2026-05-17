@@ -356,8 +356,8 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             aksaSequence.to(
               aurora,
               {
-                yPercent: 7,
-                scale: 1.045,
+                yPercent: 2,
+                scale: 1.012,
                 duration: sequenceDuration,
                 ease: "none",
               },
@@ -457,23 +457,23 @@ function AksaShowcaseStep({
   return (
     <section className="aksa-showcase-step relative h-screen min-h-[44rem] px-5 py-[6vh] sm:px-10 lg:px-16">
       <div className="aksa-step-copy relative z-20 max-w-[31rem] lg:self-center">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/45">
+        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/38">
           {frame.label}
         </p>
 
-        <h2 className="mt-5 font-display text-[clamp(2.9rem,4.6vw,5rem)] font-semibold leading-[0.88] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
+        <h2 className="aksa-editorial-title mt-5 font-display font-semibold leading-[0.84] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
           Aksa Xiterz
         </h2>
 
-        <h3 className="mt-5 max-w-[29rem] font-display text-[clamp(1.65rem,2.7vw,2.75rem)] font-semibold leading-[1] tracking-normal text-white">
+        <h3 className="aksa-editorial-subtitle mt-5 max-w-[29rem] font-display font-semibold leading-[1] tracking-normal text-white">
           {frame.title}
         </h3>
 
-        <p className="mt-5 max-w-md text-sm leading-6 text-slate-300 sm:text-base sm:leading-7">
+        <p className="mt-5 max-w-md text-sm leading-6 text-slate-300/82 sm:text-base sm:leading-7">
           {frame.body}
         </p>
 
-        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-violet-100/50">
+        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.62rem] uppercase tracking-[0.22em] text-violet-100/42">
           {frame.meta}
         </p>
       </div>
@@ -490,7 +490,7 @@ function AksaShowcaseStep({
               alt={`Aksa Xiterz ${frame.title}`}
               fill
               unoptimized
-              sizes="(max-width: 1024px) 82vw, 34vw"
+              sizes="(max-width: 1024px) 82vw, 38vw"
               className="object-contain"
               loading={index === 0 ? "eager" : "lazy"}
             />
@@ -511,10 +511,10 @@ function AksaScreenWall({ activeIndex }: { activeIndex: number }) {
       {aksaShowcaseFrames.map((screen, screenIndex) => (
         <div
           key={screen.src}
-          className={`relative aspect-[1290/2796] overflow-hidden rounded-[0.55rem] border bg-[#08050d] shadow-[0_18px_60px_rgba(0,0,0,0.34)] ${
+          className={`aksa-screen-tile relative aspect-[1290/2796] overflow-hidden rounded-[0.55rem] border bg-[#08050d] shadow-[0_18px_60px_rgba(0,0,0,0.34)] ${
             screenIndex === activeIndex
-              ? "border-violet-100/30 opacity-70"
-              : "border-white/10 opacity-[0.24]"
+              ? "aksa-screen-tile-active border-violet-100/18"
+              : "border-white/8"
           }`}
         >
           <Image
