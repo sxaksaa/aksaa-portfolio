@@ -11,12 +11,12 @@ type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 1,
-  siemola: 9.72,
-  fashion: 11.52,
-  closing: 13.28,
+  siemola: 10.78,
+  fashion: 12.58,
+  closing: 14.34,
 } as const;
 
-const aksaSequenceAt = 2.55;
+const aksaSequenceAt = 3.52;
 
 const aksaShowcaseFrames = [
   {
@@ -336,12 +336,33 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
       const aksaPanel = panelByName.get("aksa");
       if (aksaPanel) {
+        const showcaseWindow =
+          aksaPanel.querySelector<HTMLElement>(".aksa-showcase-window");
         const verticalTrack =
           aksaPanel.querySelector<HTMLElement>(".aksa-vertical-track");
         const aurora = aksaPanel.querySelector<HTMLElement>(".aksa-aurora");
         const steps = gsap.utils.toArray<HTMLElement>(
           aksaPanel.querySelectorAll<HTMLElement>(".aksa-showcase-step"),
         );
+        const contentRevealAt =
+          transitionAt.aksa + bottomUpPanelMotion.incomingTo.duration - 0.08;
+
+        if (showcaseWindow) {
+          gsap.set(showcaseWindow, {
+            autoAlpha: 1,
+            yPercent: 64,
+            transformOrigin: "center bottom",
+          });
+          film.to(
+            showcaseWindow,
+            {
+              yPercent: 0,
+              duration: 0.95,
+              ease: "none",
+            },
+            contentRevealAt,
+          );
+        }
 
         if (verticalTrack && steps.length > 1) {
           const aksaSequence = gsap.timeline();
