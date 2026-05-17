@@ -10,13 +10,13 @@ const panels = ["intro", "aksa", "siemola", "fashion", "closing"] as const;
 type PanelName = (typeof panels)[number];
 
 const transitionAt = {
-  aksa: 1,
-  siemola: 10.16,
-  fashion: 11.96,
-  closing: 13.72,
+  aksa: 0.12,
+  siemola: 9.56,
+  fashion: 11.36,
+  closing: 13.12,
 } as const;
 
-const aksaSequenceAt = 2.7;
+const aksaSequenceAt = 2.08;
 
 const aksaShowcaseFrames = [
   {
@@ -129,7 +129,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.064,
+      lerp: 0.095,
       smoothWheel: true,
     });
 
@@ -263,7 +263,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: 1.85,
+          scrub: 1.35,
         },
       });
 
