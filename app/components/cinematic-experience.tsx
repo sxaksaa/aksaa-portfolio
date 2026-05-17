@@ -11,12 +11,71 @@ type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 1,
-  siemola: 5.45,
-  fashion: 7.15,
-  closing: 8.85,
+  siemola: 9.4,
+  fashion: 11.15,
+  closing: 12.9,
 } as const;
 
-const aksaSequenceAt = 2.72;
+const aksaSequenceAt = 1.9;
+
+const aksaShowcaseFrames = [
+  {
+    src: "/projects/aksa-xiterz/home-mobile.png",
+    label: "01 / Platform",
+    title: "Premium tools and instant licenses.",
+    body: "The homepage sets the promise first: trusted digital tools, license access, setup support, and a clear product path.",
+    meta: "Hero, trust numbers, product search",
+  },
+  {
+    src: "/projects/aksa-xiterz/products-mobile.png",
+    label: "02 / Storefront",
+    title: "Products stay easy to scan.",
+    body: "Cards keep platform, stock status, pricing, and auto-delivery availability visible before a buyer enters checkout.",
+    meta: "Catalog, pricing, stock signal",
+  },
+  {
+    src: "/projects/aksa-xiterz/qris-mobile.png",
+    label: "03 / QRIS",
+    title: "QRIS stays inside the flow.",
+    body: "The invoice opens as a native payment state with order ID, fee, total, expiry, and a direct check-payment action.",
+    meta: "QR invoice, exact total, expiry",
+  },
+  {
+    src: "/projects/aksa-xiterz/crypto-address-mobile.png",
+    label: "04 / Crypto",
+    title: "USDT checkout is explicit.",
+    body: "Network, amount, address, token contract, and warning copy are shown together so customers know what must match.",
+    meta: "BSC RPC, exact amount, copy actions",
+  },
+  {
+    src: "/projects/aksa-xiterz/licenses-mobile.png",
+    label: "05 / Licenses",
+    title: "Delivery lands in one place.",
+    body: "Paid keys are grouped with purchase details, active state, copy action, and support shortcuts for setup help.",
+    meta: "License key, support, delivery",
+  },
+  {
+    src: "/projects/aksa-xiterz/orders-mobile.png",
+    label: "06 / Orders",
+    title: "Order history keeps state visible.",
+    body: "Customers can track totals, paid orders, waiting payments, cancelled invoices, methods, prices, and timestamps.",
+    meta: "History, status, payment method",
+  },
+  {
+    src: "/projects/aksa-xiterz/guides-mobile.png",
+    label: "07 / Guides",
+    title: "Guides reduce setup friction.",
+    body: "A public knowledge base gives step-by-step Windows fixes before support has to answer the same setup questions.",
+    meta: "Knowledge base, setup fixes",
+  },
+  {
+    src: "/projects/aksa-xiterz/downloads-mobile.png",
+    label: "08 / Downloads",
+    title: "Files are collected neatly.",
+    body: "The downloads page keeps public tools and required files organized by product so buyers can continue after purchase.",
+    meta: "Tools, folders, companion files",
+  },
+] as const;
 
 const bottomUpPanelMotion = {
   incomingFrom: {
@@ -277,312 +336,100 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
       const aksaPanel = panelByName.get("aksa");
       if (aksaPanel) {
-        const galleryShell =
-          aksaPanel.querySelector<HTMLElement>(".aksa-gallery-shell");
-        const galleryFrame =
-          aksaPanel.querySelector<HTMLElement>(".aksa-gallery-frame");
-        const qrisShot = aksaPanel.querySelector<HTMLElement>(".aksa-shot-qris");
-        const cryptoShot =
-          aksaPanel.querySelector<HTMLElement>(".aksa-shot-crypto");
-        const checkoutShot =
-          aksaPanel.querySelector<HTMLElement>(".aksa-shot-checkout");
-        const ordersShot =
-          aksaPanel.querySelector<HTMLElement>(".aksa-shot-orders");
+        const verticalTrack =
+          aksaPanel.querySelector<HTMLElement>(".aksa-vertical-track");
+        const aurora = aksaPanel.querySelector<HTMLElement>(".aksa-aurora");
+        const steps = gsap.utils.toArray<HTMLElement>(
+          aksaPanel.querySelectorAll<HTMLElement>(".aksa-showcase-step"),
+        );
+        const phoneFrames = gsap.utils.toArray<HTMLElement>(
+          aksaPanel.querySelectorAll<HTMLElement>(".aksa-phone-frame"),
+        );
+        const copyCards = gsap.utils.toArray<HTMLElement>(
+          aksaPanel.querySelectorAll<HTMLElement>(".aksa-step-copy"),
+        );
 
-        if (
-          galleryShell &&
-          galleryFrame &&
-          qrisShot &&
-          cryptoShot &&
-          checkoutShot &&
-          ordersShot
-        ) {
-          const sequenceShots = [
-            qrisShot,
-            cryptoShot,
-            checkoutShot,
-            ordersShot,
-          ];
+        if (verticalTrack && steps.length > 1) {
+          const aksaSequence = gsap.timeline();
+          const stepDuration = 0.78;
+          const sequenceDuration = stepDuration * (steps.length - 1);
+          const aksaMotionTargets = [
+            verticalTrack,
+            aurora,
+            ...steps,
+            ...phoneFrames,
+            ...copyCards,
+          ].filter(Boolean) as HTMLElement[];
 
-          gsap.set(galleryShell, {
-            perspective: 1400,
-            transformStyle: "preserve-3d",
-          });
-          gsap.set(galleryFrame, {
-            x: "2vw",
-            y: "0vh",
-            z: 0,
-            xPercent: -50,
-            yPercent: -50,
-            scale: 0.94,
-            rotateX: 0,
-            rotateY: 0,
-            transformPerspective: 1400,
-            transformStyle: "preserve-3d",
-            transformOrigin: "center center",
-            willChange: "transform",
-            force3D: true,
-            backfaceVisibility: "hidden",
-          });
-          gsap.set(sequenceShots, {
+          gsap.set(aksaMotionTargets, {
             willChange: "transform, opacity",
             force3D: true,
             backfaceVisibility: "hidden",
           });
-          gsap.set(checkoutShot, {
-            autoAlpha: 1,
-            scale: 1,
-            x: "0vw",
-            y: "0vh",
-            z: 140,
-            xPercent: -50,
-            yPercent: -50,
-            rotateX: 0,
-            rotateY: 0,
-            filter: "blur(0px)",
-          });
-          gsap.set(qrisShot, {
-            autoAlpha: 0.3,
-            scale: 0.86,
-            x: "8vw",
-            y: "0vh",
-            z: -90,
-            xPercent: -50,
-            yPercent: -50,
-            rotateX: 0,
-            rotateY: 7,
-            filter: "blur(0px)",
-          });
-          gsap.set(cryptoShot, {
-            autoAlpha: 0.14,
-            scale: 0.76,
-            x: "13vw",
-            y: "0vh",
-            z: -220,
-            xPercent: -50,
-            yPercent: -50,
-            rotateX: 0,
-            rotateY: 10,
-            filter: "blur(0px)",
-          });
-          gsap.set(ordersShot, {
-            autoAlpha: 0,
-            scale: 0.72,
-            x: "15vw",
-            y: "0vh",
-            z: -300,
-            xPercent: -50,
-            yPercent: -50,
-            rotateX: 0,
-            rotateY: 11,
-            filter: "blur(0px)",
-          });
 
-          const aksaSequence = gsap.timeline();
+          aksaSequence.to(
+            verticalTrack,
+            {
+              y: `-${(steps.length - 1) * 100}vh`,
+              duration: sequenceDuration,
+              ease: "none",
+            },
+            0,
+          );
 
-          // Active screenshots stay sharp; only the leaving/background layers blur.
-          aksaSequence
-            .to(galleryFrame, {
-              x: "1vw",
-              y: "0vh",
-              z: 50,
-              scale: 0.98,
-              duration: 0.36,
-              ease: "none",
-            })
-            .to(
-              checkoutShot,
+          if (aurora) {
+            aksaSequence.to(
+              aurora,
               {
-                x: "-9vw",
-                y: "0vh",
-                z: -120,
-                scale: 0.82,
-                rotateY: -8,
-                autoAlpha: 0.26,
-                filter: "blur(6px)",
-                duration: 0.5,
+                yPercent: 14,
+                scale: 1.08,
+                duration: sequenceDuration,
                 ease: "none",
               },
-              "<",
-            )
-            .to(
-              qrisShot,
-              {
-                x: "0vw",
-                y: "0vh",
-                z: 150,
-                scale: 1,
-                rotateY: 0,
-                autoAlpha: 1,
-                filter: "blur(0px)",
-                duration: 0.5,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              cryptoShot,
-              {
-                x: "8vw",
-                y: "0vh",
-                z: -90,
-                scale: 0.86,
-                rotateY: 7,
-                autoAlpha: 0.3,
-                filter: "blur(0px)",
-                duration: 0.5,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              ordersShot,
-              {
-                x: "13vw",
-                y: "0vh",
-                z: -220,
-                scale: 0.76,
-                rotateY: 10,
-                autoAlpha: 0.14,
-                filter: "blur(0px)",
-                duration: 0.5,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              galleryFrame,
-              {
-                x: "0vw",
-                y: "0vh",
-                z: 68,
-                scale: 1,
-                duration: 0.5,
-                ease: "none",
-              },
-            )
-            .to(
-              checkoutShot,
-              {
-                x: "-15vw",
-                y: "0vh",
-                z: -270,
-                scale: 0.66,
-                autoAlpha: 0,
-                filter: "blur(10px)",
-                duration: 0.52,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              qrisShot,
-              {
-                x: "-9vw",
-                y: "0vh",
-                z: -120,
-                scale: 0.82,
-                rotateY: -8,
-                autoAlpha: 0.26,
-                filter: "blur(6px)",
-                duration: 0.52,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              cryptoShot,
-              {
-                x: "0vw",
-                y: "0vh",
-                z: 150,
-                scale: 1,
-                rotateY: 0,
-                autoAlpha: 1,
-                filter: "blur(0px)",
-                duration: 0.52,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              ordersShot,
-              {
-                x: "8vw",
-                y: "0vh",
-                z: -90,
-                scale: 0.86,
-                rotateY: 7,
-                autoAlpha: 0.3,
-                filter: "blur(0px)",
-                duration: 0.52,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              galleryFrame,
-              {
-                x: "-1vw",
-                y: "0vh",
-                z: 82,
-                scale: 1.02,
-                duration: 0.52,
-                ease: "none",
-              },
-            )
-            .to(
-              qrisShot,
-              {
-                x: "-15vw",
-                y: "0vh",
-                z: -280,
-                scale: 0.64,
-                autoAlpha: 0,
-                filter: "blur(10px)",
-                duration: 0.54,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              cryptoShot,
-              {
-                x: "-9vw",
-                y: "0vh",
-                z: -120,
-                scale: 0.82,
-                rotateY: -8,
-                autoAlpha: 0.26,
-                filter: "blur(6px)",
-                duration: 0.54,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(
-              ordersShot,
-              {
-                x: "0vw",
-                y: "0vh",
-                z: 150,
-                scale: 1,
-                rotateY: 0,
-                autoAlpha: 1,
-                filter: "blur(0px)",
-                duration: 0.54,
-                ease: "none",
-              },
-              "<",
-            )
-            .to(galleryFrame, {
-              x: "-2vw",
-              y: "0vh",
-              z: 90,
-              scale: 1.03,
-              duration: 0.36,
-              ease: "none",
-            });
+              0,
+            );
+          }
+
+          steps.forEach((step, index) => {
+            const at = index * stepDuration;
+            const copyCard = copyCards[index];
+            const phoneFrame = phoneFrames[index];
+
+            if (copyCard && phoneFrame && index > 0) {
+              aksaSequence.fromTo(
+                [copyCard, phoneFrame],
+                {
+                  autoAlpha: 0.5,
+                  y: 46,
+                  scale: 0.98,
+                },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  scale: 1,
+                  duration: 0.32,
+                  stagger: 0.04,
+                  ease: "none",
+                  immediateRender: false,
+                },
+                Math.max(0, at - 0.18),
+              );
+            }
+
+            if (step && index > 0) {
+              aksaSequence.fromTo(
+                step,
+                { autoAlpha: 0.78 },
+                {
+                  autoAlpha: 1,
+                  duration: 0.24,
+                  ease: "none",
+                  immediateRender: false,
+                },
+                Math.max(0, at - 0.12),
+              );
+            }
+          });
 
           film.add(aksaSequence, aksaSequenceAt);
         }
@@ -635,32 +482,49 @@ function PanelShell({
   );
 }
 
-function AksaFeatureShot({
-  src,
-  alt,
-  className,
-  objectPosition = "center top",
+function AksaShowcaseStep({
+  frame,
+  index,
 }: {
-  src: string;
-  alt: string;
-  className: string;
-  objectPosition?: string;
+  frame: (typeof aksaShowcaseFrames)[number];
+  index: number;
 }) {
   return (
-    <figure
-      className={`aksa-depth-shot absolute left-1/2 top-1/2 h-[min(56vh,38rem)] w-[min(72vw,31rem)] overflow-hidden rounded-md bg-[#0a0610] shadow-[0_34px_100px_rgba(0,0,0,0.5)] sm:w-[min(29vw,31rem)] ${className}`}
-      style={{ transformStyle: "preserve-3d" }}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes="(max-width: 640px) 74vw, 42vw"
-        quality={78}
-        className="object-cover"
-        style={{ objectPosition }}
-      />
-    </figure>
+    <section className="aksa-showcase-step grid h-screen min-h-[42rem] items-center gap-7 px-5 py-[7vh] sm:px-10 lg:grid-cols-[minmax(0,0.96fr)_minmax(18rem,0.5fr)] lg:px-16">
+      <div className="aksa-step-copy max-w-[33rem]">
+        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/45">
+          {frame.label}
+        </p>
+
+        <h2 className="mt-5 font-display text-[clamp(3.25rem,5.6vw,5.8rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.68)]">
+          Aksa Xiterz
+        </h2>
+
+        <h3 className="mt-6 max-w-[30rem] font-display text-[clamp(2rem,3.5vw,3.4rem)] font-semibold leading-[0.96] tracking-normal text-white">
+          {frame.title}
+        </h3>
+
+        <p className="mt-5 max-w-lg text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
+          {frame.body}
+        </p>
+
+        <p className="mt-6 border-y border-white/10 py-4 font-mono text-[0.66rem] uppercase tracking-[0.22em] text-violet-100/50">
+          {frame.meta}
+        </p>
+      </div>
+
+      <figure className="aksa-phone-frame relative mx-auto aspect-[1290/2796] h-[min(76vh,44rem)] w-auto overflow-hidden rounded-[1.15rem] border border-violet-300/22 bg-[#07050c] shadow-[0_34px_110px_rgba(0,0,0,0.62),0_0_70px_rgba(147,51,234,0.18)]">
+        <Image
+          src={frame.src}
+          alt={`Aksa Xiterz ${frame.title}`}
+          fill
+          unoptimized
+          sizes="(max-width: 1024px) 82vw, 32vw"
+          className="object-contain"
+          loading={index === 0 ? "eager" : "lazy"}
+        />
+      </figure>
+    </section>
   );
 }
 
@@ -691,7 +555,7 @@ function IntroPanel() {
       <div className="intro-content-group relative z-10 grid h-full place-items-center px-5 text-center">
         <div className="w-full max-w-7xl">
           <p className="font-mono text-xs uppercase tracking-[0.34em] text-white/40">
-            Computer Science Student • Ready For Internship
+            Computer Science Student • Full-Stack Web • Open For Internship
           </p>
 
           <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
@@ -699,12 +563,14 @@ function IntroPanel() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
-            Building cinematic digital systems with quiet precision.
+            I build web systems where backend rules, payment flows, and
+            polished interfaces work as one product.
           </p>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
-            Exploring backend systems, motion interfaces, and modern web
-            experiences through practical products.
+            This portfolio follows the projects that shaped my full-stack
+            direction: digital checkout, smart-locker operations, ecommerce
+            workflows, and cinematic frontend craft.
           </p>
         </div>
       </div>
@@ -720,74 +586,28 @@ function AksaPanel() {
   return (
     <PanelShell className="bg-[#12081a]">
       <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_72%_40%,rgba(133,77,160,0.26),transparent_34%),linear-gradient(135deg,rgba(22,8,37,1),rgba(7,5,11,1)_54%,rgba(42,22,48,0.9))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_42%,rgba(147,51,234,0.32),transparent_34%),radial-gradient(circle_at_22%_18%,rgba(236,72,153,0.13),transparent_30%),linear-gradient(135deg,rgba(19,8,35,1),rgba(5,4,10,1)_58%,rgba(29,14,40,0.96))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,3,8,0.9)_0%,rgba(8,5,13,0.64)_44%,rgba(6,4,10,0.86)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-35" />
+        <div className="aksa-aurora absolute -left-[18vw] top-[8vh] h-[78vh] w-[70vw] rounded-full bg-violet-500/16 blur-3xl" />
+        <div className="absolute -right-[10vw] bottom-[-12vh] h-[56vh] w-[48vw] rounded-full bg-fuchsia-500/10 blur-3xl" />
 
-        <div
-          className="camera-visual aksa-gallery-shell absolute inset-y-[13vh] left-[36vw] right-[2vw] z-10 overflow-visible sm:left-[40vw] sm:right-[4vw] lg:left-[43vw] lg:right-[6vw]"
-          style={{ perspective: "1400px", transformStyle: "preserve-3d" }}
-        >
-          <div className="absolute inset-x-[8%] bottom-[10%] top-[10%] rounded-full bg-violet-500/12 blur-3xl" />
-
-          <div
-            className="aksa-gallery-frame absolute left-1/2 top-1/2 h-[68vh] w-[min(54vw,54rem)] overflow-visible"
-            style={{ transformStyle: "preserve-3d" }}
-          >
-            <AksaFeatureShot
-              src="/projects/aksa-xiterz/qris-mobile.png"
-              alt="Close crop of the Aksa Xiterz QRIS payment screen"
-              objectPosition="center 43%"
-              className="aksa-shot-qris"
-            />
-
-            <AksaFeatureShot
-              src="/projects/aksa-xiterz/crypto-address-mobile.png"
-              alt="Close crop of the Aksa Xiterz USDT payment details screen"
-              objectPosition="center 38%"
-              className="aksa-shot-crypto"
-            />
-
-            <AksaFeatureShot
-              src="/projects/aksa-xiterz/checkout-network-mobile.png"
-              alt="Close crop of the Aksa Xiterz checkout network selection screen"
-              objectPosition="center 35%"
-              className="aksa-shot-checkout"
-            />
-
-            <AksaFeatureShot
-              src="/projects/aksa-xiterz/orders-mobile.png"
-              alt="Close crop of the Aksa Xiterz transaction order screen"
-              objectPosition="center 32%"
-              className="aksa-shot-orders"
-            />
+        <div className="camera-visual aksa-showcase-window absolute inset-0 z-10 overflow-hidden">
+          <div className="aksa-vertical-track absolute inset-x-0 top-0">
+            {aksaShowcaseFrames.map((frame, index) => (
+              <AksaShowcaseStep
+                key={frame.src}
+                frame={frame}
+                index={index}
+              />
+            ))}
           </div>
         </div>
       </div>
 
-      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
-        Chapter 01 / Commercial System
+      <p className="camera-copy absolute right-5 top-[8vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/36 sm:block sm:right-10 lg:right-16">
+        Chapter 01 / Aksa Xiterz
       </p>
-
-      <div className="camera-copy absolute left-5 top-[10vh] z-30 max-w-[calc(100vw-2.5rem)] sm:left-10 sm:max-w-[25rem] lg:left-16">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">
-          Aksa Xiterz • Payment Automation
-        </p>
-
-        <p className="mt-5 text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          Exact payments, QRIS invoices, crypto checks, and license delivery in
-          one operational flow.
-        </p>
-      </div>
-
-      <div className="camera-copy absolute bottom-[25vh] left-5 z-30 hidden flex-wrap gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/46 sm:flex sm:left-10 lg:left-16">
-        <span>QRIS</span>
-        <span>Crypto Flow</span>
-        <span>Digital Delivery</span>
-        <span>Ops Logic</span>
-      </div>
-
-      <h2 className="camera-copy absolute bottom-[6vh] left-5 z-30 max-w-[min(54rem,calc(100vw-2.5rem))] font-display text-[clamp(4.8rem,13vw,12rem)] font-semibold leading-[0.84] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16">
-        Aksa Xiterz
-      </h2>
     </PanelShell>
   );
 }
@@ -863,14 +683,15 @@ SWITCH_CLOSE  RETURN_SYNC`}
         </p>
 
         <p className="mt-5 text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          Hardware signals become database truth through guarded states and
-          accountable records.
+          A smart-locker system where RFID taps, switch signals, role access,
+          and borrowing history are normalized into reliable Laravel records.
         </p>
 
         <div className="mt-7 flex flex-wrap justify-end gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/40">
-          <span>State Logic</span>
-          <span>Database Flow</span>
-          <span>Access Rules</span>
+          <span>Laravel API</span>
+          <span>RFID Flow</span>
+          <span>Locker States</span>
+          <span>Role Access</span>
         </div>
       </div>
     </PanelShell>
@@ -919,13 +740,16 @@ function FashionPanel() {
 
       <div className="camera-copy absolute bottom-[10vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-12 sm:max-w-md lg:right-20">
         <p className="text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          Editorial storefront composition shaped around rhythm, hierarchy, and
-          product mood.
+          A fashion storefront shaped around catalog clarity, admin workflows,
+          product-size logic, and a stronger public presentation for portfolio
+          review.
         </p>
 
         <div className="mt-7 flex flex-wrap justify-end gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/40">
-          <span>Interface Direction</span>
-          <span>Cinematic UI</span>
+          <span>Ecommerce UI</span>
+          <span>Admin Flow</span>
+          <span>Product Catalog</span>
+          <span>Portfolio Polish</span>
         </div>
       </div>
     </PanelShell>
@@ -952,12 +776,13 @@ function ClosingPanel() {
 
         <div className="border-l border-white/12 pl-6">
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.34em] text-white/38">
-            Available For Internship
+            Available For Full-Stack Internship
           </p>
 
           <p className="max-w-md text-lg leading-7 text-slate-300 sm:text-xl sm:leading-8">
-            I am looking for work where backend logic, product sense, and
-            interface craft meet in real shipped systems.
+            I am looking for a place to grow by building useful web apps:
+            Laravel backends, clean databases, payment logic, and interfaces
+            that make real workflows easier to trust.
           </p>
 
           <div className="mt-9 flex gap-7 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
@@ -992,7 +817,7 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[820vh]">
+      <section className="panel-scroll relative z-10 h-[1180vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
