@@ -13,10 +13,11 @@ const transitionAt = {
   aksa: 0.12,
   siemola: 10.46,
   fashion: 12.22,
-  closing: 13.94,
+  closing: 20.1,
 } as const;
 
 const aksaSequenceAt = 1.52;
+const fashionSequenceAt = 12.96;
 
 const aksaShowcaseFrames = [
   {
@@ -123,11 +124,71 @@ const panelTransitions = [
     incoming: "fashion",
     at: transitionAt.fashion,
     ...connectedPanelMotion,
+    incomingFadeTo: {
+      ...connectedPanelMotion.incomingFadeTo,
+      duration: 0.34,
+    },
+    outgoingFadeTo: {
+      ...connectedPanelMotion.outgoingFadeTo,
+      duration: 0.42,
+    },
   },
   {
     incoming: "closing",
     at: transitionAt.closing,
     ...connectedPanelMotion,
+  },
+] as const;
+
+const fashionShowcaseFrames = [
+  {
+    src: "/projects/brl-fashion/dashboard.png",
+    label: "01 / Homepage",
+    title: "The homepage opens with catalog clarity.",
+    body: "BRL Fashion presents the brand, search, category access, and visual product mood in a desktop-first storefront.",
+    meta: "Hero, search, category rhythm",
+  },
+  {
+    src: "/projects/brl-fashion/catalog-gallery.png",
+    label: "02 / Catalog + Gallery",
+    title: "Category and gallery sections make browsing feel visual.",
+    body: "The catalog carousel and fashion gallery turn the landing page into a richer product discovery surface.",
+    meta: "Catalog, gallery, visual browsing",
+  },
+  {
+    src: "/projects/brl-fashion/blog.png",
+    label: "03 / Blog",
+    title: "Support content gives the storefront a softer layer.",
+    body: "The blog section adds care tips and fashion knowledge so the site feels more complete than a plain catalog grid.",
+    meta: "Blog, care guide, public presentation",
+  },
+  {
+    src: "/projects/brl-fashion/feedback.png",
+    label: "04 / Feedback",
+    title: "Feedback keeps the brand grounded in customers.",
+    body: "Customer cards and FAQ content make the storefront feel more alive while keeping service questions nearby.",
+    meta: "Feedback, FAQ, trust signal",
+  },
+  {
+    src: "/projects/brl-fashion/faq-chatbot.png",
+    label: "05 / FAQ + Chatbot",
+    title: "The chatbot turns support into a visible feature.",
+    body: "FAQ content and the BRL assistant show how the site can answer product and service questions without leaving the page.",
+    meta: "FAQ, chatbot, support flow",
+  },
+  {
+    src: "/projects/brl-fashion/product-list.png",
+    label: "06 / Product List",
+    title: "Product lists expose size and stock signals.",
+    body: "Category pages keep price, description, stock, size choices, quantity, and purchase actions close together.",
+    meta: "Catalog, stock, size selection",
+  },
+  {
+    src: "/projects/brl-fashion/checkout-payment.png",
+    label: "07 / Checkout",
+    title: "Checkout connects delivery, payment, and order summary.",
+    body: "Delivery details, payment options, cart state, totals, and the mini-cart are visible in one transaction flow.",
+    meta: "Delivery, payment, mini cart",
   },
 ] as const;
 
@@ -394,6 +455,81 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           });
 
           film.add(aksaSequence, aksaSequenceAt);
+        }
+      }
+
+      const fashionPanel = panelByName.get("fashion");
+      if (fashionPanel) {
+        const verticalTrack =
+          fashionPanel.querySelector<HTMLElement>(".fashion-vertical-track");
+        const steps = gsap.utils.toArray<HTMLElement>(
+          fashionPanel.querySelectorAll<HTMLElement>(".fashion-showcase-step"),
+        );
+
+        if (verticalTrack && steps.length > 1) {
+          const fashionSequence = gsap.timeline();
+          const stepDuration = 1.06;
+          const sequenceDuration = stepDuration * (steps.length - 1);
+
+          gsap.set(verticalTrack, {
+            willChange: "transform",
+            force3D: true,
+            backfaceVisibility: "hidden",
+          });
+          gsap.set(steps, {
+            autoAlpha: 0,
+            y: 22,
+            willChange: "opacity, transform",
+          });
+          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
+
+          fashionSequence.to(
+            verticalTrack,
+            {
+              y: `-${(steps.length - 1) * 100}vh`,
+              duration: sequenceDuration,
+              ease: "none",
+            },
+            0,
+          );
+
+          steps.forEach((step, index) => {
+            const centerAt = index * stepDuration;
+            const fadeInDuration = 0.28;
+            const fadeInLead = 0.46;
+            const fadeOutDelay = 0.42;
+            const fadeOutDuration = 0.34;
+
+            if (index > 0) {
+              fashionSequence.fromTo(
+                step,
+                { autoAlpha: 0, y: 28 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: fadeInDuration,
+                  ease: "none",
+                  immediateRender: false,
+                },
+                centerAt - fadeInLead,
+              );
+            }
+
+            if (index < steps.length - 1) {
+              fashionSequence.to(
+                step,
+                {
+                  autoAlpha: 0,
+                  y: -24,
+                  duration: fadeOutDuration,
+                  ease: "none",
+                },
+                centerAt + fadeOutDelay,
+              );
+            }
+          });
+
+          film.add(fashionSequence, fashionSequenceAt);
         }
       }
 
@@ -737,24 +873,124 @@ SWITCH_CLOSE  RETURN_SYNC`}
 // BRL FASHION
 // ===============================
 
+function FashionShowcaseStep({
+  frame,
+  index,
+}: {
+  frame: (typeof fashionShowcaseFrames)[number];
+  index: number;
+}) {
+  return (
+    <section className="fashion-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
+      <div className="fashion-visual-composition relative z-10 hidden h-[58vh] overflow-hidden border border-white/10 bg-[#130d10] sm:block lg:h-[70vh]">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(119,74,70,0.38),rgba(19,13,16,0.94)_44%,rgba(156,124,93,0.22))]" />
+        <div className="absolute inset-y-0 left-[22%] w-px bg-white/12" />
+        <div className="absolute inset-y-0 left-[58%] w-px bg-white/10" />
+        <div className="absolute inset-x-[8%] top-[25%] h-px bg-white/14" />
+        <div className="absolute inset-x-[17%] bottom-[21%] h-px bg-white/12" />
+        <div className="absolute left-[10%] top-[15%] h-[42%] w-[28%] border border-white/10 bg-black/16" />
+        <div className="absolute bottom-[14%] left-[34%] h-[34%] w-[24%] border border-white/10 bg-white/[0.035]" />
+        <div className="absolute right-[10%] top-[12%] h-[68%] w-[20%] border border-white/10 bg-black/14" />
+
+        <div className="absolute left-[6%] top-[34%] hidden opacity-30 lg:block">
+          <FashionScreenWall activeIndex={index} />
+        </div>
+
+        <div className="fashion-screen-stage absolute left-[49%] top-[50%] z-20 aspect-[1920/945] -translate-x-1/2 -translate-y-1/2">
+          <figure className="relative h-full w-full overflow-hidden rounded-lg border border-white/16 bg-[#f7f7f7] shadow-[0_28px_90px_rgba(0,0,0,0.72)]">
+            <Image
+              src={frame.src}
+              alt={`BRL Fashion ${frame.title}`}
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 70vw, 48vw"
+              className="object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </figure>
+        </div>
+
+        <div className="absolute bottom-7 left-[10%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/36 sm:text-[0.62rem]">
+          <span>Product Rhythm</span>
+          <span>{frame.meta}</span>
+        </div>
+      </div>
+
+      <div className="fashion-step-copy relative z-20 text-left lg:text-right">
+        <p className="font-mono text-xs uppercase tracking-[0.34em] text-rose-100/40">
+          {frame.label}
+        </p>
+
+        <h2 className="mt-6 flex flex-col font-display text-[clamp(3.6rem,8vw,9.6rem)] font-semibold leading-[0.78] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] lg:items-end">
+          <span className="block whitespace-nowrap">BRL</span>
+          <span className="block whitespace-nowrap">Fashion</span>
+        </h2>
+
+        <h3 className="mt-5 font-display text-[clamp(1.55rem,2.4vw,2.45rem)] font-medium leading-[1.08] tracking-normal text-rose-100/88">
+          {frame.title}
+        </h3>
+
+        <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
+          {frame.body}
+        </p>
+
+        <div className="mt-7 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
+          {frame.meta.split(", ").map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FashionScreenWall({ activeIndex }: { activeIndex: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="fashion-screen-wall pointer-events-none grid grid-cols-2 gap-2"
+    >
+      {fashionShowcaseFrames.map((screen, screenIndex) => (
+        <div
+          key={screen.src}
+          className={`fashion-screen-tile relative aspect-[1920/945] w-24 overflow-hidden rounded-md border transition-all duration-500 ${
+            screenIndex === activeIndex
+              ? "scale-105 border-rose-200/42 bg-rose-950/20 opacity-100"
+              : "border-white/5 bg-black/40 opacity-40"
+          }`}
+        >
+          <Image
+            src={screen.src}
+            alt=""
+            fill
+            unoptimized
+            sizes="8vw"
+            className="object-cover opacity-70"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function FashionPanel() {
   return (
     <PanelShell className="bg-[#1b1114]">
       <div className="camera-scene absolute inset-0 origin-center">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(14,8,10,0.78)_0%,rgba(16,10,12,0.5)_45%,rgba(12,9,8,0.9)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_17vh] opacity-35" />
 
-        <div className="camera-visual absolute left-[-28vw] top-[25vh] z-10 h-[48vh] w-[118vw] overflow-hidden border border-white/10 bg-[#130d10] sm:left-[-8vw] sm:top-[14vh] sm:h-[72vh] sm:w-[72vw] lg:left-[-4vw]">
-          <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(119,74,70,0.42),rgba(19,13,16,0.9)_42%,rgba(156,124,93,0.25))]" />
-          <div className="absolute inset-y-0 left-[24%] w-px bg-white/12" />
-          <div className="absolute inset-y-0 left-[56%] w-px bg-white/10" />
-          <div className="absolute inset-x-[10%] top-[26%] h-px bg-white/14" />
-          <div className="absolute inset-x-[22%] bottom-[21%] h-px bg-white/12" />
-          <div className="absolute left-[11%] top-[15%] h-[42%] w-[28%] border border-white/10 bg-black/16" />
-          <div className="absolute bottom-[14%] left-[38%] h-[34%] w-[22%] border border-white/10 bg-white/[0.035]" />
-          <div className="absolute right-[9%] top-[11%] h-[68%] w-[18%] border border-white/10 bg-black/14" />
-          <div className="absolute bottom-7 left-[11%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/36 sm:text-[0.62rem]">
-            <span>Product Rhythm</span>
-            <span>Visual System</span>
+        <div className="camera-visual fashion-showcase-window absolute inset-0 z-10 overflow-hidden">
+          <div className="fashion-vertical-track absolute inset-x-0 top-0">
+            {fashionShowcaseFrames.map((frame, index) => (
+              <FashionShowcaseStep
+                key={frame.src}
+                frame={frame}
+                index={index}
+              />
+            ))}
           </div>
         </div>
       </div>
@@ -762,31 +998,6 @@ function FashionPanel() {
       <p className="camera-copy absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">
         Chapter 03 / Editorial Interface
       </p>
-
-      <div className="camera-copy absolute right-5 top-[16vh] z-30 max-w-[min(50rem,calc(100vw-2.5rem))] text-right sm:right-12 sm:top-[13vh] lg:right-20">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-rose-100/40">
-          Visual Systems • Product Mood
-        </p>
-        <h2 className="mt-7 flex flex-col items-end font-display text-[clamp(4.3rem,12vw,12rem)] font-semibold leading-[0.8] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)]">
-          <span className="block whitespace-nowrap">BRL</span>
-          <span className="block whitespace-nowrap">Fashion</span>
-        </h2>
-      </div>
-
-      <div className="camera-copy absolute bottom-[10vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-12 sm:max-w-md lg:right-20">
-        <p className="text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          A fashion storefront shaped around catalog clarity, admin workflows,
-          product-size logic, and a stronger public presentation for portfolio
-          review.
-        </p>
-
-        <div className="mt-7 flex flex-wrap justify-end gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/40">
-          <span>Ecommerce UI</span>
-          <span>Admin Flow</span>
-          <span>Product Catalog</span>
-          <span>Portfolio Polish</span>
-        </div>
-      </div>
     </PanelShell>
   );
 }
@@ -852,7 +1063,7 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[1180vh]">
+      <section className="panel-scroll relative z-10 h-[1900vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />

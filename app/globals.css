@@ -111,9 +111,44 @@ a {
   opacity: 0.24;
 }
 
+.fashion-showcase-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.fashion-step-copy {
+  min-width: 0;
+  width: min(100%, 31rem);
+  max-width: min(100%, 31rem);
+  text-wrap: balance;
+}
+
+.fashion-visual-composition {
+  align-self: center;
+  justify-self: start;
+  width: min(100%, 54rem);
+}
+
+.fashion-screen-stage {
+  width: clamp(30rem, 82vw, 48rem);
+}
+
+.fashion-screen-wall {
+  filter: blur(1px) saturate(0.58) contrast(0.76) brightness(0.58);
+}
+
 @media (min-width: 40rem) {
   .aksa-phone-stage {
     width: clamp(20rem, 50vw, 23rem);
+  }
+
+  .fashion-screen-stage {
+    width: clamp(34rem, 74vw, 50rem);
   }
 }
 
@@ -151,6 +186,28 @@ a {
   .aksa-phone-stage {
     width: clamp(25rem, 30vw, 29rem);
   }
+
+  .fashion-showcase-step {
+    grid-template-columns: minmax(38rem, 54vw) minmax(23rem, 33vw);
+    grid-template-rows: 1fr;
+    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 5.5rem);
+    transform: translateX(-4vw);
+  }
+
+  .fashion-step-copy {
+    justify-self: end;
+  }
+
+  .fashion-visual-composition {
+    justify-self: start;
+    width: min(54vw, 62rem);
+    transform: translateX(4.2vw);
+  }
+
+  .fashion-screen-stage {
+    width: clamp(40rem, 47vw, 58rem);
+  }
 }
 
 @media (min-width: 80rem) {
@@ -161,6 +218,10 @@ a {
   .aksa-screen-wall {
     inset-inline: 5%;
     bottom: 4%;
+  }
+
+  .fashion-screen-stage {
+    width: clamp(45rem, 49vw, 62rem);
   }
 }
 
