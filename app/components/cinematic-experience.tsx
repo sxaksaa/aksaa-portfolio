@@ -1,10 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import {
+  AksaPanel,
+  ClosingPanel,
+  EduvestPanel,
+  FashionPanel,
+  IntroPanel,
+} from "./cinematic/panels";
 
 const panels = ["intro", "aksa", "eduvest", "fashion", "closing"] as const;
 type PanelName = (typeof panels)[number];
@@ -16,141 +22,39 @@ const transitionAt = {
   closing: 24.48,
 } as const;
 
-const aksaSequenceAt = 1.52;
-const eduvestSequenceAt = 11.12;
-const fashionSequenceAt = 17.62;
-
-const aksaShowcaseFrames = [
-  {
-    src: "/projects/aksa-xiterz/Dashboard.png",
-    label: "01 / Platform",
-    title: "Premium tools and instant licenses.",
-    body: "The homepage sets the promise first: trusted digital tools, license access, setup support, and a clear product path.",
-    meta: "Hero, trust numbers, product search",
-  },
-  {
-    src: "/projects/aksa-xiterz/list%20product.png",
-    label: "02 / Storefront",
-    title: "Products stay easy to scan.",
-    body: "Cards keep platform, stock status, pricing, and auto-delivery availability visible before a buyer enters checkout.",
-    meta: "Catalog, pricing, stock signal",
-  },
-  {
-    src: "/projects/aksa-xiterz/Contoh%20Qris%20Payment.png",
-    label: "03 / QRIS",
-    title: "QRIS stays inside the flow.",
-    body: "The invoice opens as a native payment state with order ID, fee, total, expiry, and a direct check-payment action.",
-    meta: "QR invoice, exact total, expiry",
-  },
-  {
-    src: "/projects/aksa-xiterz/Contoh%20Crypto%20Payment.png",
-    label: "04 / Crypto",
-    title: "USDT checkout is explicit.",
-    body: "Network, amount, address, token contract, and warning copy are shown together so customers know what must match.",
-    meta: "BSC RPC, exact amount, copy actions",
-  },
-  {
-    src: "/projects/aksa-xiterz/license%20section.png",
-    label: "05 / Licenses",
-    title: "Delivery lands in one place.",
-    body: "Paid keys are grouped with purchase details, active state, copy action, and support shortcuts for setup help.",
-    meta: "License key, support, delivery",
-  },
-  {
-    src: "/projects/aksa-xiterz/order%20history.png",
-    label: "06 / Orders",
-    title: "Order history keeps state visible.",
-    body: "Customers can track totals, paid orders, waiting payments, cancelled invoices, methods, prices, and timestamps.",
-    meta: "History, status, payment method",
-  },
-  {
-    src: "/projects/aksa-xiterz/Guides%20Blog.png",
-    label: "07 / Guides",
-    title: "Guides reduce setup friction.",
-    body: "A public knowledge base gives step-by-step Windows fixes before support has to answer the same setup questions.",
-    meta: "Knowledge base, setup fixes",
-  },
-  {
-    src: "/projects/aksa-xiterz/Download%20Section.png",
-    label: "08 / Downloads",
-    title: "Files are collected neatly.",
-    body: "The downloads page keeps public tools and required files organized by product so buyers can continue after purchase.",
-    meta: "Tools, folders, companion files",
-  },
-] as const;
-
-const eduvestShowcaseFrames = [
-  {
-    src: "/projects/eduvest/dashboard.png",
-    label: "01 / Dashboard",
-    title: "Finance learning starts from a clear hub.",
-    body: "The logged-in homepage points learners to the catalog, active playlists, and the next course without making the product feel like a generic dashboard.",
-    meta: "Hero, catalog path, login state",
-  },
-  {
-    src: "/projects/eduvest/all-courses.png",
-    label: "02 / Main Course",
-    title: "Course cards make the learning tracks easy to choose.",
-    body: "Stock investing, crypto, and financial basics are grouped as open learning paths with video counts, ratings, and clear continue actions.",
-    meta: "Course catalog, ratings, progress",
-  },
-  {
-    src: "/projects/eduvest/playlist.png",
-    label: "03 / Playlists",
-    title: "Every topic is shaped like a playlist.",
-    body: "Finance topics feel approachable because each track is presented as a video sequence instead of a scattered set of pages.",
-    meta: "Learning tracks, video flow",
-  },
-  {
-    src: "/projects/eduvest/learning-progress.png",
-    label: "04 / Progress",
-    title: "Progress turns study into a visible habit.",
-    body: "Belajarku collects enrolled courses, completed videos, and profile activity so learners can continue from where they stopped.",
-    meta: "Belajarku, completion, activity",
-  },
-  {
-    src: "/projects/eduvest/my-courses.png",
-    label: "05 / My Courses",
-    title: "The active course list stays focused.",
-    body: "Course summaries keep the current lesson count, topic category, and continue button close to the learner's next action.",
-    meta: "Course progress, next action",
-  },
-  {
-    src: "/projects/eduvest/news-faq-testimonials.png",
-    label: "06 / Trust Layer",
-    title: "News, FAQ, and testimonials complete the product story.",
-    body: "The public home sections explain the learning hub, demo accounts, and student feedback without drifting away from finance education.",
-    meta: "FAQ, updates, testimonials",
-  },
-] as const;
+const showcaseSequenceAt = {
+  aksa: 1.52,
+  eduvest: 11.12,
+  fashion: 17.62,
+} as const;
 
 const connectedPanelMotion = {
   incomingFrom: {
-    yPercent: 7,
-    scale: 1.012,
+    yPercent: 8,
+    scale: 1.014,
     clipPath: "inset(0% 0% 0% 0%)",
   },
   incomingTo: {
     yPercent: 0,
     scale: 1,
-    duration: 1.62,
+    duration: 1.3,
     ease: "none",
     immediateRender: false,
   },
   incomingFadeTo: {
     autoAlpha: 1,
-    duration: 0.82,
+    duration: 0.56,
     ease: "none",
   },
   outgoingTo: {
-    scale: 0.988,
-    yPercent: -0.8,
-    duration: 1.62,
+    scale: 0.986,
+    yPercent: -1.1,
+    duration: 1.15,
     ease: "none",
   },
   outgoingFadeTo: {
     autoAlpha: 0,
-    duration: 0.96,
+    duration: 0.42,
     ease: "none",
   },
 } as const;
@@ -170,14 +74,6 @@ const panelTransitions = [
     incoming: "fashion",
     at: transitionAt.fashion,
     ...connectedPanelMotion,
-    incomingFadeTo: {
-      ...connectedPanelMotion.incomingFadeTo,
-      duration: 0.34,
-    },
-    outgoingFadeTo: {
-      ...connectedPanelMotion.outgoingFadeTo,
-      duration: 0.42,
-    },
   },
   {
     incoming: "closing",
@@ -186,57 +82,18 @@ const panelTransitions = [
   },
 ] as const;
 
-const fashionShowcaseFrames = [
-  {
-    src: "/projects/brl-fashion/dashboard.png",
-    label: "01 / Homepage",
-    title: "The homepage opens with catalog clarity.",
-    body: "BRL Fashion presents the brand, search, category access, and visual product mood in a desktop-first storefront.",
-    meta: "Hero, search, category rhythm",
-  },
-  {
-    src: "/projects/brl-fashion/catalog-gallery.png",
-    label: "02 / Catalog + Gallery",
-    title: "Category and gallery sections make browsing feel visual.",
-    body: "The catalog carousel and fashion gallery turn the landing page into a richer product discovery surface.",
-    meta: "Catalog, gallery, visual browsing",
-  },
-  {
-    src: "/projects/brl-fashion/blog.png",
-    label: "03 / Blog",
-    title: "Support content gives the storefront a softer layer.",
-    body: "The blog section adds care tips and fashion knowledge so the site feels more complete than a plain catalog grid.",
-    meta: "Blog, care guide, public presentation",
-  },
-  {
-    src: "/projects/brl-fashion/feedback.png",
-    label: "04 / Feedback",
-    title: "Feedback keeps the brand grounded in customers.",
-    body: "Customer cards and FAQ content make the storefront feel more alive while keeping service questions nearby.",
-    meta: "Feedback, FAQ, trust signal",
-  },
-  {
-    src: "/projects/brl-fashion/faq-chatbot.png",
-    label: "05 / FAQ + Chatbot",
-    title: "The chatbot turns support into a visible feature.",
-    body: "FAQ content and the BRL assistant show how the site can answer product and service questions without leaving the page.",
-    meta: "FAQ, chatbot, support flow",
-  },
-  {
-    src: "/projects/brl-fashion/product-list.png",
-    label: "06 / Product List",
-    title: "Product lists expose size and stock signals.",
-    body: "Category pages keep price, description, stock, size choices, quantity, and purchase actions close together.",
-    meta: "Catalog, stock, size selection",
-  },
-  {
-    src: "/projects/brl-fashion/checkout-payment.png",
-    label: "07 / Checkout",
-    title: "Checkout connects delivery, payment, and order summary.",
-    body: "Delivery details, payment options, cart state, totals, and the mini-cart are visible in one transaction flow.",
-    meta: "Delivery, payment, mini cart",
-  },
-] as const;
+type ShowcaseTimelineConfig = {
+  panelName: Extract<PanelName, "aksa" | "eduvest" | "fashion">;
+  trackSelector: string;
+  stepSelector: string;
+  startAt: number;
+  stepDuration: number;
+  fadeInDuration?: number;
+  fadeInLead?: number;
+  fadeOutDelay?: number;
+  fadeOutDuration?: number;
+  depthTargets?: (panel: HTMLElement) => HTMLElement[];
+};
 
 function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
@@ -246,17 +103,11 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.12,
+      lerp: 0.075,
       smoothWheel: true,
     });
 
     window.scrollTo(0, 0);
-
-    const unlockIntroScroll = (shouldRefresh = true) => {
-      if (shouldRefresh) {
-        ScrollTrigger.refresh();
-      }
-    };
 
     function raf(time: number) {
       lenis.raf(time);
@@ -270,7 +121,6 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         panels.map((panel, index) => [panel, panelElements[index]]),
       );
 
-      // 1. SETUP AWAL
       panelElements.forEach((panel, index) => {
         gsap.set(panel, {
           yPercent: index === 0 ? 0 : connectedPanelMotion.incomingFrom.yPercent,
@@ -285,34 +135,27 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         });
       });
 
-      // ==========================================
-      // INTRO ANIMATION (Peningkatan: Lebih Cepat)
-      // ==========================================
       const introTl = gsap.timeline({
-        onComplete: () => unlockIntroScroll(),
+        onComplete: () => ScrollTrigger.refresh(),
       });
+
       introTl.set(".intro-content-group", {
         autoAlpha: 0,
         y: 20,
         scale: 0.99,
       });
       introTl.set(".intro-words-container", { autoAlpha: 1 });
-
       introTl.to(root, { autoAlpha: 1, duration: 0.2, ease: "power1.in" });
 
-      const words = gsap.utils.toArray(".intro-word");
-
-      words.forEach((word) => {
-        const el = word as HTMLElement;
-
+      gsap.utils.toArray<HTMLElement>(".intro-word").forEach((word) => {
         introTl
           .fromTo(
-            el,
+            word,
             { yPercent: 38, autoAlpha: 0 },
             { yPercent: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
           )
           .to(
-            el,
+            word,
             {
               yPercent: -38,
               autoAlpha: 0,
@@ -323,36 +166,35 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           );
       });
 
-      introTl.to(
-        ".intro-words-container",
-        {
-          autoAlpha: 0,
-          y: -8,
-          duration: 0.45,
-          ease: "power2.out",
-        },
-        "-=0.1",
-      );
-
-      // Reveal main hero
-      introTl.to(
-        ".intro-content-group",
-        {
-          autoAlpha: 1,
-          y: 0,
-          scale: 1,
-          duration: 1.0,
-          ease: "power3.out",
-        },
-        "-=0.08",
-      );
+      introTl
+        .to(
+          ".intro-words-container",
+          {
+            autoAlpha: 0,
+            y: -8,
+            duration: 0.45,
+            ease: "power2.out",
+          },
+          "-=0.1",
+        )
+        .to(
+          ".intro-content-group",
+          {
+            autoAlpha: 1,
+            y: 0,
+            scale: 1,
+            duration: 1,
+            ease: "power3.out",
+          },
+          "-=0.08",
+        );
 
       const film = gsap.timeline({
         scrollTrigger: {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: true,
+          scrub: 0.65,
         },
       });
 
@@ -366,11 +208,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         const copy = gsap.utils.toArray<HTMLElement>(
           panel.querySelectorAll<HTMLElement>(".camera-copy"),
         );
-        const duration = 2.15;
-
         const targets = [scene, visual, ...copy].filter(
           Boolean,
         ) as HTMLElement[];
+
         if (targets.length) {
           gsap.set(targets, {
             willChange: "transform",
@@ -381,294 +222,156 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
         if (direction === "enter") {
           if (scene) {
-            film.fromTo(
-              scene,
-              { scale: 1.03 },
-              { scale: 1, duration, ease: "none" },
-              at,
-            );
+            film.fromTo(scene, { scale: 1.032 }, { scale: 1, duration: 2.3, ease: "none" }, at);
           }
-
           if (visual) {
-            film.fromTo(
-              visual,
-              { scale: 1.018 },
-              { scale: 1, duration, ease: "none" },
-              at,
-            );
+            film.fromTo(visual, { scale: 1.02 }, { scale: 1, duration: 2.3, ease: "none" }, at);
           }
-
           if (copy.length) {
-            film.fromTo(
-              copy,
-              { y: 4 },
-              { y: 0, duration: 1.65, ease: "none" },
-              at + 0.16,
-            );
+            film.fromTo(copy, { y: 6 }, { y: 0, duration: 1.8, ease: "none" }, at + 0.16);
           }
-
           return;
         }
 
         if (scene) {
-          film.to(scene, { scale: 1.026, duration, ease: "none" }, at);
+          film.to(scene, { scale: 1.028, duration: 2.3, ease: "none" }, at);
         }
-
         if (visual) {
-          film.to(visual, { scale: 1.018, duration, ease: "none" }, at);
+          film.to(visual, { scale: 1.02, duration: 2.3, ease: "none" }, at);
         }
-
         if (copy.length) {
-          film.to(copy, { y: -4, duration: 1.65, ease: "none" }, at);
+          film.to(copy, { y: -6, duration: 1.8, ease: "none" }, at);
         }
       };
 
-      const aksaPanel = panelByName.get("aksa");
-      if (aksaPanel) {
-        const verticalTrack =
-          aksaPanel.querySelector<HTMLElement>(".aksa-vertical-track");
-        const aurora = aksaPanel.querySelector<HTMLElement>(".aksa-aurora");
+      const addVerticalShowcase = ({
+        panelName,
+        trackSelector,
+        stepSelector,
+        startAt,
+        stepDuration,
+        fadeInDuration = 0.42,
+        fadeInLead = 0.58,
+        fadeOutDelay = 0.52,
+        fadeOutDuration = 0.44,
+        depthTargets,
+      }: ShowcaseTimelineConfig) => {
+        const panel = panelByName.get(panelName);
+        if (!panel) return;
+
+        const verticalTrack = panel.querySelector<HTMLElement>(trackSelector);
         const steps = gsap.utils.toArray<HTMLElement>(
-          aksaPanel.querySelectorAll<HTMLElement>(".aksa-showcase-step"),
+          panel.querySelectorAll<HTMLElement>(stepSelector),
+        );
+        if (!verticalTrack || steps.length <= 1) return;
+
+        const sequence = gsap.timeline();
+        const sequenceDuration = stepDuration * (steps.length - 1);
+        const extraDepthTargets = depthTargets?.(panel).filter(Boolean) ?? [];
+
+        gsap.set([verticalTrack, ...extraDepthTargets], {
+          willChange: "transform",
+          force3D: true,
+          backfaceVisibility: "hidden",
+        });
+        gsap.set(steps, {
+          autoAlpha: 0,
+          y: 24,
+          willChange: "opacity, transform",
+        });
+        gsap.set(steps[0], { autoAlpha: 1, y: 0 });
+
+        sequence.to(
+          verticalTrack,
+          {
+            y: `-${(steps.length - 1) * 100}vh`,
+            duration: sequenceDuration,
+            ease: "none",
+          },
+          0,
         );
 
-        if (verticalTrack && steps.length > 1) {
-          const aksaSequence = gsap.timeline();
-          const stepDuration = 1.24;
-          const sequenceDuration = stepDuration * (steps.length - 1);
-          const aksaDepthTargets = [verticalTrack, aurora].filter(
-            Boolean,
-          ) as HTMLElement[];
-
-          gsap.set(aksaDepthTargets, {
-            willChange: "transform",
-            force3D: true,
-            backfaceVisibility: "hidden",
-          });
-          gsap.set(steps, {
-            autoAlpha: 0,
-            y: 20,
-            willChange: "opacity, transform",
-          });
-          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
-
-          aksaSequence.to(
-            verticalTrack,
+        if (extraDepthTargets.length) {
+          sequence.to(
+            extraDepthTargets,
             {
-              y: `-${(steps.length - 1) * 100}vh`,
+              yPercent: 2,
+              scale: 1.012,
               duration: sequenceDuration,
               ease: "none",
             },
             0,
           );
+        }
 
-          if (aurora) {
-            aksaSequence.to(
-              aurora,
+        steps.forEach((step, index) => {
+          const centerAt = index * stepDuration;
+
+          if (index > 0) {
+            sequence.fromTo(
+              step,
+              { autoAlpha: 0, y: 30 },
               {
-                yPercent: 2,
-                scale: 1.012,
-                duration: sequenceDuration,
+                autoAlpha: 1,
+                y: 0,
+                duration: fadeInDuration,
                 ease: "none",
+                immediateRender: false,
               },
-              0,
+              centerAt - fadeInLead,
             );
           }
 
-          steps.forEach((step, index) => {
-            const centerAt = index * stepDuration;
-            const fadeInDuration = 0.36;
-            const fadeInLead = 0.5;
-            const fadeOutDelay = 0.46;
-            const fadeOutDuration = 0.38;
+          if (index < steps.length - 1) {
+            sequence.to(
+              step,
+              {
+                autoAlpha: 0,
+                y: -26,
+                duration: fadeOutDuration,
+                ease: "none",
+              },
+              centerAt + fadeOutDelay,
+            );
+          }
+        });
 
-            if (index > 0) {
-              aksaSequence.fromTo(
-                step,
-                { autoAlpha: 0, y: 26 },
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  duration: fadeInDuration,
-                  ease: "none",
-                  immediateRender: false,
-                },
-                centerAt - fadeInLead,
-              );
-            }
+        film.add(sequence, startAt);
+      };
 
-            if (index < steps.length - 1) {
-              aksaSequence.to(
-                step,
-                {
-                  autoAlpha: 0,
-                  y: -22,
-                  duration: fadeOutDuration,
-                  ease: "none",
-                },
-                centerAt + fadeOutDelay,
-              );
-            }
-          });
+      addVerticalShowcase({
+        panelName: "aksa",
+        trackSelector: ".aksa-vertical-track",
+        stepSelector: ".aksa-showcase-step",
+        startAt: showcaseSequenceAt.aksa,
+        stepDuration: 1.28,
+        depthTargets: (panel) => [
+          panel.querySelector<HTMLElement>(".aksa-aurora"),
+        ].filter(Boolean) as HTMLElement[],
+      });
 
-          film.add(aksaSequence, aksaSequenceAt);
-        }
-      }
+      addVerticalShowcase({
+        panelName: "eduvest",
+        trackSelector: ".eduvest-vertical-track",
+        stepSelector: ".eduvest-showcase-step",
+        startAt: showcaseSequenceAt.eduvest,
+        stepDuration: 1.1,
+      });
 
-      const eduvestPanel = panelByName.get("eduvest");
-      if (eduvestPanel) {
-        const verticalTrack =
-          eduvestPanel.querySelector<HTMLElement>(".eduvest-vertical-track");
-        const steps = gsap.utils.toArray<HTMLElement>(
-          eduvestPanel.querySelectorAll<HTMLElement>(".eduvest-showcase-step"),
-        );
-
-        if (verticalTrack && steps.length > 1) {
-          const eduvestSequence = gsap.timeline();
-          const stepDuration = 1.04;
-          const sequenceDuration = stepDuration * (steps.length - 1);
-
-          gsap.set(verticalTrack, {
-            willChange: "transform",
-            force3D: true,
-            backfaceVisibility: "hidden",
-          });
-          gsap.set(steps, {
-            autoAlpha: 0,
-            y: 20,
-            willChange: "opacity, transform",
-          });
-          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
-
-          eduvestSequence.to(
-            verticalTrack,
-            {
-              y: `-${(steps.length - 1) * 100}vh`,
-              duration: sequenceDuration,
-              ease: "none",
-            },
-            0,
-          );
-
-          steps.forEach((step, index) => {
-            const centerAt = index * stepDuration;
-            const fadeInDuration = 0.34;
-            const fadeInLead = 0.48;
-            const fadeOutDelay = 0.46;
-            const fadeOutDuration = 0.34;
-
-            if (index > 0) {
-              eduvestSequence.fromTo(
-                step,
-                { autoAlpha: 0, y: 26 },
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  duration: fadeInDuration,
-                  ease: "none",
-                  immediateRender: false,
-                },
-                centerAt - fadeInLead,
-              );
-            }
-
-            if (index < steps.length - 1) {
-              eduvestSequence.to(
-                step,
-                {
-                  autoAlpha: 0,
-                  y: -22,
-                  duration: fadeOutDuration,
-                  ease: "none",
-                },
-                centerAt + fadeOutDelay,
-              );
-            }
-          });
-
-          film.add(eduvestSequence, eduvestSequenceAt);
-        }
-      }
-
-      const fashionPanel = panelByName.get("fashion");
-      if (fashionPanel) {
-        const verticalTrack =
-          fashionPanel.querySelector<HTMLElement>(".fashion-vertical-track");
-        const steps = gsap.utils.toArray<HTMLElement>(
-          fashionPanel.querySelectorAll<HTMLElement>(".fashion-showcase-step"),
-        );
-
-        if (verticalTrack && steps.length > 1) {
-          const fashionSequence = gsap.timeline();
-          const stepDuration = 1.06;
-          const sequenceDuration = stepDuration * (steps.length - 1);
-
-          gsap.set(verticalTrack, {
-            willChange: "transform",
-            force3D: true,
-            backfaceVisibility: "hidden",
-          });
-          gsap.set(steps, {
-            autoAlpha: 0,
-            y: 22,
-            willChange: "opacity, transform",
-          });
-          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
-
-          fashionSequence.to(
-            verticalTrack,
-            {
-              y: `-${(steps.length - 1) * 100}vh`,
-              duration: sequenceDuration,
-              ease: "none",
-            },
-            0,
-          );
-
-          steps.forEach((step, index) => {
-            const centerAt = index * stepDuration;
-            const fadeInDuration = 0.28;
-            const fadeInLead = 0.46;
-            const fadeOutDelay = 0.42;
-            const fadeOutDuration = 0.34;
-
-            if (index > 0) {
-              fashionSequence.fromTo(
-                step,
-                { autoAlpha: 0, y: 28 },
-                {
-                  autoAlpha: 1,
-                  y: 0,
-                  duration: fadeInDuration,
-                  ease: "none",
-                  immediateRender: false,
-                },
-                centerAt - fadeInLead,
-              );
-            }
-
-            if (index < steps.length - 1) {
-              fashionSequence.to(
-                step,
-                {
-                  autoAlpha: 0,
-                  y: -24,
-                  duration: fadeOutDuration,
-                  ease: "none",
-                },
-                centerAt + fadeOutDelay,
-              );
-            }
-          });
-
-          film.add(fashionSequence, fashionSequenceAt);
-        }
-      }
+      addVerticalShowcase({
+        panelName: "fashion",
+        trackSelector: ".fashion-vertical-track",
+        stepSelector: ".fashion-showcase-step",
+        startAt: showcaseSequenceAt.fashion,
+        stepDuration: 1.1,
+      });
 
       panelTransitions.forEach((transition) => {
         const incomingPanel = panelByName.get(transition.incoming as PanelName);
         const incomingIndex = panels.indexOf(transition.incoming as PanelName);
         const outgoingPanel = panelElements[incomingIndex - 1];
+        const outgoingAt = transition.at;
+        const incomingAt = transition.at + 0.58;
 
         if (!incomingPanel || !outgoingPanel) return;
 
@@ -677,558 +380,36 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             incomingPanel,
             { ...transition.incomingFrom },
             { ...transition.incomingTo },
-            transition.at,
+            incomingAt,
           )
-          .to(incomingPanel, { ...transition.incomingFadeTo }, transition.at)
+          .to(
+            incomingPanel,
+            { ...transition.incomingFadeTo },
+            incomingAt + 0.1,
+          )
           .to(
             outgoingPanel,
             { ...transition.outgoingTo },
-            transition.at + 0.16,
+            outgoingAt,
           )
           .to(
             outgoingPanel,
             { ...transition.outgoingFadeTo },
-            transition.at + 0.24,
+            outgoingAt,
           );
 
-        addCameraDepth(incomingPanel, transition.at, "enter");
-        addCameraDepth(outgoingPanel, transition.at + 0.16, "exit");
+        addCameraDepth(incomingPanel, incomingAt, "enter");
+        addCameraDepth(outgoingPanel, outgoingAt, "exit");
       });
 
       ScrollTrigger.refresh();
     }, root);
 
     return () => {
-      unlockIntroScroll(false);
       ctx.revert();
       lenis.destroy();
     };
   }, [rootRef]);
-}
-
-function PanelShell({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className: string;
-}) {
-  return (
-    <article
-      className={`cinematic-panel absolute inset-0 overflow-hidden bg-[#050505] ${className}`}
-    >
-      {children}
-    </article>
-  );
-}
-
-function AksaShowcaseStep({
-  frame,
-  index,
-}: {
-  frame: (typeof aksaShowcaseFrames)[number];
-  index: number;
-}) {
-  return (
-    <section className="aksa-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
-      
-      {/* SISI KIRI: VISUAL STAGE (Layout Arsitektural & Garis Tipis ala Editorial) */}
-      <div className="aksa-visual-composition relative z-10 w-full h-[60vh] lg:h-[70vh] border border-white/10 bg-black/10 overflow-hidden hidden sm:block">
-        {/* Garis Pembagi Internal */}
-        <div className="absolute inset-y-0 left-[30%] w-px bg-white/10" />
-        <div className="absolute inset-y-0 left-[70%] w-px bg-white/5" />
-        <div className="absolute inset-x-0 top-[25%] h-px bg-white/10" />
-        <div className="absolute inset-x-0 bottom-[20%] h-px bg-white/10" />
-        
-        {/* Konten Metadata Tekstual Pojok */}
-        <div className="absolute bottom-4 left-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-white/30">
-          SYSTEM ENVIRONMENT // INTERACTION
-        </div>
-        <div className="absolute top-4 right-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-violet-100/30">
-          {frame.meta}
-        </div>
-
-        {/* Latar Belakang Mini Wall-Tiles */}
-        <div className="absolute left-[6%] top-[35%] opacity-25 scale-90 pointer-events-none hidden lg:block">
-          <AksaScreenWall activeIndex={index} />
-        </div>
-
-        {/* Stage Utama: iPhone Frame Centered Asymmetrically */}
-        <div className="aksa-phone-stage absolute left-[45%] top-[50%] -translate-x-1/2 -translate-y-1/2 z-20 h-[85%] aspect-[1290/2796]">
-          <span className="pointer-events-none absolute -inset-[15%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.15),transparent_60%)] blur-2xl" />
-          
-          <figure className="relative w-full h-full overflow-hidden rounded-[1rem] border border-white/15 bg-[#0a0712] shadow-[0_24px_80px_rgba(0,0,0,0.8)]">
-            <Image
-              src={frame.src}
-              alt={`Aksa Xiterz ${frame.title}`}
-              fill
-              unoptimized
-              sizes="(max-width: 1024px) 50vw, 25vw"
-              className="object-contain p-1"
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          </figure>
-        </div>
-      </div>
-
-      {/* SISI KANAN: EDITORIAL COPY (Konsisten Rata Kanan Mengikuti Pola BRL Fashion) */}
-      <div className="aksa-step-copy relative z-20 text-left lg:text-right">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/40">
-          {frame.label}
-        </p>
-
-        <h2 className="aksa-editorial-title mt-6 font-display text-[clamp(2.5rem,5vw,4.5rem)] font-semibold leading-[0.9] tracking-normal text-white">
-          Aksa Xiterz
-        </h2>
-
-        <h3 className="aksa-editorial-subtitle mt-4 font-display text-lg font-medium leading-[1.3] text-violet-200/90">
-          {frame.title}
-        </h3>
-
-        <p className="mt-5 text-sm leading-6 text-slate-400 font-light">
-          {frame.body}
-        </p>
-
-        <div className="mt-8 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
-          <span>{frame.meta.split(', ')[0]}</span>
-          <span>•</span>
-          <span>{frame.meta.split(', ')[1] || 'Secure Delivery'}</span>
-        </div>
-      </div>
-
-    </section>
-  );
-}
-
-function AksaScreenWall({ activeIndex }: { activeIndex: number }) {
-  return (
-    <div
-      aria-hidden="true"
-      className="aksa-screen-wall pointer-events-none grid grid-cols-2 gap-3"
-    >
-      {aksaShowcaseFrames.slice(0, 4).map((screen, screenIndex) => (
-        <div
-          key={screen.src}
-          className={`aksa-screen-tile relative w-16 aspect-[1290/2796] overflow-hidden rounded-[0.3rem] border transition-all duration-500 ${
-            screenIndex === activeIndex % 4
-              ? "border-violet-500/40 bg-violet-950/20 opacity-100 scale-105"
-              : "border-white/5 bg-black/40 opacity-40"
-          }`}
-        >
-          <Image
-            src={screen.src}
-            alt=""
-            fill
-            unoptimized
-            sizes="4vw"
-            className="object-contain opacity-60"
-            loading="lazy"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ===============================
-// INTRO PANEL
-// ===============================
-
-function IntroPanel() {
-  return (
-    <PanelShell className="bg-[#050409]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(116,65,151,0.25),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(13,10,17,0.98)_52%,rgba(4,6,8,1))]" />
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.022)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-40" />
-
-      <div className="intro-words-container absolute inset-0 z-20 grid place-items-center overflow-hidden px-5 text-center">
-        <h1 className="relative h-[clamp(4rem,10vw,7.5rem)] w-full max-w-[min(88vw,66rem)] overflow-hidden font-display text-[clamp(3.7rem,10vw,7.5rem)] font-semibold leading-[0.9] tracking-normal text-white">
-          <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            Quiet
-          </span>
-          <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            Systems
-          </span>
-          <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            In Motion
-          </span>
-        </h1>
-      </div>
-
-      <div className="intro-content-group relative z-10 grid h-full place-items-center px-5 text-center">
-        <div className="w-full max-w-7xl">
-          <p className="font-mono text-xs uppercase tracking-[0.34em] text-white/40">
-            Computer Science Student • Full-Stack Web • Open For Internship
-          </p>
-
-          <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
-            Aksaa
-          </h1>
-
-          <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
-            I build web systems where backend rules, payment flows, and
-            polished interfaces work as one product.
-          </p>
-
-          <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
-            This portfolio follows the projects that shaped my full-stack
-            direction: digital checkout, finance education, ecommerce workflows,
-            and cinematic frontend craft.
-          </p>
-        </div>
-      </div>
-    </PanelShell>
-  );
-}
-
-// ===============================
-// AKSA XITERZ
-// ===============================
-
-function AksaPanel() {
-  return (
-    <PanelShell className="bg-[#12081a]">
-      <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_42%,rgba(147,51,234,0.32),transparent_34%),radial-gradient(circle_at_22%_18%,rgba(236,72,153,0.13),transparent_30%),linear-gradient(135deg,rgba(19,8,35,1),rgba(5,4,10,1)_58%,rgba(29,14,40,0.96))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,3,8,0.9)_0%,rgba(8,5,13,0.64)_44%,rgba(6,4,10,0.86)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-35" />
-        <div className="aksa-aurora absolute -left-[18vw] top-[6vh] h-[78vh] w-[70vw] rounded-full bg-violet-500/14 blur-3xl" />
-        <div className="absolute -right-[10vw] bottom-[-12vh] h-[56vh] w-[48vw] rounded-full bg-fuchsia-500/8 blur-3xl" />
-        <div className="absolute inset-y-[12vh] right-[7vw] w-px bg-[linear-gradient(180deg,transparent,rgba(221,214,254,0.22),transparent)] opacity-60" />
-
-        <div className="camera-visual aksa-showcase-window absolute inset-0 z-10 overflow-hidden">
-          <div className="aksa-vertical-track absolute inset-x-0 top-0">
-            {aksaShowcaseFrames.map((frame, index) => (
-              <AksaShowcaseStep
-                key={frame.src}
-                frame={frame}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <p className="camera-copy absolute right-5 top-[8vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/36 sm:block sm:right-10 lg:right-16">
-        Chapter 01 / Aksa Xiterz
-      </p>
-    </PanelShell>
-  );
-}
-
-// ===============================
-// EDUVEST
-// ===============================
-
-function EduvestShowcaseStep({
-  frame,
-  index,
-}: {
-  frame: (typeof eduvestShowcaseFrames)[number];
-  index: number;
-}) {
-  return (
-    <section className="eduvest-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
-      <div className="eduvest-visual-composition relative z-10 hidden h-[58vh] overflow-hidden border border-violet-100/12 bg-[#0b0614] sm:block lg:h-[70vh]">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(139,92,246,0.24),rgba(8,4,18,0.96)_46%,rgba(14,165,233,0.12))]" />
-        <div className="absolute inset-y-0 left-[19%] w-px bg-violet-100/12" />
-        <div className="absolute inset-y-0 left-[62%] w-px bg-white/8" />
-        <div className="absolute inset-x-[7%] top-[23%] h-px bg-violet-100/12" />
-        <div className="absolute inset-x-[14%] bottom-[19%] h-px bg-sky-100/10" />
-
-        <div className="absolute left-[6%] top-[34%] hidden opacity-30 lg:block">
-          <EduvestScreenWall activeIndex={index} />
-        </div>
-
-        <div className="eduvest-screen-stage absolute left-[49%] top-[50%] z-20 aspect-[1920/945] -translate-x-1/2 -translate-y-1/2">
-          <span className="pointer-events-none absolute -inset-[12%] bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.18),transparent_62%)] blur-3xl" />
-          <figure className="relative h-full w-full overflow-hidden rounded-lg border border-violet-100/18 bg-[#f5f1ff] shadow-[0_28px_90px_rgba(0,0,0,0.74)]">
-            <Image
-              src={frame.src}
-              alt={`EduVest ${frame.title}`}
-              fill
-              unoptimized
-              sizes="(max-width: 1024px) 82vw, 49vw"
-              className="object-cover"
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          </figure>
-        </div>
-
-        <div className="absolute bottom-7 left-[10%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-violet-50/38 sm:text-[0.62rem]">
-          <span>Video Learning</span>
-          <span>{frame.meta}</span>
-        </div>
-      </div>
-
-      <div className="eduvest-step-copy relative z-20 text-left lg:text-right">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">
-          {frame.label}
-        </p>
-
-        <h2 className="mt-6 whitespace-nowrap font-display text-[clamp(3.4rem,6.4vw,7rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)]">
-          EduVest
-        </h2>
-
-        <h3 className="mt-5 font-display text-[clamp(1.55rem,2.4vw,2.45rem)] font-medium leading-[1.08] tracking-normal text-violet-100/88">
-          {frame.title}
-        </h3>
-
-        <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
-          {frame.body}
-        </p>
-
-        <div className="mt-7 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
-          {frame.meta.split(", ").map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function EduvestScreenWall({ activeIndex }: { activeIndex: number }) {
-  return (
-    <div
-      aria-hidden="true"
-      className="eduvest-screen-wall pointer-events-none grid grid-cols-2 gap-2"
-    >
-      {eduvestShowcaseFrames.map((screen, screenIndex) => (
-        <div
-          key={screen.src}
-          className={`relative aspect-[1920/945] w-24 overflow-hidden rounded-md border transition-all duration-500 ${
-            screenIndex === activeIndex
-              ? "scale-105 border-violet-200/42 bg-violet-950/20 opacity-100"
-              : "border-white/5 bg-black/40 opacity-40"
-          }`}
-        >
-          <Image
-            src={screen.src}
-            alt=""
-            fill
-            unoptimized
-            sizes="8vw"
-            className="object-cover opacity-70"
-            loading="lazy"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function EduvestPanel() {
-  return (
-    <PanelShell className="bg-[#080413]">
-      <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_26%,rgba(139,92,246,0.3),transparent_34%),radial-gradient(circle_at_16%_76%,rgba(14,165,233,0.14),transparent_34%),linear-gradient(135deg,rgba(10,4,22,1),rgba(4,2,10,1)_56%,rgba(28,18,54,0.94))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,2,13,0.92)_0%,rgba(12,5,26,0.56)_44%,rgba(6,3,12,0.88)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_16vh] opacity-35" />
-        <div className="absolute left-[12vw] top-[18vh] h-[52vh] w-px bg-[linear-gradient(180deg,transparent,rgba(216,180,254,0.24),transparent)]" />
-        <div className="absolute right-[16vw] top-[8vh] h-[78vh] w-px bg-[linear-gradient(180deg,transparent,rgba(125,211,252,0.2),transparent)]" />
-
-        <div className="camera-visual eduvest-showcase-window absolute inset-0 z-10 overflow-hidden">
-          <div className="eduvest-vertical-track absolute inset-x-0 top-0">
-            {eduvestShowcaseFrames.map((frame, index) => (
-              <EduvestShowcaseStep
-                key={frame.src}
-                frame={frame}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
-        Chapter 02 / Finance Learning
-      </p>
-    </PanelShell>
-  );
-}
-
-// ===============================
-// BRL FASHION
-// ===============================
-
-function FashionShowcaseStep({
-  frame,
-  index,
-}: {
-  frame: (typeof fashionShowcaseFrames)[number];
-  index: number;
-}) {
-  return (
-    <section className="fashion-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
-      <div className="fashion-visual-composition relative z-10 hidden h-[58vh] overflow-hidden border border-white/10 bg-[#130d10] sm:block lg:h-[70vh]">
-        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(119,74,70,0.38),rgba(19,13,16,0.94)_44%,rgba(156,124,93,0.22))]" />
-        <div className="absolute inset-y-0 left-[22%] w-px bg-white/12" />
-        <div className="absolute inset-y-0 left-[58%] w-px bg-white/10" />
-        <div className="absolute inset-x-[8%] top-[25%] h-px bg-white/14" />
-        <div className="absolute inset-x-[17%] bottom-[21%] h-px bg-white/12" />
-        <div className="absolute left-[10%] top-[15%] h-[42%] w-[28%] border border-white/10 bg-black/16" />
-        <div className="absolute bottom-[14%] left-[34%] h-[34%] w-[24%] border border-white/10 bg-white/[0.035]" />
-        <div className="absolute right-[10%] top-[12%] h-[68%] w-[20%] border border-white/10 bg-black/14" />
-
-        <div className="absolute left-[6%] top-[34%] hidden opacity-30 lg:block">
-          <FashionScreenWall activeIndex={index} />
-        </div>
-
-        <div className="fashion-screen-stage absolute left-[49%] top-[50%] z-20 aspect-[1920/945] -translate-x-1/2 -translate-y-1/2">
-          <figure className="relative h-full w-full overflow-hidden rounded-lg border border-white/16 bg-[#f7f7f7] shadow-[0_28px_90px_rgba(0,0,0,0.72)]">
-            <Image
-              src={frame.src}
-              alt={`BRL Fashion ${frame.title}`}
-              fill
-              unoptimized
-              sizes="(max-width: 1024px) 70vw, 48vw"
-              className="object-cover"
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          </figure>
-        </div>
-
-        <div className="absolute bottom-7 left-[10%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-white/36 sm:text-[0.62rem]">
-          <span>Product Rhythm</span>
-          <span>{frame.meta}</span>
-        </div>
-      </div>
-
-      <div className="fashion-step-copy relative z-20 text-left lg:text-right">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-rose-100/40">
-          {frame.label}
-        </p>
-
-        <h2 className="mt-6 flex flex-col font-display text-[clamp(3.6rem,8vw,9.6rem)] font-semibold leading-[0.78] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] lg:items-end">
-          <span className="block whitespace-nowrap">BRL</span>
-          <span className="block whitespace-nowrap">Fashion</span>
-        </h2>
-
-        <h3 className="mt-5 font-display text-[clamp(1.55rem,2.4vw,2.45rem)] font-medium leading-[1.08] tracking-normal text-rose-100/88">
-          {frame.title}
-        </h3>
-
-        <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
-          {frame.body}
-        </p>
-
-        <div className="mt-7 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
-          {frame.meta.split(", ").map((item) => (
-            <span key={item}>{item}</span>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function FashionScreenWall({ activeIndex }: { activeIndex: number }) {
-  return (
-    <div
-      aria-hidden="true"
-      className="fashion-screen-wall pointer-events-none grid grid-cols-2 gap-2"
-    >
-      {fashionShowcaseFrames.map((screen, screenIndex) => (
-        <div
-          key={screen.src}
-          className={`fashion-screen-tile relative aspect-[1920/945] w-24 overflow-hidden rounded-md border transition-all duration-500 ${
-            screenIndex === activeIndex
-              ? "scale-105 border-rose-200/42 bg-rose-950/20 opacity-100"
-              : "border-white/5 bg-black/40 opacity-40"
-          }`}
-        >
-          <Image
-            src={screen.src}
-            alt=""
-            fill
-            unoptimized
-            sizes="8vw"
-            className="object-cover opacity-70"
-            loading="lazy"
-          />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function FashionPanel() {
-  return (
-    <PanelShell className="bg-[#1b1114]">
-      <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(14,8,10,0.78)_0%,rgba(16,10,12,0.5)_45%,rgba(12,9,8,0.9)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_17vh] opacity-35" />
-
-        <div className="camera-visual fashion-showcase-window absolute inset-0 z-10 overflow-hidden">
-          <div className="fashion-vertical-track absolute inset-x-0 top-0">
-            {fashionShowcaseFrames.map((frame, index) => (
-              <FashionShowcaseStep
-                key={frame.src}
-                frame={frame}
-                index={index}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <p className="camera-copy absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">
-        Chapter 03 / Editorial Interface
-      </p>
-    </PanelShell>
-  );
-}
-
-// ===============================
-// CLOSING
-// ===============================
-
-function ClosingPanel() {
-  return (
-    <PanelShell className="bg-[#050409]">
-      <div className="camera-scene absolute inset-0 origin-center">
-        <div className="camera-visual absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(100,82,141,0.18),transparent_34%),linear-gradient(135deg,rgba(5,4,9,1),rgba(9,8,17,1)_54%,rgba(7,9,12,1))]" />
-      </div>
-
-      <div className="camera-copy relative z-10 mx-auto grid h-full w-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-[1fr_0.8fr] lg:px-16">
-        <h2 className="font-display text-[clamp(4.6rem,12vw,11rem)] font-semibold leading-[0.86] tracking-normal text-white">
-          Build quietly.
-          <br />
-          Ship clearly.
-        </h2>
-
-        <div className="border-l border-white/12 pl-6">
-          <p className="mb-5 font-mono text-xs uppercase tracking-[0.34em] text-white/38">
-            Available For Full-Stack Internship
-          </p>
-
-          <p className="max-w-md text-lg leading-7 text-slate-300 sm:text-xl sm:leading-8">
-            I am looking for a place to grow by building useful web apps:
-            Laravel backends, clean databases, payment logic, and interfaces
-            that make real workflows easier to trust.
-          </p>
-
-          <div className="mt-9 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
-            <a
-              href="https://github.com/sxaksaa"
-              target="_blank"
-              rel="noreferrer"
-              className="border-b border-white/40 pb-2"
-            >
-              GitHub
-            </a>
-            <a
-              href="mailto:akbarsalahudinpurnomo@gmail.com"
-              className="border-b border-white/40 pb-2 normal-case tracking-[0.03em]"
-            >
-              akbarsalahudinpurnomo@gmail.com
-            </a>
-          </div>
-        </div>
-      </div>
-    </PanelShell>
-  );
 }
 
 export function CinematicScrollExperience() {
@@ -1238,10 +419,10 @@ export function CinematicScrollExperience() {
   return (
     <main
       ref={rootRef}
-      className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
+      className="experience invisible relative min-h-screen overflow-x-clip bg-[#050505] opacity-0 text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[2400vh]">
+      <section className="panel-scroll relative z-10 h-[2600vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
