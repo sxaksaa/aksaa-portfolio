@@ -1031,7 +1031,7 @@ function ClosingPanel() {
             that make real workflows easier to trust.
           </p>
 
-          <div className="mt-9 flex gap-7 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
+          <div className="mt-9 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
             <a
               href="https://github.com/sxaksaa"
               target="_blank"
@@ -1041,10 +1041,10 @@ function ClosingPanel() {
               GitHub
             </a>
             <a
-              href="mailto:hello@aksaa.dev"
-              className="border-b border-white/40 pb-2"
+              href="mailto:akbarsalahudinpurnomo@gmail.com"
+              className="border-b border-white/40 pb-2 normal-case tracking-[0.03em]"
             >
-              Contact
+              akbarsalahudinpurnomo@gmail.com
             </a>
           </div>
         </div>
