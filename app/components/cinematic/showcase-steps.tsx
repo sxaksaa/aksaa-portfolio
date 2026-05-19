@@ -99,7 +99,7 @@ export function AksaShowcaseStep({
           {frame.meta}
         </div>
 
-        <div className="absolute left-[6%] top-[35%] hidden scale-90 opacity-25 lg:block">
+        <div className="absolute left-[6%] top-[35%] hidden scale-90 opacity-20 lg:block">
           <ScreenWall
             frames={frames.slice(0, 4)}
             activeIndex={index % 4}
@@ -113,7 +113,7 @@ export function AksaShowcaseStep({
         </div>
 
         <div className="aksa-phone-stage absolute left-[45%] top-[50%] z-20 aspect-[1290/2796] h-[85%] -translate-x-1/2 -translate-y-1/2">
-          <span className="pointer-events-none absolute -inset-[15%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.15),transparent_60%)] blur-2xl" />
+          <span className="pointer-events-none absolute -inset-[12%] bg-[radial-gradient(circle_at_center,rgba(147,51,234,0.12),transparent_60%)]" />
           <figure className="relative h-full w-full overflow-hidden rounded-[1rem] border border-white/15 bg-[#0a0712] shadow-[0_24px_80px_rgba(0,0,0,0.8)]">
             <Image
               src={frame.src}
@@ -230,7 +230,7 @@ export function DesktopShowcaseStep({
         <div className="absolute bottom-[14%] left-[34%] h-[34%] w-[24%] border border-white/10 bg-white/[0.035]" />
         <div className="absolute right-[10%] top-[12%] h-[68%] w-[20%] border border-white/10 bg-black/14" />
 
-        <div className="absolute left-[6%] top-[34%] hidden opacity-30 lg:block">
+        <div className="absolute left-[6%] top-[34%] hidden opacity-22 lg:block">
           <ScreenWall
             frames={frames}
             activeIndex={index}

@@ -71,11 +71,13 @@ export function AksaPanel() {
   return (
     <PanelShell className="bg-[#12081a]">
       <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_42%,rgba(147,51,234,0.32),transparent_34%),radial-gradient(circle_at_22%_18%,rgba(236,72,153,0.13),transparent_30%),linear-gradient(135deg,rgba(19,8,35,1),rgba(5,4,10,1)_58%,rgba(29,14,40,0.96))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,3,8,0.9)_0%,rgba(8,5,13,0.64)_44%,rgba(6,4,10,0.86)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(19,8,35,1),rgba(6,3,13,1)_54%,rgba(30,10,44,0.98))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_18%_62%,rgba(168,85,247,0.32),transparent_42%),radial-gradient(ellipse_at_78%_32%,rgba(217,70,239,0.24),transparent_37%),radial-gradient(ellipse_at_56%_78%,rgba(59,130,246,0.14),transparent_44%)]" />
+        <div className="aksa-aurora absolute -left-[18vw] top-[3vh] h-[84vh] w-[72vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(147,51,234,0.34),rgba(236,72,153,0.16)_42%,transparent_72%)] opacity-85" />
+        <div className="absolute -right-[14vw] bottom-[-16vh] h-[64vh] w-[58vw] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(192,132,252,0.22),rgba(14,165,233,0.1)_48%,transparent_74%)] opacity-75" />
+        <div className="absolute inset-0 bg-[conic-gradient(from_215deg_at_44%_50%,transparent_0deg,rgba(168,85,247,0.16)_58deg,rgba(236,72,153,0.12)_104deg,transparent_158deg)] opacity-70" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,3,8,0.82)_0%,rgba(8,5,13,0.5)_44%,rgba(6,4,10,0.78)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_18vh] opacity-35" />
-        <div className="aksa-aurora absolute -left-[18vw] top-[6vh] h-[78vh] w-[70vw] rounded-full bg-violet-500/14 blur-3xl" />
-        <div className="absolute -right-[10vw] bottom-[-12vh] h-[56vh] w-[48vw] rounded-full bg-fuchsia-500/8 blur-3xl" />
         <div className="absolute inset-y-[12vh] right-[7vw] w-px bg-[linear-gradient(180deg,transparent,rgba(221,214,254,0.22),transparent)] opacity-60" />
 
         <div className="camera-visual aksa-showcase-window absolute inset-0 z-10 overflow-hidden">

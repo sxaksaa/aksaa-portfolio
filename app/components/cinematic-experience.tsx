@@ -103,9 +103,14 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      lerp: 0.075,
+      lerp: 0.135,
       smoothWheel: true,
+      wheelMultiplier: 0.88,
+      touchMultiplier: 1,
     });
+
+    const syncScrollTrigger = () => ScrollTrigger.update();
+    lenis.on("scroll", syncScrollTrigger);
 
     window.scrollTo(0, 0);
 
@@ -130,8 +135,6 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           clipPath: "inset(0% 0% 0% 0%)",
           transformOrigin: "center center",
           willChange: "transform",
-          force3D: true,
-          backfaceVisibility: "hidden",
         });
       });
 
@@ -194,7 +197,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
           trigger: ".panel-scroll",
           start: "top top",
           end: "bottom bottom",
-          scrub: 0.65,
+          scrub: 0.22,
         },
       });
 
@@ -204,44 +207,23 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         direction: "enter" | "exit",
       ) => {
         const scene = panel.querySelector<HTMLElement>(".camera-scene");
-        const visual = panel.querySelector<HTMLElement>(".camera-visual");
-        const copy = gsap.utils.toArray<HTMLElement>(
-          panel.querySelectorAll<HTMLElement>(".camera-copy"),
-        );
-        const targets = [scene, visual, ...copy].filter(
-          Boolean,
-        ) as HTMLElement[];
-
-        if (targets.length) {
-          gsap.set(targets, {
-            willChange: "transform",
-            force3D: true,
-            backfaceVisibility: "hidden",
-          });
-        }
-
-        if (direction === "enter") {
-          if (scene) {
-            film.fromTo(scene, { scale: 1.032 }, { scale: 1, duration: 2.3, ease: "none" }, at);
-          }
-          if (visual) {
-            film.fromTo(visual, { scale: 1.02 }, { scale: 1, duration: 2.3, ease: "none" }, at);
-          }
-          if (copy.length) {
-            film.fromTo(copy, { y: 6 }, { y: 0, duration: 1.8, ease: "none" }, at + 0.16);
-          }
+        if (!scene) {
           return;
         }
 
-        if (scene) {
-          film.to(scene, { scale: 1.028, duration: 2.3, ease: "none" }, at);
+        gsap.set(scene, { willChange: "transform" });
+
+        if (direction === "enter") {
+          film.fromTo(
+            scene,
+            { scale: 1.024 },
+            { scale: 1, duration: 1.8, ease: "none" },
+            at,
+          );
+          return;
         }
-        if (visual) {
-          film.to(visual, { scale: 1.02, duration: 2.3, ease: "none" }, at);
-        }
-        if (copy.length) {
-          film.to(copy, { y: -6, duration: 1.8, ease: "none" }, at);
-        }
+
+        film.to(scene, { scale: 1.02, duration: 1.8, ease: "none" }, at);
       };
 
       const addVerticalShowcase = ({
@@ -271,13 +253,10 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
 
         gsap.set([verticalTrack, ...extraDepthTargets], {
           willChange: "transform",
-          force3D: true,
-          backfaceVisibility: "hidden",
         });
         gsap.set(steps, {
           autoAlpha: 0,
           y: 24,
-          willChange: "opacity, transform",
         });
         gsap.set(steps[0], { autoAlpha: 1, y: 0 });
 
@@ -345,9 +324,6 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         stepSelector: ".aksa-showcase-step",
         startAt: showcaseSequenceAt.aksa,
         stepDuration: 1.28,
-        depthTargets: (panel) => [
-          panel.querySelector<HTMLElement>(".aksa-aurora"),
-        ].filter(Boolean) as HTMLElement[],
       });
 
       addVerticalShowcase({
@@ -406,6 +382,7 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
     }, root);
 
     return () => {
+      lenis.off("scroll", syncScrollTrigger);
       ctx.revert();
       lenis.destroy();
     };
