@@ -6,18 +6,19 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 
-const panels = ["intro", "aksa", "siemola", "fashion", "closing"] as const;
+const panels = ["intro", "aksa", "eduvest", "fashion", "closing"] as const;
 type PanelName = (typeof panels)[number];
 
 const transitionAt = {
   aksa: 0.12,
-  siemola: 10.46,
-  fashion: 12.22,
-  closing: 20.1,
+  eduvest: 10.46,
+  fashion: 16.88,
+  closing: 24.48,
 } as const;
 
 const aksaSequenceAt = 1.52;
-const fashionSequenceAt = 12.96;
+const eduvestSequenceAt = 11.12;
+const fashionSequenceAt = 17.62;
 
 const aksaShowcaseFrames = [
   {
@@ -78,6 +79,51 @@ const aksaShowcaseFrames = [
   },
 ] as const;
 
+const eduvestShowcaseFrames = [
+  {
+    src: "/projects/eduvest/dashboard.png",
+    label: "01 / Dashboard",
+    title: "Finance learning starts from a clear hub.",
+    body: "The logged-in homepage points learners to the catalog, active playlists, and the next course without making the product feel like a generic dashboard.",
+    meta: "Hero, catalog path, login state",
+  },
+  {
+    src: "/projects/eduvest/all-courses.png",
+    label: "02 / Main Course",
+    title: "Course cards make the learning tracks easy to choose.",
+    body: "Stock investing, crypto, and financial basics are grouped as open learning paths with video counts, ratings, and clear continue actions.",
+    meta: "Course catalog, ratings, progress",
+  },
+  {
+    src: "/projects/eduvest/playlist.png",
+    label: "03 / Playlists",
+    title: "Every topic is shaped like a playlist.",
+    body: "Finance topics feel approachable because each track is presented as a video sequence instead of a scattered set of pages.",
+    meta: "Learning tracks, video flow",
+  },
+  {
+    src: "/projects/eduvest/learning-progress.png",
+    label: "04 / Progress",
+    title: "Progress turns study into a visible habit.",
+    body: "Belajarku collects enrolled courses, completed videos, and profile activity so learners can continue from where they stopped.",
+    meta: "Belajarku, completion, activity",
+  },
+  {
+    src: "/projects/eduvest/my-courses.png",
+    label: "05 / My Courses",
+    title: "The active course list stays focused.",
+    body: "Course summaries keep the current lesson count, topic category, and continue button close to the learner's next action.",
+    meta: "Course progress, next action",
+  },
+  {
+    src: "/projects/eduvest/news-faq-testimonials.png",
+    label: "06 / Trust Layer",
+    title: "News, FAQ, and testimonials complete the product story.",
+    body: "The public home sections explain the learning hub, demo accounts, and student feedback without drifting away from finance education.",
+    meta: "FAQ, updates, testimonials",
+  },
+] as const;
+
 const connectedPanelMotion = {
   incomingFrom: {
     yPercent: 7,
@@ -116,8 +162,8 @@ const panelTransitions = [
     ...connectedPanelMotion,
   },
   {
-    incoming: "siemola",
-    at: transitionAt.siemola,
+    incoming: "eduvest",
+    at: transitionAt.eduvest,
     ...connectedPanelMotion,
   },
   {
@@ -458,6 +504,81 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
         }
       }
 
+      const eduvestPanel = panelByName.get("eduvest");
+      if (eduvestPanel) {
+        const verticalTrack =
+          eduvestPanel.querySelector<HTMLElement>(".eduvest-vertical-track");
+        const steps = gsap.utils.toArray<HTMLElement>(
+          eduvestPanel.querySelectorAll<HTMLElement>(".eduvest-showcase-step"),
+        );
+
+        if (verticalTrack && steps.length > 1) {
+          const eduvestSequence = gsap.timeline();
+          const stepDuration = 1.04;
+          const sequenceDuration = stepDuration * (steps.length - 1);
+
+          gsap.set(verticalTrack, {
+            willChange: "transform",
+            force3D: true,
+            backfaceVisibility: "hidden",
+          });
+          gsap.set(steps, {
+            autoAlpha: 0,
+            y: 20,
+            willChange: "opacity, transform",
+          });
+          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
+
+          eduvestSequence.to(
+            verticalTrack,
+            {
+              y: `-${(steps.length - 1) * 100}vh`,
+              duration: sequenceDuration,
+              ease: "none",
+            },
+            0,
+          );
+
+          steps.forEach((step, index) => {
+            const centerAt = index * stepDuration;
+            const fadeInDuration = 0.34;
+            const fadeInLead = 0.48;
+            const fadeOutDelay = 0.46;
+            const fadeOutDuration = 0.34;
+
+            if (index > 0) {
+              eduvestSequence.fromTo(
+                step,
+                { autoAlpha: 0, y: 26 },
+                {
+                  autoAlpha: 1,
+                  y: 0,
+                  duration: fadeInDuration,
+                  ease: "none",
+                  immediateRender: false,
+                },
+                centerAt - fadeInLead,
+              );
+            }
+
+            if (index < steps.length - 1) {
+              eduvestSequence.to(
+                step,
+                {
+                  autoAlpha: 0,
+                  y: -22,
+                  duration: fadeOutDuration,
+                  ease: "none",
+                },
+                centerAt + fadeOutDelay,
+              );
+            }
+          });
+
+          film.add(eduvestSequence, eduvestSequenceAt);
+        }
+      }
+
       const fashionPanel = panelByName.get("fashion");
       if (fashionPanel) {
         const verticalTrack =
@@ -739,8 +860,8 @@ function IntroPanel() {
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
             This portfolio follows the projects that shaped my full-stack
-            direction: digital checkout, smart-locker operations, ecommerce
-            workflows, and cinematic frontend craft.
+            direction: digital checkout, finance education, ecommerce workflows,
+            and cinematic frontend craft.
           </p>
         </div>
       </div>
@@ -784,87 +905,133 @@ function AksaPanel() {
 }
 
 // ===============================
-// SIEMOLA
+// EDUVEST
 // ===============================
 
-function SiemolaPanel() {
+function EduvestShowcaseStep({
+  frame,
+  index,
+}: {
+  frame: (typeof eduvestShowcaseFrames)[number];
+  index: number;
+}) {
   return (
-    <PanelShell className="bg-[#061019]">
+    <section className="eduvest-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
+      <div className="eduvest-visual-composition relative z-10 hidden h-[58vh] overflow-hidden border border-violet-100/12 bg-[#0b0614] sm:block lg:h-[70vh]">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(139,92,246,0.24),rgba(8,4,18,0.96)_46%,rgba(14,165,233,0.12))]" />
+        <div className="absolute inset-y-0 left-[19%] w-px bg-violet-100/12" />
+        <div className="absolute inset-y-0 left-[62%] w-px bg-white/8" />
+        <div className="absolute inset-x-[7%] top-[23%] h-px bg-violet-100/12" />
+        <div className="absolute inset-x-[14%] bottom-[19%] h-px bg-sky-100/10" />
+
+        <div className="absolute left-[6%] top-[34%] hidden opacity-30 lg:block">
+          <EduvestScreenWall activeIndex={index} />
+        </div>
+
+        <div className="eduvest-screen-stage absolute left-[49%] top-[50%] z-20 aspect-[1920/945] -translate-x-1/2 -translate-y-1/2">
+          <span className="pointer-events-none absolute -inset-[12%] bg-[radial-gradient(circle_at_center,rgba(168,85,247,0.18),transparent_62%)] blur-3xl" />
+          <figure className="relative h-full w-full overflow-hidden rounded-lg border border-violet-100/18 bg-[#f5f1ff] shadow-[0_28px_90px_rgba(0,0,0,0.74)]">
+            <Image
+              src={frame.src}
+              alt={`EduVest ${frame.title}`}
+              fill
+              unoptimized
+              sizes="(max-width: 1024px) 82vw, 49vw"
+              className="object-cover"
+              loading={index === 0 ? "eager" : "lazy"}
+            />
+          </figure>
+        </div>
+
+        <div className="absolute bottom-7 left-[10%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] text-violet-50/38 sm:text-[0.62rem]">
+          <span>Video Learning</span>
+          <span>{frame.meta}</span>
+        </div>
+      </div>
+
+      <div className="eduvest-step-copy relative z-20 text-left lg:text-right">
+        <p className="font-mono text-xs uppercase tracking-[0.34em] text-violet-100/42">
+          {frame.label}
+        </p>
+
+        <h2 className="mt-6 whitespace-nowrap font-display text-[clamp(3.4rem,6.4vw,7rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)]">
+          EduVest
+        </h2>
+
+        <h3 className="mt-5 font-display text-[clamp(1.55rem,2.4vw,2.45rem)] font-medium leading-[1.08] tracking-normal text-violet-100/88">
+          {frame.title}
+        </h3>
+
+        <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
+          {frame.body}
+        </p>
+
+        <div className="mt-7 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
+          {frame.meta.split(", ").map((item) => (
+            <span key={item}>{item}</span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function EduvestScreenWall({ activeIndex }: { activeIndex: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      className="eduvest-screen-wall pointer-events-none grid grid-cols-2 gap-2"
+    >
+      {eduvestShowcaseFrames.map((screen, screenIndex) => (
+        <div
+          key={screen.src}
+          className={`relative aspect-[1920/945] w-24 overflow-hidden rounded-md border transition-all duration-500 ${
+            screenIndex === activeIndex
+              ? "scale-105 border-violet-200/42 bg-violet-950/20 opacity-100"
+              : "border-white/5 bg-black/40 opacity-40"
+          }`}
+        >
+          <Image
+            src={screen.src}
+            alt=""
+            fill
+            unoptimized
+            sizes="8vw"
+            className="object-cover opacity-70"
+            loading="lazy"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function EduvestPanel() {
+  return (
+    <PanelShell className="bg-[#080413]">
       <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_76%_28%,rgba(64,104,134,0.25),transparent_34%),linear-gradient(135deg,rgba(7,17,26,1),rgba(4,8,13,1)_58%,rgba(17,30,42,0.92))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_74%_26%,rgba(139,92,246,0.3),transparent_34%),radial-gradient(circle_at_16%_76%,rgba(14,165,233,0.14),transparent_34%),linear-gradient(135deg,rgba(10,4,22,1),rgba(4,2,10,1)_56%,rgba(28,18,54,0.94))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(6,2,13,0.92)_0%,rgba(12,5,26,0.56)_44%,rgba(6,3,12,0.88)_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.018)_1px,transparent_1px)] bg-[size:100%_16vh] opacity-35" />
+        <div className="absolute left-[12vw] top-[18vh] h-[52vh] w-px bg-[linear-gradient(180deg,transparent,rgba(216,180,254,0.24),transparent)]" />
+        <div className="absolute right-[16vw] top-[8vh] h-[78vh] w-px bg-[linear-gradient(180deg,transparent,rgba(125,211,252,0.2),transparent)]" />
 
-        <div className="camera-visual absolute left-[6vw] top-[20vh] z-10 h-[58vh] w-[94vw] sm:left-[11vw] sm:top-[15vh] sm:h-[68vh] sm:w-[78vw]">
-          <div className="absolute inset-y-[8%] left-[12%] right-[4%] border-y border-white/12 bg-[linear-gradient(120deg,rgba(13,30,45,0.78),rgba(5,10,16,0.38)_54%,rgba(26,43,56,0.5))]" />
-          <div className="absolute inset-x-[20%] top-[12%] h-px bg-white/14" />
-          <div className="absolute inset-x-[4%] top-[44%] h-px bg-white/10" />
-          <div className="absolute inset-x-[15%] bottom-[18%] h-px bg-white/14" />
-          <div className="absolute bottom-[12%] left-[24%] top-[7%] w-px bg-white/12" />
-          <div className="absolute bottom-[6%] right-[18%] top-[14%] w-px bg-white/12" />
-
-          <pre className="absolute left-[8%] top-[16%] max-w-[78vw] whitespace-pre-wrap border-l border-blue-100/22 pl-5 font-mono text-[0.64rem] uppercase leading-6 tracking-[0.18em] text-blue-100/58 sm:left-[10%] sm:max-w-none sm:text-[0.74rem] sm:leading-7">
-{`RFID_TAP      AUTH_WINDOW
-SWITCH_OPEN   BORROW_ACTIVE
-SWITCH_CLOSE  RETURN_SYNC`}
-          </pre>
-
-          <div className="absolute right-[8%] top-[20%] hidden w-[28vw] min-w-[17rem] border border-white/12 bg-black/18 p-5 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:block">
-            <div className="mb-4 text-blue-100/68">locker_accesses</div>
-            <div className="flex justify-between border-t border-white/10 py-3">
-              <span>student_id</span>
-              <span>indexed</span>
-            </div>
-            <div className="flex justify-between border-t border-white/10 py-3">
-              <span>locker_id</span>
-              <span>mapped</span>
-            </div>
-            <div className="flex justify-between border-t border-white/10 py-3">
-              <span>status</span>
-              <span>synced</span>
-            </div>
-          </div>
-
-          <div className="absolute bottom-[16%] left-[18%] flex w-[62vw] max-w-xl flex-col gap-3 font-mono text-[0.62rem] uppercase tracking-[0.2em] text-white/48 sm:left-[16%]">
-            <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
-              <span>api/tab</span>
-              <span className="text-blue-100/68">RFID event</span>
-            </div>
-            <div className="flex items-center justify-between border border-white/12 bg-black/16 px-4 py-3">
-              <span>borrowLocker()</span>
-              <span className="text-blue-100/68">state guard</span>
-            </div>
-          </div>
-
-          <div className="absolute right-[8%] bottom-[8%] hidden font-mono text-[0.62rem] uppercase tracking-[0.32em] text-white/34 sm:block">
-            infrastructure logic
+        <div className="camera-visual eduvest-showcase-window absolute inset-0 z-10 overflow-hidden">
+          <div className="eduvest-vertical-track absolute inset-x-0 top-0">
+            {eduvestShowcaseFrames.map((frame, index) => (
+              <EduvestShowcaseStep
+                key={frame.src}
+                frame={frame}
+                index={index}
+              />
+            ))}
           </div>
         </div>
       </div>
 
-      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-blue-100/34 sm:block sm:right-10 lg:right-16">
-        Chapter 02 / Structured Systems
+      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
+        Chapter 02 / Finance Learning
       </p>
-
-      <h2 className="camera-copy absolute left-5 top-[10vh] z-30 font-display text-[clamp(4.8rem,14vw,12.5rem)] font-semibold leading-[0.86] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] sm:left-10 lg:left-16">
-        Siemola
-      </h2>
-
-      <div className="camera-copy absolute bottom-[9vh] right-5 z-30 max-w-[calc(100vw-2.5rem)] text-right sm:right-10 sm:max-w-md lg:right-16">
-        <p className="font-mono text-xs uppercase tracking-[0.34em] text-blue-100/38">
-          Backend Workflows • Process Logic
-        </p>
-
-        <p className="mt-5 text-base leading-7 text-slate-300 sm:text-lg sm:leading-8">
-          A smart-locker system where RFID taps, switch signals, role access,
-          and borrowing history are normalized into reliable Laravel records.
-        </p>
-
-        <div className="mt-7 flex flex-wrap justify-end gap-x-5 gap-y-3 font-mono text-[0.62rem] uppercase tracking-[0.26em] text-white/40">
-          <span>Laravel API</span>
-          <span>RFID Flow</span>
-          <span>Locker States</span>
-          <span>Role Access</span>
-        </div>
-      </div>
     </PanelShell>
   );
 }
@@ -1063,11 +1230,11 @@ export function CinematicScrollExperience() {
       className="experience invisible opacity-0 relative min-h-screen overflow-x-clip bg-[#050505] text-white"
     >
       <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[1900vh]">
+      <section className="panel-scroll relative z-10 h-[2400vh]">
         <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
           <IntroPanel />
           <AksaPanel />
-          <SiemolaPanel />
+          <EduvestPanel />
           <FashionPanel />
           <ClosingPanel />
         </div>

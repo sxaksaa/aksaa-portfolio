@@ -7,13 +7,13 @@ The site is designed as a single-scroll portfolio story rather than a standard r
 ## Portfolio Direction
 
 - **Aksa Xiterz** - digital-products storefront with QRIS checkout, direct USDT payment flow, order automation, package stock rules, and license delivery.
-- **Siemola** - smart-locker borrowing system with RFID events, locker state transitions, role access, and reliable Laravel records.
+- **EduVest** - finance education platform with video course playlists, learning progress, profile activity, FAQ content, and a premium dark-purple interface.
 - **BRL Fashion** - ecommerce storefront/admin work with catalog structure, product-size logic, checkout flow, and public portfolio polish.
 
 ## What It Shows
 
 - Full-stack product thinking across frontend, backend, database, and operational flows.
-- Laravel-oriented backend logic for payments, orders, roles, stock, and audit/history records.
+- Laravel-oriented backend logic for payments, orders, roles, learning progress, stock, and audit/history records.
 - Motion-heavy Next.js interface work using GSAP, ScrollTrigger, and Lenis.
 - A recruiter-friendly internship narrative built around shipped project behavior, not generic profile filler.
 

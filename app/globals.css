@@ -111,6 +111,37 @@ a {
   opacity: 0.24;
 }
 
+.eduvest-showcase-step {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.eduvest-step-copy {
+  min-width: 0;
+  width: min(100%, 31rem);
+  max-width: min(100%, 31rem);
+  text-wrap: balance;
+}
+
+.eduvest-visual-composition {
+  align-self: center;
+  justify-self: start;
+  width: min(100%, 54rem);
+}
+
+.eduvest-screen-stage {
+  width: clamp(30rem, 82vw, 48rem);
+}
+
+.eduvest-screen-wall {
+  filter: blur(1px) saturate(0.62) contrast(0.78) brightness(0.6);
+}
+
 .fashion-showcase-step {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -145,6 +176,10 @@ a {
 @media (min-width: 40rem) {
   .aksa-phone-stage {
     width: clamp(20rem, 50vw, 23rem);
+  }
+
+  .eduvest-screen-stage {
+    width: clamp(34rem, 74vw, 50rem);
   }
 
   .fashion-screen-stage {
@@ -187,6 +222,28 @@ a {
     width: clamp(25rem, 30vw, 29rem);
   }
 
+  .eduvest-showcase-step {
+    grid-template-columns: minmax(38rem, 54vw) minmax(23rem, 33vw);
+    grid-template-rows: 1fr;
+    justify-content: space-between;
+    gap: clamp(2rem, 4vw, 5.5rem);
+    transform: translateX(-4vw);
+  }
+
+  .eduvest-step-copy {
+    justify-self: end;
+  }
+
+  .eduvest-visual-composition {
+    justify-self: start;
+    width: min(54vw, 62rem);
+    transform: translateX(4.2vw);
+  }
+
+  .eduvest-screen-stage {
+    width: clamp(40rem, 47vw, 58rem);
+  }
+
   .fashion-showcase-step {
     grid-template-columns: minmax(38rem, 54vw) minmax(23rem, 33vw);
     grid-template-rows: 1fr;
@@ -218,6 +275,10 @@ a {
   .aksa-screen-wall {
     inset-inline: 5%;
     bottom: 4%;
+  }
+
+  .eduvest-screen-stage {
+    width: clamp(45rem, 49vw, 62rem);
   }
 
   .fashion-screen-stage {
