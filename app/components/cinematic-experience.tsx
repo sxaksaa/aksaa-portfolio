@@ -445,8 +445,12 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             force3D: true,
             backfaceVisibility: "hidden",
           });
-          gsap.set(steps, { autoAlpha: 0, willChange: "opacity" });
-          gsap.set(steps[0], { autoAlpha: 1 });
+          gsap.set(steps, {
+            autoAlpha: 0,
+            y: 20,
+            willChange: "opacity, transform",
+          });
+          gsap.set(steps[0], { autoAlpha: 1, y: 0 });
 
           aksaSequence.to(
             verticalTrack,
@@ -471,33 +475,40 @@ function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
             );
           }
 
-          steps.slice(0, -1).forEach((step, index) => {
-            const nextStep = steps[index + 1];
-            const nextStepCenterAt = (index + 1) * stepDuration;
-            const fadeDuration = 0.48;
-            const crossfadeAt = nextStepCenterAt - fadeDuration;
+          steps.forEach((step, index) => {
+            const centerAt = index * stepDuration;
+            const fadeInDuration = 0.36;
+            const fadeInLead = 0.5;
+            const fadeOutDelay = 0.46;
+            const fadeOutDuration = 0.38;
 
-            aksaSequence
-              .to(
+            if (index > 0) {
+              aksaSequence.fromTo(
                 step,
-                {
-                  autoAlpha: 0,
-                  duration: fadeDuration,
-                  ease: "none",
-                },
-                crossfadeAt,
-              )
-              .fromTo(
-                nextStep,
-                { autoAlpha: 0 },
+                { autoAlpha: 0, y: 26 },
                 {
                   autoAlpha: 1,
-                  duration: fadeDuration,
+                  y: 0,
+                  duration: fadeInDuration,
                   ease: "none",
                   immediateRender: false,
                 },
-                crossfadeAt,
+                centerAt - fadeInLead,
               );
+            }
+
+            if (index < steps.length - 1) {
+              aksaSequence.to(
+                step,
+                {
+                  autoAlpha: 0,
+                  y: -22,
+                  duration: fadeOutDuration,
+                  ease: "none",
+                },
+                centerAt + fadeOutDelay,
+              );
+            }
           });
 
           film.add(aksaSequence, aksaSequenceAt);
