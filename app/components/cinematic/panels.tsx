@@ -198,10 +198,12 @@ export function ClosingPanel() {
               GitHub
             </a>
             <a
-              href="mailto:akbarsalahudinpurnomo@gmail.com"
-              className="border-b border-white/40 pb-2 normal-case tracking-[0.03em]"
+              href="https://mail.google.com/mail/?view=cm&fs=1&to=akbarsalahudinpurnomo@gmail.com"
+              target="_blank"
+              rel="noreferrer"
+              className="border-b border-white/40 pb-2"
             >
-              akbarsalahudinpurnomo@gmail.com
+              Email
             </a>
           </div>
         </div>
