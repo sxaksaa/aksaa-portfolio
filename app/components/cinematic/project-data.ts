@@ -11,7 +11,7 @@ export const aksaShowcaseFrames = [
     src: "/projects/aksa-xiterz/Dashboard.png",
     label: "01 / System Intent",
     title: "Built to make delivery less manual.",
-    body: "I shaped Aksa Xiterz around a simple problem: checkout should not depend on repeated chats, screenshots, or manual key handoffs.",
+    body: "Aksa Xiterz is my own digital license store. I built it so orders, payments, and key delivery do not depend on repeated chats.",
     meta: "Store Intent, License Flow",
   },
   {
@@ -25,7 +25,7 @@ export const aksaShowcaseFrames = [
     src: "/projects/aksa-xiterz/Contoh%20Qris%20Payment.png",
     label: "03 / Payment State",
     title: "Payment state stays readable.",
-    body: "The QRIS flow keeps amount, expiry, order ID, and status checks close together because clarity reduces support work.",
+    body: "Because real customers pay through it, QRIS keeps amount, expiry, order ID, and status checks close together.",
     meta: "QRIS Invoice, Payment Check",
   },
   {
@@ -39,14 +39,14 @@ export const aksaShowcaseFrames = [
     src: "/projects/aksa-xiterz/license%20section.png",
     label: "05 / Fulfillment",
     title: "Delivery is backend logic.",
-    body: "Paid keys are tied to order state and copy actions instead of being treated as a loose message after purchase.",
+    body: "When an order is paid, the license should be ready without me manually pasting keys into chat.",
     meta: "License Delivery, Copy Action",
   },
   {
     src: "/projects/aksa-xiterz/order%20history.png",
     label: "06 / Traceability",
     title: "History is part of trust.",
-    body: "I want users to see what happened, what is waiting, and what failed without asking an admin to explain the order.",
+    body: "Customers can trace status themselves: what happened, what is waiting, and what needs attention.",
     meta: "Order History, Status Tracking",
   },
   {

@@ -76,6 +76,32 @@ function LiveSiteLink({
   );
 }
 
+function MobileProjectPreview({
+  frame,
+  projectName,
+  imageClassName,
+  loading = "lazy",
+}: {
+  frame: ShowcaseFrame;
+  projectName: string;
+  imageClassName: string;
+  loading?: "eager" | "lazy";
+}) {
+  return (
+    <figure className="relative mt-6 h-44 w-full overflow-hidden rounded-md border border-white/12 bg-black/24 shadow-[0_18px_56px_rgba(0,0,0,0.45)] sm:hidden">
+      <Image
+        src={frame.src}
+        alt={`${projectName} preview: ${frame.title}`}
+        fill
+        quality={75}
+        sizes="100vw"
+        className={imageClassName}
+        loading={loading}
+      />
+    </figure>
+  );
+}
+
 export function AksaShowcaseStep({
   frame,
   index,
@@ -137,6 +163,12 @@ export function AksaShowcaseStep({
         <p className="mt-5 text-sm font-light leading-6 text-slate-400">
           {frame.body}
         </p>
+        <MobileProjectPreview
+          frame={frame}
+          projectName="Aksa Xiterz"
+          imageClassName="object-contain p-1"
+          loading={index === 0 ? "eager" : "lazy"}
+        />
         <LiveSiteLink href={liveUrl} projectName="Aksa Xiterz" alignRight />
       </div>
     </section>
@@ -278,6 +310,12 @@ export function DesktopShowcaseStep({
         <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
           {frame.body}
         </p>
+        <MobileProjectPreview
+          frame={frame}
+          projectName={variant === "eduvest" ? "EduVest" : "BRL Fashion"}
+          imageClassName="object-cover"
+          loading={index === 0 ? "eager" : "lazy"}
+        />
         <LiveSiteLink
           href={liveUrl}
           projectName={variant === "eduvest" ? "EduVest" : "BRL Fashion"}
