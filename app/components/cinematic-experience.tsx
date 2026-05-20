@@ -18,14 +18,14 @@ type PanelName = (typeof panels)[number];
 const transitionAt = {
   aksa: 0.12,
   eduvest: 10.46,
-  fashion: 16.88,
-  closing: 24.48,
+  fashion: 17.62,
+  closing: 25.88,
 } as const;
 
 const showcaseSequenceAt = {
   aksa: 1.52,
-  eduvest: 11.12,
-  fashion: 17.62,
+  eduvest: 11.86,
+  fashion: 19.02,
 } as const;
 
 const connectedPanelMotion = {
