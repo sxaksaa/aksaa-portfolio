@@ -273,10 +273,18 @@ export function DesktopShowcaseStep({
         <div
           className={cx(
             styles.footerClass,
-            "absolute bottom-7 left-[10%] right-[10%] flex justify-between font-mono text-[0.56rem] uppercase tracking-[0.28em] sm:text-[0.62rem]",
+            "absolute bottom-7 left-[10%] font-mono text-[0.56rem] uppercase tracking-[0.28em] sm:text-[0.62rem]",
           )}
         >
           <span>{styles.footerLabel}</span>
+        </div>
+
+        <div
+          className={cx(
+            styles.footerClass,
+            "absolute right-[10%] top-7 max-w-[38%] text-right font-mono text-[0.56rem] uppercase leading-relaxed tracking-[0.28em] sm:text-[0.62rem]",
+          )}
+        >
           <span>{frame.meta}</span>
         </div>
       </div>
