@@ -44,7 +44,7 @@ export function IntroPanel() {
       <div className="intro-content-group relative z-10 grid h-full place-items-center px-5 text-center">
         <div className="w-full max-w-7xl">
           <p className="font-mono text-xs uppercase tracking-[0.34em] text-white/40">
-            Full-Stack Developer • Backend Systems • Cinematic Web
+            Full-Stack Web Developer • Open To Internship • Web Interfaces
           </p>
 
           <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
@@ -52,14 +52,12 @@ export function IntroPanel() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
-            I like building web apps where the backend is clear, the interface
-            is calm, and every state has a reason.
+            I enjoy coding websites that feel clear, useful, and intentional.
           </p>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
-            My work sits between Laravel systems, payment flows, product logic,
-            and cinematic frontend direction. I care about software that feels
-            reliable before it tries to feel impressive.
+            Scroll through a few favorite projects I have built, from payment
+            flows to learning systems and ecommerce interfaces.
           </p>
         </div>
       </div>
@@ -93,10 +91,6 @@ export function AksaPanel() {
           </div>
         </div>
       </div>
-
-      <p className="camera-copy absolute right-5 top-[8vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/36 sm:block sm:right-10 lg:right-16">
-        Chapter 01 / Payment Logic
-      </p>
     </PanelShell>
   );
 }
@@ -125,10 +119,6 @@ export function EduvestPanel() {
           </div>
         </div>
       </div>
-
-      <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
-        Chapter 02 / Learning Systems
-      </p>
     </PanelShell>
   );
 }
@@ -155,10 +145,6 @@ export function FashionPanel() {
           </div>
         </div>
       </div>
-
-      <p className="camera-copy absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">
-        Chapter 03 / Interface Structure
-      </p>
     </PanelShell>
   );
 }
@@ -179,7 +165,7 @@ export function ClosingPanel() {
 
         <div className="border-l border-white/12 pl-6">
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.34em] text-white/38">
-            Open To Internship • Web Systems
+            Available For Internship • Web Systems
           </p>
 
           <p className="max-w-md text-lg leading-7 text-slate-300 sm:text-xl sm:leading-8">

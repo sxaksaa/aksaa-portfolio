@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Aksaa | Full-Stack Web Portfolio",
   description:
-    "Personal portfolio for Aksaa, a full-stack developer focused on Laravel backends, payment logic, product systems, and cinematic web interfaces.",
+    "Personal portfolio for Aksaa, a full-stack web developer open to internship roles, focused on Laravel backends, payment logic, product systems, and cinematic web interfaces.",
 };
 
 export default function RootLayout({

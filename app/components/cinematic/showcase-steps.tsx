@@ -93,7 +93,7 @@ export function AksaShowcaseStep({
         <div className="absolute inset-x-0 bottom-[20%] h-px bg-white/10" />
 
         <div className="absolute bottom-4 left-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-white/30">
-          SYSTEM ENVIRONMENT // INTERACTION
+          DIGITAL LICENSE STORE
         </div>
         <div className="absolute top-4 right-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-violet-100/30">
           {frame.meta}
@@ -166,7 +166,7 @@ const desktopVariantStyles = {
       "bg-[linear-gradient(135deg,rgba(139,92,246,0.24),rgba(8,4,18,0.96)_46%,rgba(14,165,233,0.12))]",
     frameBg: "bg-[#f5f1ff]",
     footerClass: "text-violet-50/38",
-    footerLabel: "Video Learning",
+    footerLabel: "Investing Education",
   },
   fashion: {
     stepClass: "fashion-showcase-step",
@@ -182,7 +182,7 @@ const desktopVariantStyles = {
       "bg-[linear-gradient(135deg,rgba(119,74,70,0.38),rgba(19,13,16,0.94)_44%,rgba(156,124,93,0.22))]",
     frameBg: "bg-[#f7f7f7]",
     footerClass: "text-white/36",
-    footerLabel: "Product Rhythm",
+    footerLabel: "Fashion Digital Store",
   },
 } as const;
 
