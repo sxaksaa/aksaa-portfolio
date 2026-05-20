@@ -179,13 +179,12 @@ export function ClosingPanel() {
 
         <div className="border-l border-white/12 pl-6">
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.34em] text-white/38">
-            Backend Logic • Interface Clarity • Product Systems
+            Open To Internship • Web Systems
           </p>
 
           <p className="max-w-md text-lg leading-7 text-slate-300 sm:text-xl sm:leading-8">
-            I care about rules that are visible, data that moves through a
-            clear path, and interfaces that help people understand what is
-            happening. That is the kind of work I want to keep growing into.
+            Interested in backend logic, interface clarity, and digital
+            experiences that feel intentional.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
