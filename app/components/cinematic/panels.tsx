@@ -5,6 +5,12 @@ import {
 } from "./project-data";
 import { AksaShowcaseStep, DesktopShowcaseStep } from "./showcase-steps";
 
+const projectLinks = {
+  aksa: "https://aksaxiterz.com/",
+  eduvest: "https://eduvest-production.up.railway.app/",
+  fashion: "https://brl-fashion-production.up.railway.app/",
+} as const;
+
 export function PanelShell({
   children,
   className,
@@ -86,6 +92,7 @@ export function AksaPanel() {
                 frame={frame}
                 frames={aksaShowcaseFrames}
                 index={index}
+                liveUrl={projectLinks.aksa}
               />
             ))}
           </div>
@@ -113,6 +120,7 @@ export function EduvestPanel() {
                 frame={frame}
                 frames={eduvestShowcaseFrames}
                 index={index}
+                liveUrl={projectLinks.eduvest}
                 variant="eduvest"
               />
             ))}
@@ -125,10 +133,10 @@ export function EduvestPanel() {
 
 export function FashionPanel() {
   return (
-    <PanelShell className="bg-[#1b1114]">
+    <PanelShell className="bg-[#0f0718]">
       <div className="camera-scene absolute inset-0 origin-center">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(170,116,96,0.22),transparent_36%),linear-gradient(135deg,rgba(40,25,29,1),rgba(10,8,10,1)_52%,rgba(54,43,34,0.9))]" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(14,8,10,0.78)_0%,rgba(16,10,12,0.5)_45%,rgba(12,9,8,0.9)_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_26%_66%,rgba(139,92,246,0.2),transparent_36%),linear-gradient(135deg,rgba(21,10,35,1),rgba(7,5,13,1)_52%,rgba(24,17,46,0.92))]" />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,4,16,0.82)_0%,rgba(12,6,24,0.52)_45%,rgba(7,5,15,0.9)_100%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:100%_17vh] opacity-35" />
 
         <div className="camera-visual fashion-showcase-window absolute inset-0 z-10 overflow-hidden">
@@ -139,6 +147,7 @@ export function FashionPanel() {
                 frame={frame}
                 frames={fashionShowcaseFrames}
                 index={index}
+                liveUrl={projectLinks.fashion}
                 variant="fashion"
               />
             ))}

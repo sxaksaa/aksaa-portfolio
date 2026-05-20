@@ -5,27 +5,6 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-function MetaTags({
-  meta,
-  alignRight = false,
-}: {
-  meta: string;
-  alignRight?: boolean;
-}) {
-  return (
-    <div
-      className={cx(
-        "mt-7 flex flex-wrap gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.58rem] uppercase tracking-[0.2em] text-white/40",
-        alignRight ? "justify-start lg:justify-end" : "justify-start",
-      )}
-    >
-      {meta.split(", ").map((item) => (
-        <span key={item}>{item}</span>
-      ))}
-    </div>
-  );
-}
-
 function ScreenWall({
   frames,
   activeIndex,
@@ -73,17 +52,41 @@ function ScreenWall({
   );
 }
 
+function LiveSiteLink({
+  href,
+  projectName,
+  alignRight = false,
+}: {
+  href: string;
+  projectName: string;
+  alignRight?: boolean;
+}) {
+  return (
+    <div className={cx("mt-7 flex", alignRight ? "lg:justify-end" : "justify-start")}>
+      <a
+        href={href}
+        target="_blank"
+        rel="noreferrer"
+        aria-label={`Open ${projectName} live site`}
+        className="inline-flex items-center border-b border-white/35 pb-2 font-mono text-[0.65rem] uppercase tracking-[0.28em] text-white/60 transition-colors duration-300 hover:border-white/70 hover:text-white"
+      >
+        Live Site
+      </a>
+    </div>
+  );
+}
+
 export function AksaShowcaseStep({
   frame,
   index,
   frames,
+  liveUrl,
 }: {
   frame: ShowcaseFrame;
   index: number;
   frames: readonly ShowcaseFrame[];
+  liveUrl: string;
 }) {
-  const [primaryMeta, secondaryMeta = "Secure Delivery"] = frame.meta.split(", ");
-
   return (
     <section className="aksa-showcase-step relative h-screen min-h-[44rem] overflow-hidden px-5 sm:px-8 lg:px-[5vw]">
       <div className="aksa-visual-composition relative z-10 hidden h-[60vh] w-full overflow-hidden border border-white/10 bg-black/10 sm:block lg:h-[70vh]">
@@ -91,13 +94,6 @@ export function AksaShowcaseStep({
         <div className="absolute inset-y-0 left-[70%] w-px bg-white/5" />
         <div className="absolute inset-x-0 top-[25%] h-px bg-white/10" />
         <div className="absolute inset-x-0 bottom-[20%] h-px bg-white/10" />
-
-        <div className="absolute bottom-4 left-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-white/30">
-          DIGITAL LICENSE STORE
-        </div>
-        <div className="absolute top-4 right-6 font-mono text-[0.55rem] uppercase tracking-[0.25em] text-violet-100/30">
-          {frame.meta}
-        </div>
 
         <div className="absolute left-[6%] top-[35%] hidden scale-90 opacity-20 lg:block">
           <ScreenWall
@@ -141,11 +137,7 @@ export function AksaShowcaseStep({
         <p className="mt-5 text-sm font-light leading-6 text-slate-400">
           {frame.body}
         </p>
-        <div className="mt-8 flex flex-wrap justify-start gap-x-4 gap-y-2 border-t border-white/10 pt-4 font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/40 lg:justify-end">
-          <span>{primaryMeta}</span>
-          <span>*</span>
-          <span>{secondaryMeta}</span>
-        </div>
+        <LiveSiteLink href={liveUrl} projectName="Aksa Xiterz" alignRight />
       </div>
     </section>
   );
@@ -165,24 +157,20 @@ const desktopVariantStyles = {
     visualGradient:
       "bg-[linear-gradient(135deg,rgba(139,92,246,0.24),rgba(8,4,18,0.96)_46%,rgba(14,165,233,0.12))]",
     frameBg: "bg-[#f5f1ff]",
-    footerClass: "text-violet-50/38",
-    footerLabel: "Investing Education",
   },
   fashion: {
     stepClass: "fashion-showcase-step",
-    visualClass: "fashion-visual-composition bg-[#130d10]",
+    visualClass: "fashion-visual-composition bg-[#0f0718]",
     copyClass: "fashion-step-copy",
     stageClass: "fashion-screen-stage",
     wallClass: "fashion-screen-wall gap-2",
-    labelClass: "text-rose-100/40",
+    labelClass: "text-violet-100/40",
     titleClass:
       "mt-6 flex flex-col font-display text-[clamp(3.6rem,8vw,9.6rem)] font-semibold leading-[0.78] tracking-normal text-white drop-shadow-[0_24px_60px_rgba(0,0,0,0.72)] lg:items-end",
-    subtitleClass: "text-rose-100/88",
+    subtitleClass: "text-violet-100/88",
     visualGradient:
-      "bg-[linear-gradient(135deg,rgba(119,74,70,0.38),rgba(19,13,16,0.94)_44%,rgba(156,124,93,0.22))]",
+      "bg-[linear-gradient(135deg,rgba(124,58,237,0.24),rgba(9,4,18,0.96)_44%,rgba(59,130,246,0.1))]",
     frameBg: "bg-[#f7f7f7]",
-    footerClass: "text-white/36",
-    footerLabel: "Fashion Digital Store",
   },
 } as const;
 
@@ -190,11 +178,13 @@ export function DesktopShowcaseStep({
   frame,
   index,
   frames,
+  liveUrl,
   variant,
 }: {
   frame: ShowcaseFrame;
   index: number;
   frames: readonly ShowcaseFrame[];
+  liveUrl: string;
   variant: keyof typeof desktopVariantStyles;
 }) {
   const styles = desktopVariantStyles[variant];
@@ -239,7 +229,7 @@ export function DesktopShowcaseStep({
             activeTileClassName={
               variant === "eduvest"
                 ? "scale-105 border-violet-200/42 bg-violet-950/20 opacity-100"
-                : "scale-105 border-rose-200/42 bg-rose-950/20 opacity-100"
+                : "scale-105 border-violet-200/42 bg-violet-950/20 opacity-100"
             }
             inactiveTileClassName="border-white/5 bg-black/40 opacity-40"
             imageClassName="object-cover opacity-70"
@@ -270,23 +260,6 @@ export function DesktopShowcaseStep({
           </figure>
         </div>
 
-        <div
-          className={cx(
-            styles.footerClass,
-            "absolute bottom-7 left-[10%] font-mono text-[0.56rem] uppercase tracking-[0.28em] sm:text-[0.62rem]",
-          )}
-        >
-          <span>{styles.footerLabel}</span>
-        </div>
-
-        <div
-          className={cx(
-            styles.footerClass,
-            "absolute right-[10%] top-7 max-w-[38%] text-right font-mono text-[0.56rem] uppercase leading-relaxed tracking-[0.28em] sm:text-[0.62rem]",
-          )}
-        >
-          <span>{frame.meta}</span>
-        </div>
       </div>
 
       <div className={cx(styles.copyClass, "relative z-20 text-left lg:text-right")}>
@@ -305,7 +278,11 @@ export function DesktopShowcaseStep({
         <p className="mt-5 text-sm font-light leading-6 text-slate-300 sm:text-base sm:leading-7">
           {frame.body}
         </p>
-        <MetaTags meta={frame.meta} alignRight />
+        <LiveSiteLink
+          href={liveUrl}
+          projectName={variant === "eduvest" ? "EduVest" : "BRL Fashion"}
+          alignRight
+        />
       </div>
     </section>
   );
