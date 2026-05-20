@@ -21,7 +21,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aksaa | Full-Stack Web Portfolio",
+  title: "Aksaa | Web Portfolio",
   description:
     "Personal portfolio for Aksaa, a CS student and full-stack web developer open to internship roles, focused on Laravel, MySQL, Next.js, payment logic, and clear web interfaces.",
 };

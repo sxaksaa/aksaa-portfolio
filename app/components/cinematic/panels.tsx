@@ -54,7 +54,7 @@ export function IntroPanel() {
           </p>
 
           <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
-            Aksaa
+            Aksa
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
