@@ -94,7 +94,7 @@ function MobileProjectPreview({
         alt={`${projectName} preview: ${frame.title}`}
         fill
         quality={75}
-        sizes="100vw"
+        sizes="(max-width: 639px) calc(100vw - 2.5rem), 1px"
         className={imageClassName}
         loading={loading}
       />

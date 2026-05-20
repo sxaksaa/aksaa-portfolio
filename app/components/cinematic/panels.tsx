@@ -50,7 +50,7 @@ export function IntroPanel() {
       <div className="intro-content-group relative z-10 grid h-full place-items-center px-5 text-center">
         <div className="w-full max-w-7xl">
           <p className="font-mono text-xs uppercase tracking-[0.34em] text-white/40">
-            Full-Stack Web Developer • CS Student • Open To Internship
+            Laravel • MySQL • Next.js
           </p>
 
           <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
@@ -58,11 +58,7 @@ export function IntroPanel() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
-            I enjoy coding websites that feel clear, useful, and intentional.
-          </p>
-
-          <p className="mx-auto mt-5 max-w-xl font-mono text-[0.62rem] uppercase tracking-[0.28em] text-violet-100/46 sm:text-xs">
-            Laravel • MySQL • Next.js
+            I enjoy coding websites
           </p>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
