@@ -30,13 +30,13 @@ export function IntroPanel() {
       <div className="intro-words-container absolute inset-0 z-20 grid place-items-center overflow-hidden px-5 text-center">
         <h1 className="relative h-[clamp(4rem,10vw,7.5rem)] w-full max-w-[min(88vw,66rem)] overflow-hidden font-display text-[clamp(3.7rem,10vw,7.5rem)] font-semibold leading-[0.9] tracking-normal text-white">
           <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            Quiet
+            Think
           </span>
           <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            Systems
+            Build
           </span>
           <span className="intro-word absolute inset-0 flex items-center justify-center text-center opacity-0">
-            In Motion
+            Refine
           </span>
         </h1>
       </div>
@@ -44,7 +44,7 @@ export function IntroPanel() {
       <div className="intro-content-group relative z-10 grid h-full place-items-center px-5 text-center">
         <div className="w-full max-w-7xl">
           <p className="font-mono text-xs uppercase tracking-[0.34em] text-white/40">
-            Computer Science Student • Full-Stack Web • Open For Internship
+            Full-Stack Developer • Backend Systems • Cinematic Web
           </p>
 
           <h1 className="mt-7 font-display text-[clamp(6.5rem,22vw,18rem)] font-semibold leading-[0.82] tracking-normal text-white">
@@ -52,14 +52,14 @@ export function IntroPanel() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-xl leading-8 text-slate-300 sm:mt-8 sm:text-2xl sm:leading-9">
-            I build web systems where backend rules, payment flows, and
-            polished interfaces work as one product.
+            I like building web apps where the backend is clear, the interface
+            is calm, and every state has a reason.
           </p>
 
           <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-white/48 sm:text-base sm:leading-7">
-            This portfolio follows the projects that shaped my full-stack
-            direction: digital checkout, finance education, ecommerce workflows,
-            and cinematic frontend craft.
+            My work sits between Laravel systems, payment flows, product logic,
+            and cinematic frontend direction. I care about software that feels
+            reliable before it tries to feel impressive.
           </p>
         </div>
       </div>
@@ -95,7 +95,7 @@ export function AksaPanel() {
       </div>
 
       <p className="camera-copy absolute right-5 top-[8vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/36 sm:block sm:right-10 lg:right-16">
-        Chapter 01 / Aksa Xiterz
+        Chapter 01 / Payment Logic
       </p>
     </PanelShell>
   );
@@ -127,7 +127,7 @@ export function EduvestPanel() {
       </div>
 
       <p className="camera-copy absolute right-5 top-[9vh] z-30 hidden font-mono text-xs uppercase tracking-[0.34em] text-violet-100/34 sm:block sm:right-10 lg:right-16">
-        Chapter 02 / Finance Learning
+        Chapter 02 / Learning Systems
       </p>
     </PanelShell>
   );
@@ -157,7 +157,7 @@ export function FashionPanel() {
       </div>
 
       <p className="camera-copy absolute left-5 top-[9vh] z-30 font-mono text-xs uppercase tracking-[0.34em] text-rose-100/34 sm:left-10 lg:left-16">
-        Chapter 03 / Editorial Interface
+        Chapter 03 / Interface Structure
       </p>
     </PanelShell>
   );
@@ -171,21 +171,21 @@ export function ClosingPanel() {
       </div>
 
       <div className="camera-copy relative z-10 mx-auto grid h-full w-full max-w-7xl items-center gap-10 px-5 sm:px-10 lg:grid-cols-[1fr_0.8fr] lg:px-16">
-        <h2 className="font-display text-[clamp(4.6rem,12vw,11rem)] font-semibold leading-[0.86] tracking-normal text-white">
-          Build quietly.
+        <h2 className="max-w-[min(100%,54rem)] font-display text-[clamp(4.25rem,9.7vw,9.7rem)] font-semibold leading-[0.94] tracking-normal text-white">
+          Let&apos;s build
           <br />
-          Ship clearly.
+          something thoughtful.
         </h2>
 
         <div className="border-l border-white/12 pl-6">
           <p className="mb-5 font-mono text-xs uppercase tracking-[0.34em] text-white/38">
-            Available For Full-Stack Internship
+            Backend Logic • Interface Clarity • Product Systems
           </p>
 
           <p className="max-w-md text-lg leading-7 text-slate-300 sm:text-xl sm:leading-8">
-            I am looking for a place to grow by building useful web apps:
-            Laravel backends, clean databases, payment logic, and interfaces
-            that make real workflows easier to trust.
+            I care about rules that are visible, data that moves through a
+            clear path, and interfaces that help people understand what is
+            happening. That is the kind of work I want to keep growing into.
           </p>
 
           <div className="mt-9 flex flex-wrap gap-x-7 gap-y-4 font-mono text-[0.7rem] uppercase tracking-[0.28em] text-white/70">
