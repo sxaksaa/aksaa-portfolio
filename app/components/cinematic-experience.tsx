@@ -19,7 +19,8 @@ import {
 } from "lucide-react";
 
 const contactLinks = {
-  email: "mailto:akbarsalahudinpurnomo@gmail.com",
+  email:
+    "mailto:akbarsalahudinpurnomo@gmail.com?subject=Kesempatan%20Internship%20-%20Akbar%20Salahudin%20Purnomo",
   github: "https://github.com/sxaksaa",
   phone: "+6287784727890",
   cv: "/documents/cv-akbar-salahudin-purnomo.pdf",
@@ -68,12 +69,26 @@ const projects = [
     imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
     summary:
       "Storefront lisensi digital dengan katalog, paket lisensi, cart checkout, voucher, riwayat pesanan, multi-payment, dan auto-delivery license key.",
+    story: [
+      {
+        label: "Tantangan",
+        text: "Pembelian lisensi digital butuh payment, stok key, dan pengiriman yang tetap sinkron.",
+      },
+      {
+        label: "Solusi",
+        text: "Checkout multi-payment dihubungkan ke status order, stok lisensi, dan auto-delivery.",
+      },
+      {
+        label: "Yang saya buat",
+        text: "Storefront, checkout, admin inventory/order, voucher, verification, dan fulfillment.",
+      },
+    ],
     bullets: [
       "Mengintegrasikan QRIS/Pakasir, direct crypto, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
       "Membangun admin dashboard untuk produk, paket, stok lisensi, voucher, order, user, downloads, activity log, dan fulfillment license.",
       "Menambahkan Google login, public guides/downloads, dan HWID reset untuk mengurangi proses manual admin.",
     ],
-    proof: "Project ini paling kuat untuk menunjukkan business logic: payment, inventory lisensi, customer self-service, dan admin operation berada dalam satu alur.",
+    proof: "Bagian menariknya ada di business logic: payment, inventory lisensi, customer self-service, dan admin operation berada dalam satu alur.",
   },
   {
     number: "02",
@@ -86,12 +101,26 @@ const projects = [
     imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
     summary:
       "Platform pembelajaran investasi saham dan kripto dengan autentikasi multi-user, course library, course detail, dashboard pengguna, profile, dan news page.",
+    story: [
+      {
+        label: "Tantangan",
+        text: "Materi investasi perlu alur belajar yang runtut agar pengguna tahu progresnya.",
+      },
+      {
+        label: "Solusi",
+        text: "Course dibuat dengan enrollment, progress materi, dan next material tracking.",
+      },
+      {
+        label: "Yang saya buat",
+        text: "Auth, course library, detail course, YouTube embed, dashboard, dan admin course.",
+      },
+    ],
     bullets: [
       "Membuat enrollment, progress materi, next material tracking, dan alur belajar berbasis video.",
       "Menggunakan YouTube Embed API untuk menampilkan materi pembelajaran dalam platform.",
       "Menyediakan admin course management untuk membuat, memperbarui, dan menghapus course serta konten pembelajaran.",
     ],
-    proof: "Project ini menunjukkan kemampuan menyusun learning flow yang jelas, bukan hanya halaman landing.",
+    proof: "Yang paling saya tekankan di project ini adalah alur belajar yang jelas, bukan hanya halaman landing.",
   },
   {
     number: "03",
@@ -104,6 +133,20 @@ const projects = [
     imageAlt: "BRL Fashion product detail, cart, and checkout screens",
     summary:
       "Website e-commerce fashion dengan katalog produk, detail produk, cart, buy now, checkout, proses pembayaran, dan admin panel.",
+    story: [
+      {
+        label: "Tantangan",
+        text: "Produk fashion punya stok per ukuran, jadi checkout harus mencegah pembelian stok kosong.",
+      },
+      {
+        label: "Solusi",
+        text: "Validasi ukuran dan pengurangan stok dibuat dalam alur cart dan checkout.",
+      },
+      {
+        label: "Yang saya buat",
+        text: "Katalog, product detail, cart, buy now, checkout, payment flow, dan admin data.",
+      },
+    ],
     bullets: [
       "Menerapkan validasi stok per ukuran pakaian dan pengurangan stok saat checkout.",
       "Mengelola cart dan order menggunakan database transaction agar proses pembelian lebih aman.",
@@ -173,7 +216,8 @@ function MediaFrame({
         src={src}
         alt={alt}
         fill
-        priority={priority}
+        loading={priority ? "eager" : "lazy"}
+        fetchPriority={priority ? "high" : "auto"}
         sizes="(max-width: 768px) 92vw, (max-width: 1280px) 50vw, 760px"
         className="object-contain"
       />
@@ -207,7 +251,7 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
   return (
     <article
       id={project.name.toLowerCase().replaceAll(" ", "-")}
-      className="grid gap-8 border-t border-neutral-200 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-20"
+      className="grid gap-8 border-t border-neutral-200 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-20"
     >
       <div>
         <div className="flex items-center gap-4">
@@ -229,6 +273,20 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
           {project.summary}
         </p>
 
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {project.story.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-md border border-neutral-200 bg-neutral-50 p-4"
+            >
+              <p className="text-[11px] font-black uppercase tracking-[0.14em] text-violet-700">
+                {item.label}
+              </p>
+              <p className="mt-2 text-sm leading-6 text-neutral-700">{item.text}</p>
+            </div>
+          ))}
+        </div>
+
         <ul className="mt-6 space-y-3">
           {project.bullets.map((item) => (
             <li key={item} className="flex gap-3 text-sm leading-6 text-neutral-700">
@@ -243,7 +301,7 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
 
         <div className="mt-7 border-l-4 border-violet-700 bg-violet-50 px-5 py-4">
           <p className="text-sm font-bold uppercase tracking-[0.14em] text-violet-900">
-            Nilai yang ditunjukkan
+            Yang bisa dilihat
           </p>
           <p className="mt-2 text-sm leading-6 text-neutral-800">{project.proof}</p>
         </div>
@@ -305,21 +363,21 @@ export function CinematicScrollExperience() {
 
       <section id="profile" className="relative overflow-hidden border-b border-neutral-200 bg-[#f7f8fb]">
         <div className="absolute inset-x-0 top-0 h-56 bg-[linear-gradient(180deg,rgba(124,58,237,0.10),rgba(247,248,251,0))]" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:min-h-[calc(100vh-73px)] lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:px-10 lg:py-20">
+        <div className="relative mx-auto grid max-w-7xl gap-10 px-5 py-14 sm:px-8 sm:py-16 lg:min-h-[calc(100vh-73px)] lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:px-10 lg:py-20">
           <div>
             <p className="inline-flex rounded-md border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-violet-800">
               Junior Laravel Full Stack Developer
             </p>
-            <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[0.98] tracking-normal text-neutral-950 sm:text-7xl lg:text-8xl">
+            <h1 className="mt-6 max-w-4xl text-5xl font-black leading-[0.98] tracking-normal text-neutral-950 sm:mt-7 sm:text-7xl lg:text-8xl">
               Akbar Salahudin Purnomo
             </h1>
-            <p className="mt-7 max-w-2xl text-lg leading-8 text-neutral-700 sm:text-xl sm:leading-9">
+            <p className="mt-6 max-w-2xl text-base leading-7 text-neutral-700 sm:mt-7 sm:text-xl sm:leading-9">
               Mahasiswa D3 Teknologi Informasi Universitas Brawijaya yang fokus
               pada pengembangan web fullstack menggunakan Laravel, PHP, MySQL,
               JavaScript, REST API, dan antarmuka web responsif.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-3 sm:max-w-none">
               <ActionLink href={contactLinks.cv} icon="download" download>
                 Download CV
               </ActionLink>
@@ -391,8 +449,8 @@ export function CinematicScrollExperience() {
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <SectionHeading
             eyebrow="Keahlian Teknis"
-            title="Stack utama saya mengikuti isi CV terbaru."
-            body="Fokusnya Laravel dan MySQL, dengan kemampuan frontend yang cukup untuk membangun interface responsive dan admin dashboard yang mudah dikelola."
+            title="Stack yang biasa saya pakai di project."
+            body="Saya paling sering bekerja dengan Laravel dan MySQL, lalu merapikan frontend memakai HTML, CSS, JavaScript, dan Blade untuk halaman publik maupun admin dashboard."
           />
 
           <div className="grid gap-3">
@@ -435,11 +493,11 @@ export function CinematicScrollExperience() {
               </p>
             </div>
             <h2 className="mt-4 max-w-4xl text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl">
-              Tiga project yang menunjukkan kemampuan full stack saya.
+              Tiga project utama yang paling relevan.
             </h2>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-600">
-              Isi section ini mengikuti CV dan portfolio deck terbaru: storefront
-              lisensi digital, video learning platform, dan e-commerce fashion.
+              Beberapa project yang paling enak dilihat dulu: storefront lisensi
+              digital, video learning platform, dan e-commerce fashion.
             </p>
           </div>
 
@@ -452,14 +510,14 @@ export function CinematicScrollExperience() {
       <section className="border-y border-neutral-200 bg-[#f7f8fb]">
         <div className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-20">
           <SectionHeading
-            eyebrow="Nilai untuk internship"
-            title="Saya terbiasa membangun flow yang bisa dipakai, bukan hanya tampilan."
+            eyebrow="Yang bisa saya bantu"
+            title="Ikut mengerjakan fitur web dari backend sampai tampilan."
           />
           <div className="grid gap-4 sm:grid-cols-3">
             {[
-              ["Cepat belajar", "Terbiasa mempelajari teknologi baru lewat project nyata."],
-              ["Terstruktur", "Mulai dari database, route/controller, service, hingga interface."],
-              ["Kolaboratif", "Siap bekerja dalam tim maupun mengerjakan task secara mandiri."],
+              ["Backend Laravel", "Membuat route, controller, validasi, query database, dan alur fitur."],
+              ["Admin dashboard", "Merapikan halaman kelola data agar mudah dipakai dan dicek ulang."],
+              ["Frontend dasar", "Menyusun tampilan responsif dengan HTML, CSS, JavaScript, dan Blade."],
             ].map(([title, body]) => (
               <article key={title} className="rounded-md border border-neutral-200 bg-white p-5">
                 <Layers aria-hidden="true" className="h-5 w-5 text-violet-700" />

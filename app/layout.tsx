@@ -20,10 +20,58 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://aksa.work";
+const siteTitle = "Akbar Salahudin Purnomo | Junior Laravel Full Stack Developer";
+const siteDescription =
+  "Portfolio Akbar Salahudin Purnomo, mahasiswa D3 Teknologi Informasi Universitas Brawijaya yang fokus pada Laravel, PHP, MySQL, REST API, payment integration, dan aplikasi web full stack.";
+
 export const metadata: Metadata = {
-  title: "Akbar Salahudin Purnomo | Junior Laravel Full Stack Developer",
-  description:
-    "Portfolio Akbar Salahudin Purnomo, mahasiswa D3 Teknologi Informasi Universitas Brawijaya yang fokus pada Laravel, PHP, MySQL, REST API, payment integration, dan aplikasi web full stack.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: siteTitle,
+    template: "%s | Akbar Salahudin Purnomo",
+  },
+  description: siteDescription,
+  applicationName: "Akbar Portfolio",
+  authors: [{ name: "Akbar Salahudin Purnomo", url: siteUrl }],
+  creator: "Akbar Salahudin Purnomo",
+  publisher: "Akbar Salahudin Purnomo",
+  keywords: [
+    "Akbar Salahudin Purnomo",
+    "Laravel Developer",
+    "Junior Full Stack Developer",
+    "PHP Developer",
+    "MySQL",
+    "REST API",
+    "Portfolio Developer",
+    "Universitas Brawijaya",
+  ],
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: siteTitle,
+    description: siteDescription,
+    url: "/",
+    siteName: "Akbar Portfolio",
+    locale: "id_ID",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };
 
 export default function RootLayout({
