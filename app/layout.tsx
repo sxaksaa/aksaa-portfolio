@@ -21,9 +21,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Aksaa | Web Portfolio",
+  title: "Akbar Salahudin Purnomo | Junior Laravel Full Stack Developer",
   description:
-    "Personal portfolio for Aksaa, a CS student and full-stack web developer open to internship roles, focused on Laravel, MySQL, Next.js, payment logic, and clear web interfaces.",
+    "Portfolio Akbar Salahudin Purnomo, mahasiswa D3 Teknologi Informasi Universitas Brawijaya yang fokus pada Laravel, PHP, MySQL, REST API, payment integration, dan aplikasi web full stack.",
 };
 
 export default function RootLayout({
@@ -33,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="id"
       className={`${inter.variable} ${cormorant.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>

@@ -1,411 +1,516 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Lenis from "lenis";
+import Image from "next/image";
 import {
-  AksaPanel,
-  ClosingPanel,
-  EduvestPanel,
-  FashionPanel,
-  IntroPanel,
-} from "./cinematic/panels";
+  ArrowUpRight,
+  BadgeCheck,
+  BriefcaseBusiness,
+  Code2,
+  Database,
+  Download,
+  ExternalLink as ExternalLinkIcon,
+  FileText,
+  GitBranch,
+  GraduationCap,
+  Layers,
+  Mail,
+  MapPin,
+  Phone,
+  ServerCog,
+  ShieldCheck,
+} from "lucide-react";
 
-const panels = ["intro", "aksa", "eduvest", "fashion", "closing"] as const;
-type PanelName = (typeof panels)[number];
-
-const transitionAt = {
-  aksa: 0.12,
-  eduvest: 10.46,
-  fashion: 17.62,
-  closing: 25.88,
+const contactLinks = {
+  email: "mailto:akbarsalahudinpurnomo@gmail.com",
+  github: "https://github.com/sxaksaa",
+  phone: "+6287784727890",
+  cv: "/documents/cv-akbar-salahudin-purnomo.pdf",
+  deck: "/documents/portfolio-akbar-salahudin-purnomo.pptx",
 } as const;
 
-const showcaseSequenceAt = {
-  aksa: 1.52,
-  eduvest: 11.86,
-  fashion: 19.02,
-} as const;
+const highlights = [
+  { value: "D3 TI", label: "Universitas Brawijaya" },
+  { value: "3.85", label: "IPK terakhir" },
+  { value: "3", label: "Project full stack" },
+  { value: "Laravel", label: "Stack utama" },
+] as const;
 
-const connectedPanelMotion = {
-  incomingFrom: {
-    yPercent: 8,
-    scale: 1.014,
-    clipPath: "inset(0% 0% 0% 0%)",
-  },
-  incomingTo: {
-    yPercent: 0,
-    scale: 1,
-    duration: 1.3,
-    ease: "none",
-    immediateRender: false,
-  },
-  incomingFadeTo: {
-    autoAlpha: 1,
-    duration: 0.56,
-    ease: "none",
-  },
-  outgoingTo: {
-    scale: 0.986,
-    yPercent: -1.1,
-    duration: 1.15,
-    ease: "none",
-  },
-  outgoingFadeTo: {
-    autoAlpha: 0,
-    duration: 0.42,
-    ease: "none",
-  },
-} as const;
-
-const panelTransitions = [
+const skillGroups = [
   {
-    incoming: "aksa",
-    at: transitionAt.aksa,
-    ...connectedPanelMotion,
+    icon: ServerCog,
+    title: "Backend",
+    items: ["PHP", "Laravel", "MVC", "REST/API Integration"],
   },
   {
-    incoming: "eduvest",
-    at: transitionAt.eduvest,
-    ...connectedPanelMotion,
+    icon: Code2,
+    title: "Frontend",
+    items: ["HTML", "CSS", "JavaScript", "Blade"],
   },
   {
-    incoming: "fashion",
-    at: transitionAt.fashion,
-    ...connectedPanelMotion,
+    icon: Database,
+    title: "Database",
+    items: ["MySQL", "Relational database design"],
   },
   {
-    incoming: "closing",
-    at: transitionAt.closing,
-    ...connectedPanelMotion,
+    icon: ShieldCheck,
+    title: "Product flow",
+    items: ["Payment Integration", "Admin Dashboard", "UI/UX Design"],
   },
 ] as const;
 
-type ShowcaseTimelineConfig = {
-  panelName: Extract<PanelName, "aksa" | "eduvest" | "fashion">;
-  trackSelector: string;
-  stepSelector: string;
-  startAt: number;
-  stepDuration: number;
-  fadeInDuration?: number;
-  fadeInLead?: number;
-  fadeOutDelay?: number;
-  fadeOutDuration?: number;
-  depthTargets?: (panel: HTMLElement) => HTMLElement[];
-};
+const projects = [
+  {
+    number: "01",
+    name: "Aksa Xiterz",
+    subtitle: "Digital License Storefront",
+    url: "https://aksaxiterz.com",
+    role: "Full Stack Developer",
+    stack: ["Laravel", "PHP", "MySQL", "JavaScript", "QRIS/Pakasir", "Crypto Payment", "Binance Pay"],
+    image: "/portfolio-deck/aksa-interface-flow.png",
+    imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
+    summary:
+      "Storefront lisensi digital dengan katalog, paket lisensi, cart checkout, voucher, riwayat pesanan, multi-payment, dan auto-delivery license key.",
+    bullets: [
+      "Mengintegrasikan QRIS/Pakasir, direct crypto, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
+      "Membangun admin dashboard untuk produk, paket, stok lisensi, voucher, order, user, downloads, activity log, dan fulfillment license.",
+      "Menambahkan Google login, public guides/downloads, dan HWID reset untuk mengurangi proses manual admin.",
+    ],
+    proof: "Project ini paling kuat untuk menunjukkan business logic: payment, inventory lisensi, customer self-service, dan admin operation berada dalam satu alur.",
+  },
+  {
+    number: "02",
+    name: "EduVest",
+    subtitle: "Video Learning Platform",
+    url: "https://eduvest-production.up.railway.app",
+    role: "Full Stack Developer",
+    stack: ["Laravel", "MySQL", "YouTube Embed API", "Course Progress", "Admin Course"],
+    image: "/portfolio-deck/eduvest-learning-journey.png",
+    imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
+    summary:
+      "Platform pembelajaran investasi saham dan kripto dengan autentikasi multi-user, course library, course detail, dashboard pengguna, profile, dan news page.",
+    bullets: [
+      "Membuat enrollment, progress materi, next material tracking, dan alur belajar berbasis video.",
+      "Menggunakan YouTube Embed API untuk menampilkan materi pembelajaran dalam platform.",
+      "Menyediakan admin course management untuk membuat, memperbarui, dan menghapus course serta konten pembelajaran.",
+    ],
+    proof: "Project ini menunjukkan kemampuan menyusun learning flow yang jelas, bukan hanya halaman landing.",
+  },
+  {
+    number: "03",
+    name: "BRL Fashion",
+    subtitle: "Fashion E-Commerce",
+    url: "https://brl-fashion-production.up.railway.app",
+    role: "Full Stack Developer",
+    stack: ["PHP", "Laravel", "Blade", "MySQL", "Cart", "Checkout"],
+    image: "/portfolio-deck/brl-commerce-flow.png",
+    imageAlt: "BRL Fashion product detail, cart, and checkout screens",
+    summary:
+      "Website e-commerce fashion dengan katalog produk, detail produk, cart, buy now, checkout, proses pembayaran, dan admin panel.",
+    bullets: [
+      "Menerapkan validasi stok per ukuran pakaian dan pengurangan stok saat checkout.",
+      "Mengelola cart dan order menggunakan database transaction agar proses pembelian lebih aman.",
+      "Membangun admin dashboard untuk produk, kategori, ukuran, user, stok, dan data cart/order.",
+    ],
+    proof: "Project ini memperlihatkan pemahaman alur commerce: katalog, keputusan beli, stok ukuran, cart, checkout, dan admin data.",
+  },
+] as const;
 
-function useCinematicScroll(rootRef: React.RefObject<HTMLElement | null>) {
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
 
-    gsap.registerPlugin(ScrollTrigger);
+function ActionLink({
+  href,
+  children,
+  icon = "external",
+  variant = "primary",
+  download = false,
+}: {
+  href: string;
+  children: React.ReactNode;
+  icon?: "external" | "download" | "mail";
+  variant?: "primary" | "secondary" | "dark";
+  download?: boolean;
+}) {
+  const Icon = icon === "download" ? Download : icon === "mail" ? Mail : ArrowUpRight;
 
-    const lenis = new Lenis({
-      lerp: 0.135,
-      smoothWheel: true,
-      wheelMultiplier: 0.88,
-      touchMultiplier: 1,
-    });
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
+      download={download || undefined}
+      className={cx(
+        "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2.5 text-sm font-bold transition-colors",
+        variant === "primary" && "bg-violet-700 !text-white hover:bg-violet-800",
+        variant === "secondary" && "border border-neutral-300 bg-white !text-neutral-950 hover:bg-neutral-100",
+        variant === "dark" && "border border-violet-200 bg-violet-50 !text-violet-800 hover:bg-violet-100",
+      )}
+    >
+      {children}
+      <Icon aria-hidden="true" className="h-4 w-4" />
+    </a>
+  );
+}
 
-    const syncScrollTrigger = () => ScrollTrigger.update();
-    lenis.on("scroll", syncScrollTrigger);
+function MediaFrame({
+  src,
+  alt,
+  priority = false,
+  className,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+  className?: string;
+}) {
+  return (
+    <figure
+      className={cx(
+        "relative overflow-hidden rounded-md border border-neutral-200 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.10)]",
+        className,
+      )}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        priority={priority}
+        sizes="(max-width: 768px) 92vw, (max-width: 1280px) 50vw, 760px"
+        className="object-contain"
+      />
+    </figure>
+  );
+}
 
-    window.scrollTo(0, 0);
+function SectionHeading({
+  eyebrow,
+  title,
+  body,
+}: {
+  eyebrow: string;
+  title: string;
+  body?: string;
+}) {
+  return (
+    <div className="max-w-3xl">
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-700">
+        {eyebrow}
+      </p>
+      <h2 className="mt-3 text-3xl font-black leading-tight tracking-normal text-neutral-950 sm:text-5xl">
+        {title}
+      </h2>
+      {body ? <p className="mt-5 text-lg leading-8 text-neutral-600">{body}</p> : null}
+    </div>
+  );
+}
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    requestAnimationFrame(raf);
+function ProjectCase({ project }: { project: (typeof projects)[number] }) {
+  return (
+    <article
+      id={project.name.toLowerCase().replaceAll(" ", "-")}
+      className="grid gap-8 border-t border-neutral-200 py-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-20"
+    >
+      <div>
+        <div className="flex items-center gap-4">
+          <span className="grid h-11 w-11 place-items-center rounded-md bg-violet-700 font-mono text-sm font-black text-white">
+            {project.number}
+          </span>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
+              {project.role}
+            </p>
+            <h3 className="text-3xl font-black tracking-normal text-neutral-950 sm:text-4xl">
+              {project.name}
+            </h3>
+          </div>
+        </div>
 
-    const ctx = gsap.context(() => {
-      const panelElements = gsap.utils.toArray<HTMLElement>(".cinematic-panel");
-      const panelByName = new Map<PanelName, HTMLElement>(
-        panels.map((panel, index) => [panel, panelElements[index]]),
-      );
+        <p className="mt-5 text-xl font-bold text-violet-800">{project.subtitle}</p>
+        <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-700">
+          {project.summary}
+        </p>
 
-      panelElements.forEach((panel, index) => {
-        gsap.set(panel, {
-          yPercent: index === 0 ? 0 : connectedPanelMotion.incomingFrom.yPercent,
-          zIndex: index + 1,
-          autoAlpha: index === 0 ? 1 : 0,
-          scale: index === 0 ? 1 : connectedPanelMotion.incomingFrom.scale,
-          clipPath: "inset(0% 0% 0% 0%)",
-          transformOrigin: "center center",
-          willChange: "transform",
-        });
-      });
+        <ul className="mt-6 space-y-3">
+          {project.bullets.map((item) => (
+            <li key={item} className="flex gap-3 text-sm leading-6 text-neutral-700">
+              <BadgeCheck
+                aria-hidden="true"
+                className="mt-0.5 h-5 w-5 shrink-0 text-violet-700"
+              />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
 
-      const introTl = gsap.timeline({
-        onComplete: () => ScrollTrigger.refresh(),
-      });
+        <div className="mt-7 border-l-4 border-violet-700 bg-violet-50 px-5 py-4">
+          <p className="text-sm font-bold uppercase tracking-[0.14em] text-violet-900">
+            Nilai yang ditunjukkan
+          </p>
+          <p className="mt-2 text-sm leading-6 text-neutral-800">{project.proof}</p>
+        </div>
 
-      introTl.set(".intro-content-group", {
-        autoAlpha: 0,
-        y: 20,
-        scale: 0.99,
-      });
-      introTl.set(".intro-words-container", { autoAlpha: 1 });
-      introTl.to(root, { autoAlpha: 1, duration: 0.2, ease: "power1.in" });
+        <div className="mt-7 flex flex-wrap gap-2">
+          {project.stack.map((item) => (
+            <span
+              key={item}
+              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-bold text-neutral-800"
+            >
+              {item}
+            </span>
+          ))}
+        </div>
 
-      gsap.utils.toArray<HTMLElement>(".intro-word").forEach((word) => {
-        introTl
-          .fromTo(
-            word,
-            { yPercent: 38, autoAlpha: 0 },
-            { yPercent: 0, autoAlpha: 1, duration: 0.65, ease: "power3.out" },
-          )
-          .to(
-            word,
-            {
-              yPercent: -38,
-              autoAlpha: 0,
-              duration: 0.55,
-              ease: "power3.in",
-            },
-            "+=0.25",
-          );
-      });
+        <div className="mt-8">
+          <ActionLink href={project.url} variant="dark">
+            Lihat project live
+          </ActionLink>
+        </div>
+      </div>
 
-      introTl
-        .to(
-          ".intro-words-container",
-          {
-            autoAlpha: 0,
-            y: -8,
-            duration: 0.45,
-            ease: "power2.out",
-          },
-          "-=0.1",
-        )
-        .to(
-          ".intro-content-group",
-          {
-            autoAlpha: 1,
-            y: 0,
-            scale: 1,
-            duration: 1,
-            ease: "power3.out",
-          },
-          "-=0.08",
-        );
-
-      const film = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".panel-scroll",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: 0.22,
-        },
-      });
-
-      const addCameraDepth = (
-        panel: HTMLElement,
-        at: number,
-        direction: "enter" | "exit",
-      ) => {
-        const scene = panel.querySelector<HTMLElement>(".camera-scene");
-        if (!scene) {
-          return;
-        }
-
-        gsap.set(scene, { willChange: "transform" });
-
-        if (direction === "enter") {
-          film.fromTo(
-            scene,
-            { scale: 1.024 },
-            { scale: 1, duration: 1.8, ease: "none" },
-            at,
-          );
-          return;
-        }
-
-        film.to(scene, { scale: 1.02, duration: 1.8, ease: "none" }, at);
-      };
-
-      const addVerticalShowcase = ({
-        panelName,
-        trackSelector,
-        stepSelector,
-        startAt,
-        stepDuration,
-        fadeInDuration = 0.42,
-        fadeInLead = 0.58,
-        fadeOutDelay = 0.52,
-        fadeOutDuration = 0.44,
-        depthTargets,
-      }: ShowcaseTimelineConfig) => {
-        const panel = panelByName.get(panelName);
-        if (!panel) return;
-
-        const verticalTrack = panel.querySelector<HTMLElement>(trackSelector);
-        const steps = gsap.utils.toArray<HTMLElement>(
-          panel.querySelectorAll<HTMLElement>(stepSelector),
-        );
-        if (!verticalTrack || steps.length <= 1) return;
-
-        const sequence = gsap.timeline();
-        const sequenceDuration = stepDuration * (steps.length - 1);
-        const extraDepthTargets = depthTargets?.(panel).filter(Boolean) ?? [];
-
-        gsap.set([verticalTrack, ...extraDepthTargets], {
-          willChange: "transform",
-        });
-        gsap.set(steps, {
-          autoAlpha: 0,
-          y: 24,
-        });
-        gsap.set(steps[0], { autoAlpha: 1, y: 0 });
-
-        sequence.to(
-          verticalTrack,
-          {
-            y: `-${(steps.length - 1) * 100}vh`,
-            duration: sequenceDuration,
-            ease: "none",
-          },
-          0,
-        );
-
-        if (extraDepthTargets.length) {
-          sequence.to(
-            extraDepthTargets,
-            {
-              yPercent: 2,
-              scale: 1.012,
-              duration: sequenceDuration,
-              ease: "none",
-            },
-            0,
-          );
-        }
-
-        steps.forEach((step, index) => {
-          const centerAt = index * stepDuration;
-
-          if (index > 0) {
-            sequence.fromTo(
-              step,
-              { autoAlpha: 0, y: 30 },
-              {
-                autoAlpha: 1,
-                y: 0,
-                duration: fadeInDuration,
-                ease: "none",
-                immediateRender: false,
-              },
-              centerAt - fadeInLead,
-            );
-          }
-
-          if (index < steps.length - 1) {
-            sequence.to(
-              step,
-              {
-                autoAlpha: 0,
-                y: -26,
-                duration: fadeOutDuration,
-                ease: "none",
-              },
-              centerAt + fadeOutDelay,
-            );
-          }
-        });
-
-        film.add(sequence, startAt);
-      };
-
-      addVerticalShowcase({
-        panelName: "aksa",
-        trackSelector: ".aksa-vertical-track",
-        stepSelector: ".aksa-showcase-step",
-        startAt: showcaseSequenceAt.aksa,
-        stepDuration: 1.28,
-      });
-
-      addVerticalShowcase({
-        panelName: "eduvest",
-        trackSelector: ".eduvest-vertical-track",
-        stepSelector: ".eduvest-showcase-step",
-        startAt: showcaseSequenceAt.eduvest,
-        stepDuration: 1.1,
-      });
-
-      addVerticalShowcase({
-        panelName: "fashion",
-        trackSelector: ".fashion-vertical-track",
-        stepSelector: ".fashion-showcase-step",
-        startAt: showcaseSequenceAt.fashion,
-        stepDuration: 1.1,
-      });
-
-      panelTransitions.forEach((transition) => {
-        const incomingPanel = panelByName.get(transition.incoming as PanelName);
-        const incomingIndex = panels.indexOf(transition.incoming as PanelName);
-        const outgoingPanel = panelElements[incomingIndex - 1];
-        const outgoingAt = transition.at;
-        const incomingAt = transition.at + 0.58;
-
-        if (!incomingPanel || !outgoingPanel) return;
-
-        film
-          .fromTo(
-            incomingPanel,
-            { ...transition.incomingFrom },
-            { ...transition.incomingTo },
-            incomingAt,
-          )
-          .to(
-            incomingPanel,
-            { ...transition.incomingFadeTo },
-            incomingAt + 0.1,
-          )
-          .to(
-            outgoingPanel,
-            { ...transition.outgoingTo },
-            outgoingAt,
-          )
-          .to(
-            outgoingPanel,
-            { ...transition.outgoingFadeTo },
-            outgoingAt,
-          );
-
-        addCameraDepth(incomingPanel, incomingAt, "enter");
-        addCameraDepth(outgoingPanel, outgoingAt, "exit");
-      });
-
-      ScrollTrigger.refresh();
-    }, root);
-
-    return () => {
-      lenis.off("scroll", syncScrollTrigger);
-      ctx.revert();
-      lenis.destroy();
-    };
-  }, [rootRef]);
+      <MediaFrame
+        src={project.image}
+        alt={project.imageAlt}
+        className="aspect-[16/10] lg:aspect-[16/9]"
+      />
+    </article>
+  );
 }
 
 export function CinematicScrollExperience() {
-  const rootRef = useRef<HTMLElement>(null);
-  useCinematicScroll(rootRef);
-
   return (
-    <main
-      ref={rootRef}
-      className="experience invisible relative min-h-screen overflow-x-clip bg-[#050505] opacity-0 text-white"
-    >
-      <div className="world-gradient fixed inset-0 z-0 bg-[radial-gradient(circle_at_top,#1b1027,transparent_40%),radial-gradient(circle_at_bottom,#0b1520,transparent_40%),#050505]" />
-      <section className="panel-scroll relative z-10 h-[2600vh]">
-        <div className="panel-stage sticky top-0 h-screen overflow-clip bg-[#050505]">
-          <IntroPanel />
-          <AksaPanel />
-          <EduvestPanel />
-          <FashionPanel />
-          <ClosingPanel />
+    <main className="min-h-screen bg-[#f7f8fb] text-neutral-950">
+      <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/92 backdrop-blur">
+        <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
+          <a href="#" className="text-sm font-black tracking-normal text-neutral-950">
+            AKBAR
+          </a>
+          <div className="hidden items-center gap-7 text-sm font-bold text-neutral-600 md:flex">
+            <a href="#profile" className="hover:text-neutral-950">
+              Profile
+            </a>
+            <a href="#skills" className="hover:text-neutral-950">
+              Skills
+            </a>
+            <a href="#projects" className="hover:text-neutral-950">
+              Projects
+            </a>
+            <a href="#contact" className="hover:text-neutral-950">
+              Contact
+            </a>
+          </div>
+          <ActionLink href={contactLinks.cv} icon="download" variant="secondary" download>
+            CV
+          </ActionLink>
+        </nav>
+      </header>
+
+      <section id="profile" className="relative overflow-hidden border-b border-neutral-200 bg-[#f7f8fb]">
+        <div className="absolute inset-x-0 top-0 h-56 bg-[linear-gradient(180deg,rgba(124,58,237,0.10),rgba(247,248,251,0))]" />
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-16 sm:px-8 lg:min-h-[calc(100vh-73px)] lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:px-10 lg:py-20">
+          <div>
+            <p className="inline-flex rounded-md border border-violet-200 bg-violet-50 px-3 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-violet-800">
+              Junior Laravel Full Stack Developer
+            </p>
+            <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[0.98] tracking-normal text-neutral-950 sm:text-7xl lg:text-8xl">
+              Akbar Salahudin Purnomo
+            </h1>
+            <p className="mt-7 max-w-2xl text-lg leading-8 text-neutral-700 sm:text-xl sm:leading-9">
+              Mahasiswa D3 Teknologi Informasi Universitas Brawijaya yang fokus
+              pada pengembangan web fullstack menggunakan Laravel, PHP, MySQL,
+              JavaScript, REST API, dan antarmuka web responsif.
+            </p>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ActionLink href={contactLinks.cv} icon="download" download>
+                Download CV
+              </ActionLink>
+              <ActionLink href={contactLinks.deck} icon="download" variant="secondary" download>
+                Portfolio Deck
+              </ActionLink>
+              <ActionLink href={contactLinks.github} variant="secondary">
+                GitHub
+              </ActionLink>
+            </div>
+
+            <div className="mt-10 grid gap-3 text-sm font-semibold text-neutral-700 sm:grid-cols-2">
+              <p className="flex items-center gap-2">
+                <MapPin aria-hidden="true" className="h-4 w-4 text-violet-700" />
+                Malang, Jawa Timur
+              </p>
+              <p className="flex items-center gap-2">
+                <GraduationCap aria-hidden="true" className="h-4 w-4 text-violet-700" />
+                D3 Teknologi Informasi, Universitas Brawijaya
+              </p>
+              <a href={contactLinks.email} className="flex items-center gap-2 hover:text-violet-800">
+                <Mail aria-hidden="true" className="h-4 w-4 text-violet-700" />
+                akbarsalahudinpurnomo@gmail.com
+              </a>
+              <a href={contactLinks.phone} className="flex items-center gap-2 hover:text-violet-800">
+                <Phone aria-hidden="true" className="h-4 w-4 text-violet-700" />
+                +62 877 8472 7890
+              </a>
+            </div>
+          </div>
+
+          <div className="grid gap-4">
+            <MediaFrame
+              src="/portfolio-deck/aksa-interface-flow.png"
+              alt="Aksa Xiterz interface flow preview"
+              priority
+              className="aspect-[16/10]"
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <MediaFrame
+                src="/portfolio-deck/eduvest-learning-journey.png"
+                alt="EduVest learning journey preview"
+                className="aspect-[16/9]"
+              />
+              <MediaFrame
+                src="/portfolio-deck/brl-commerce-flow.png"
+                alt="BRL Fashion commerce flow preview"
+                className="aspect-[16/9]"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-neutral-200 bg-white">
+        <div className="mx-auto grid max-w-7xl gap-3 px-5 py-6 sm:grid-cols-4 sm:px-8 lg:px-10">
+          {highlights.map((item) => (
+            <div key={item.label} className="border-l border-neutral-200 pl-4">
+              <p className="text-2xl font-black text-neutral-950">{item.value}</p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.14em] text-neutral-500">
+                {item.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section id="skills" className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          <SectionHeading
+            eyebrow="Keahlian Teknis"
+            title="Stack utama saya mengikuti isi CV terbaru."
+            body="Fokusnya Laravel dan MySQL, dengan kemampuan frontend yang cukup untuk membangun interface responsive dan admin dashboard yang mudah dikelola."
+          />
+
+          <div className="grid gap-3">
+            {skillGroups.map((group) => {
+              const Icon = group.icon;
+
+              return (
+                <article
+                  key={group.title}
+                  className="grid gap-4 rounded-md border border-neutral-200 bg-white p-5 sm:grid-cols-[12rem_1fr] sm:items-start"
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon aria-hidden="true" className="h-5 w-5 text-violet-700" />
+                    <h3 className="text-base font-black text-neutral-950">{group.title}</h3>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {group.items.map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-md border border-neutral-200 bg-neutral-50 px-3 py-1.5 text-sm font-bold text-neutral-700"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" className="bg-white">
+        <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
+          <div className="py-16 lg:py-20">
+            <div className="flex items-center gap-3">
+              <BriefcaseBusiness aria-hidden="true" className="h-5 w-5 text-violet-700" />
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
+                Pengalaman Proyek
+              </p>
+            </div>
+            <h2 className="mt-4 max-w-4xl text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl">
+              Tiga project yang menunjukkan kemampuan full stack saya.
+            </h2>
+            <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-600">
+              Isi section ini mengikuti CV dan portfolio deck terbaru: storefront
+              lisensi digital, video learning platform, dan e-commerce fashion.
+            </p>
+          </div>
+
+          {projects.map((project) => (
+            <ProjectCase key={project.name} project={project} />
+          ))}
+        </div>
+      </section>
+
+      <section className="border-y border-neutral-200 bg-[#f7f8fb]">
+        <div className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-20">
+          <SectionHeading
+            eyebrow="Nilai untuk internship"
+            title="Saya terbiasa membangun flow yang bisa dipakai, bukan hanya tampilan."
+          />
+          <div className="grid gap-4 sm:grid-cols-3">
+            {[
+              ["Cepat belajar", "Terbiasa mempelajari teknologi baru lewat project nyata."],
+              ["Terstruktur", "Mulai dari database, route/controller, service, hingga interface."],
+              ["Kolaboratif", "Siap bekerja dalam tim maupun mengerjakan task secara mandiri."],
+            ].map(([title, body]) => (
+              <article key={title} className="rounded-md border border-neutral-200 bg-white p-5">
+                <Layers aria-hidden="true" className="h-5 w-5 text-violet-700" />
+                <h3 className="mt-5 text-lg font-black">{title}</h3>
+                <p className="mt-3 text-sm leading-6 text-neutral-600">{body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" className="bg-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_0.72fr] lg:px-10 lg:py-20">
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-700">
+              Fullstack Developer - Paid Internship
+            </p>
+            <h2 className="mt-4 max-w-3xl text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl">
+              Siap belajar di lingkungan developer profesional.
+            </h2>
+          </div>
+
+          <div className="self-end">
+            <p className="text-lg leading-8 text-neutral-700">
+              Saya mencari kesempatan internship untuk mengembangkan kemampuan
+              Laravel, backend, database, REST API, dan pengembangan aplikasi web
+              secara lebih profesional.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <ActionLink href={contactLinks.email} icon="mail">
+                Email saya
+              </ActionLink>
+              <ActionLink href={contactLinks.github} variant="secondary">
+                GitHub
+              </ActionLink>
+            </div>
+            <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-neutral-600">
+              <a href={contactLinks.cv} download className="inline-flex items-center gap-2 hover:text-violet-800">
+                <FileText aria-hidden="true" className="h-4 w-4" />
+                CV PDF
+              </a>
+              <a href={contactLinks.deck} download className="inline-flex items-center gap-2 hover:text-violet-800">
+                <ExternalLinkIcon aria-hidden="true" className="h-4 w-4" />
+                Portfolio PPTX
+              </a>
+              <a href={contactLinks.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-violet-800">
+                <GitBranch aria-hidden="true" className="h-4 w-4" />
+                github.com/sxaksaa
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </main>

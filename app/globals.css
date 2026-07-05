@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --background: #05020b;
-  --foreground: #f7f2ff;
-  color-scheme: dark;
+  --background: #f7f8fb;
+  --foreground: #111111;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -21,27 +21,16 @@
 html {
   min-height: 100%;
   background: var(--background);
-  position: relative;
-  scroll-behavior: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  scroll-behavior: smooth;
 }
 
 body {
   min-height: 100%;
+  margin: 0;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-html::-webkit-scrollbar,
-body::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
 }
 
 a {
@@ -49,245 +38,13 @@ a {
   text-decoration: none;
 }
 
-.experience {
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-.experience img {
-  -webkit-user-drag: none;
-  user-select: none;
-}
-
-.aksa-showcase-step {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 1.25rem;
-  width: 100%;
-  overflow-x: clip;
-}
-
-.aksa-step-copy {
-  min-width: 0;
-  width: min(100%, 30rem);
-  max-width: min(100%, 30rem);
-  text-wrap: balance;
-}
-
-.aksa-editorial-title {
-  font-size: clamp(3.05rem, 5vw, 5.8rem);
-}
-
-.aksa-editorial-subtitle {
-  font-size: clamp(1.6rem, 2.55vw, 2.6rem);
-}
-
-.aksa-visual-composition {
-  align-self: center;
-  justify-self: start;
-  width: min(100%, 52rem);
-}
-
-.aksa-phone-stage {
-  aspect-ratio: 1290 / 2796;
-  width: clamp(17rem, 76vw, 19rem);
-}
-
-.aksa-screen-wall {
-  inset-inline: 7%;
-  bottom: 2%;
-  opacity: 0.24;
-  transform: scale(0.88);
-}
-
-.aksa-screen-tile {
-  opacity: 0.15;
-}
-
-.aksa-screen-tile-active {
-  opacity: 0.24;
-}
-
-.eduvest-showcase-step {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 1.25rem;
-  width: 100%;
-  overflow-x: clip;
-}
-
-.eduvest-step-copy {
-  min-width: 0;
-  width: min(100%, 31rem);
-  max-width: min(100%, 31rem);
-  text-wrap: balance;
-}
-
-.eduvest-visual-composition {
-  align-self: center;
-  justify-self: start;
-  width: min(100%, 54rem);
-}
-
-.eduvest-screen-stage {
-  width: clamp(30rem, 82vw, 48rem);
-}
-
-.eduvest-screen-wall {
-  opacity: 0.72;
-}
-
-.fashion-showcase-step {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  align-items: center;
-  gap: 1.25rem;
-  width: 100%;
-  overflow-x: clip;
-}
-
-.fashion-step-copy {
-  min-width: 0;
-  width: min(100%, 31rem);
-  max-width: min(100%, 31rem);
-  text-wrap: balance;
-}
-
-.fashion-visual-composition {
-  align-self: center;
-  justify-self: start;
-  width: min(100%, 54rem);
-}
-
-.fashion-screen-stage {
-  width: clamp(30rem, 82vw, 48rem);
-}
-
-.fashion-screen-wall {
-  opacity: 0.7;
-}
-
-@media (min-width: 40rem) {
-  .aksa-phone-stage {
-    width: clamp(20rem, 50vw, 23rem);
-  }
-
-  .eduvest-screen-stage {
-    width: clamp(34rem, 74vw, 50rem);
-  }
-
-  .fashion-screen-stage {
-    width: clamp(34rem, 74vw, 50rem);
-  }
-}
-
-@media (min-width: 64rem) {
-  .aksa-showcase-step {
-    grid-template-columns: minmax(38rem, 52vw) minmax(23rem, 33vw);
-    grid-template-rows: 1fr;
-    justify-content: space-between;
-    gap: clamp(2rem, 4vw, 5.5rem);
-    transform: translateX(-4vw);
-  }
-
-  .aksa-step-copy {
-    justify-self: end;
-    margin-right: 0;
-    padding-top: 0;
-    padding-right: 0;
-  }
-
-  .aksa-visual-composition {
-    justify-self: start;
-    width: min(52vw, 58rem);
-    transform: translateX(4.2vw);
-  }
-
-  .aksa-editorial-title {
-    max-width: 100%;
-    font-size: clamp(4.4rem, 7.2vw, 7.4rem);
-  }
-
-  .aksa-editorial-subtitle {
-    font-size: clamp(1.75rem, 2.55vw, 2.7rem);
-  }
-
-  .aksa-phone-stage {
-    width: clamp(25rem, 30vw, 29rem);
-  }
-
-  .eduvest-showcase-step {
-    grid-template-columns: minmax(38rem, 54vw) minmax(23rem, 33vw);
-    grid-template-rows: 1fr;
-    justify-content: space-between;
-    gap: clamp(2rem, 4vw, 5.5rem);
-    transform: translateX(-4vw);
-  }
-
-  .eduvest-step-copy {
-    justify-self: end;
-  }
-
-  .eduvest-visual-composition {
-    justify-self: start;
-    width: min(54vw, 62rem);
-    transform: translateX(4.2vw);
-  }
-
-  .eduvest-screen-stage {
-    width: clamp(40rem, 47vw, 58rem);
-  }
-
-  .fashion-showcase-step {
-    grid-template-columns: minmax(38rem, 54vw) minmax(23rem, 33vw);
-    grid-template-rows: 1fr;
-    justify-content: space-between;
-    gap: clamp(2rem, 4vw, 5.5rem);
-    transform: translateX(-4vw);
-  }
-
-  .fashion-step-copy {
-    justify-self: end;
-  }
-
-  .fashion-visual-composition {
-    justify-self: start;
-    width: min(54vw, 62rem);
-    transform: translateX(4.2vw);
-  }
-
-  .fashion-screen-stage {
-    width: clamp(40rem, 47vw, 58rem);
-  }
-}
-
-@media (min-width: 80rem) {
-  .aksa-phone-stage {
-    width: clamp(27rem, 31vw, 30rem);
-  }
-
-  .aksa-screen-wall {
-    inset-inline: 5%;
-    bottom: 4%;
-  }
-
-  .eduvest-screen-stage {
-    width: clamp(45rem, 49vw, 62rem);
-  }
-
-  .fashion-screen-stage {
-    width: clamp(45rem, 49vw, 62rem);
-  }
+img {
+  max-width: 100%;
 }
 
 ::selection {
-  background: rgba(168, 85, 247, 0.42);
-  color: #ffffff;
+  background: rgba(109, 40, 217, 0.24);
+  color: #111111;
 }
 
 @media (prefers-reduced-motion: reduce) {
