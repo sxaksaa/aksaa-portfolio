@@ -7,9 +7,7 @@ import {
   Code2,
   Database,
   Download,
-  ExternalLink as ExternalLinkIcon,
   FileText,
-  GitBranch,
   GraduationCap,
   Mail,
   MapPin,
@@ -24,7 +22,6 @@ const contactLinks = {
   github: "https://github.com/sxaksaa",
   phone: "+6287784727890",
   cv: "/documents/cv-akbar-salahudin-purnomo.pdf",
-  deck: "/documents/portfolio-akbar-salahudin-purnomo.pptx",
 } as const;
 
 const highlights = [
@@ -160,6 +157,14 @@ function cx(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
+function GithubMark(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M12 2C6.48 2 2 6.58 2 12.25c0 4.53 2.87 8.37 6.84 9.73.5.1.68-.22.68-.5 0-.24-.01-1.05-.01-1.9-2.78.62-3.37-1.21-3.37-1.21-.45-1.19-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.67.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.04 1.03-2.76-.1-.26-.45-1.31.1-2.72 0 0 .84-.28 2.75 1.05A9.35 9.35 0 0 1 12 6.94c.85 0 1.71.12 2.51.34 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.46.1 2.72.64.72 1.03 1.64 1.03 2.76 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.38-.01 2.48-.01 2.82 0 .28.18.6.69.5A10.17 10.17 0 0 0 22 12.25C22 6.58 17.52 2 12 2Z" />
+    </svg>
+  );
+}
+
 function ActionLink({
   href,
   children,
@@ -169,11 +174,12 @@ function ActionLink({
 }: {
   href: string;
   children: React.ReactNode;
-  icon?: "external" | "download" | "mail";
+  icon?: "external" | "download" | "github" | "mail";
   variant?: "primary" | "secondary" | "dark";
   download?: boolean;
 }) {
-  const Icon = icon === "download" ? Download : icon === "mail" ? Mail : ArrowUpRight;
+  const Icon =
+    icon === "download" ? Download : icon === "github" ? GithubMark : icon === "mail" ? Mail : ArrowUpRight;
 
   return (
     <a
@@ -427,10 +433,7 @@ export function CinematicScrollExperience() {
               <ActionLink href={contactLinks.cv} icon="download" download>
                 Download CV
               </ActionLink>
-              <ActionLink href={contactLinks.deck} icon="download" variant="secondary" download>
-                Portfolio Deck
-              </ActionLink>
-              <ActionLink href={contactLinks.github} variant="secondary">
+              <ActionLink href={contactLinks.github} icon="github" variant="secondary">
                 GitHub
               </ActionLink>
             </div>
@@ -566,7 +569,7 @@ export function CinematicScrollExperience() {
               <ActionLink href={contactLinks.email} icon="mail">
                 Email saya
               </ActionLink>
-              <ActionLink href={contactLinks.github} variant="secondary">
+              <ActionLink href={contactLinks.github} icon="github" variant="secondary">
                 GitHub
               </ActionLink>
             </div>
@@ -575,12 +578,8 @@ export function CinematicScrollExperience() {
                 <FileText aria-hidden="true" className="h-4 w-4" />
                 CV PDF
               </a>
-              <a href={contactLinks.deck} download className="inline-flex items-center gap-2 hover:text-violet-800">
-                <ExternalLinkIcon aria-hidden="true" className="h-4 w-4" />
-                Portfolio PPTX
-              </a>
               <a href={contactLinks.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-violet-800">
-                <GitBranch aria-hidden="true" className="h-4 w-4" />
+                <GithubMark aria-hidden="true" className="h-4 w-4" />
                 github.com/sxaksaa
               </a>
             </div>
