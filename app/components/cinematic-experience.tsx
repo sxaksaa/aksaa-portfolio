@@ -63,15 +63,14 @@ const projects = [
     url: "https://aksaxiterz.com",
     image: "/portfolio-deck/aksa-interface-flow.png",
     imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
-    summary:
-      "Storefront lisensi digital dengan katalog, paket lisensi, cart checkout, voucher, riwayat pesanan, multi-payment, dan auto-delivery license key.",
     bullets: [
       "Mengintegrasikan QRIS dari Pakasir, direct crypto address wallet, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
       "Membangun admin dashboard untuk produk, paket, stok lisensi, voucher, order, user, downloads, activity log, dan fulfillment license.",
-      "Menambahkan Google login untuk menyimpan lisensi di akun user.",
+      "Menambahkan Google login untuk autentikasi pengguna, dan menyimpan lisensi.",
       "Menambahkan HWID reset untuk mengurangi proses manual admin.",
     ],
-    proof: "Bagian menariknya ada di business logic: payment, inventory lisensi, customer self-service, dan admin operation berada dalam satu alur.",
+    proof:
+      "Storefront lisensi digital dengan katalog, paket lisensi, cart checkout, voucher, riwayat pesanan, multi-payment, dan auto-delivery license key.",
   },
   {
     number: "02",
@@ -80,14 +79,13 @@ const projects = [
     url: "https://eduvest-production.up.railway.app",
     image: "/portfolio-deck/eduvest-learning-journey.png",
     imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
-    summary:
-      "Platform pembelajaran investasi saham dan kripto dengan autentikasi multi-user, course library, course detail, dashboard pengguna, profile, dan news page.",
     bullets: [
       "Membuat enrollment, progress materi, next material tracking, dan alur belajar berbasis video.",
       "Menggunakan YouTube Embed API untuk menampilkan materi pembelajaran dalam platform.",
       "Menyediakan admin course management untuk membuat, memperbarui, dan menghapus course serta konten pembelajaran.",
     ],
-    proof: "Yang paling saya tekankan di project ini adalah alur belajar yang jelas, bukan hanya halaman landing.",
+    proof:
+      "Platform pembelajaran investasi saham dan kripto dengan autentikasi multi-user, course library, course detail, dashboard pengguna, profile, dan news page.",
   },
   {
     number: "03",
@@ -96,14 +94,13 @@ const projects = [
     url: "https://brl-fashion-production.up.railway.app",
     image: "/portfolio-deck/brl-commerce-flow.png",
     imageAlt: "BRL Fashion product detail, cart, and checkout screens",
-    summary:
-      "Website e-commerce fashion dengan katalog produk, detail produk, cart, buy now, checkout, proses pembayaran, dan admin panel.",
     bullets: [
       "Menerapkan validasi stok per ukuran pakaian dan pengurangan stok saat checkout.",
       "Mengelola cart dan order menggunakan database transaction agar proses pembelian lebih aman.",
       "Membangun admin dashboard untuk produk, kategori, ukuran, user, stok, dan data cart/order.",
     ],
-    proof: "Project ini memperlihatkan pemahaman alur commerce: katalog, keputusan beli, stok ukuran, cart, checkout, dan admin data.",
+    proof:
+      "Website e-commerce fashion dengan katalog produk, detail produk, cart, buy now, checkout, proses pembayaran, dan admin panel.",
   },
 ] as const;
 
@@ -276,11 +273,8 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
         </div>
 
         <p className="mt-5 text-xl font-bold text-violet-800">{project.subtitle}</p>
-        <p className="mt-4 max-w-2xl text-base leading-7 text-neutral-700">
-          {project.summary}
-        </p>
 
-        <ul className="mt-6 space-y-3">
+        <ul className="mt-5 space-y-3">
           {project.bullets.map((item) => (
             <li key={item} className="flex gap-3 text-sm leading-6 text-neutral-700">
               <BadgeCheck
