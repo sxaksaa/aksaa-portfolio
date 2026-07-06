@@ -20,7 +20,8 @@ const contactLinks = {
   email:
     "mailto:akbarsalahudinpurnomo@gmail.com?subject=Kesempatan%20Internship%20-%20Akbar%20Salahudin%20Purnomo",
   github: "https://github.com/sxaksaa",
-  phone: "+6287784727890",
+  phone: "+62 877 8472 7890",
+  whatsapp: "https://wa.me/+6287784727890",
   cv: "/documents/cv-akbar-salahudin-purnomo.pdf",
 } as const;
 
@@ -168,12 +169,20 @@ function ActionLink({
 }: {
   href: string;
   children: React.ReactNode;
-  icon?: "external" | "download" | "github" | "mail";
+  icon?: "external" | "download" | "github" | "mail" | "phone";
   variant?: "primary" | "secondary" | "dark";
   download?: boolean;
 }) {
   const Icon =
-    icon === "download" ? Download : icon === "github" ? GithubMark : icon === "mail" ? Mail : ArrowUpRight;
+    icon === "download"
+      ? Download
+      : icon === "github"
+        ? GithubMark
+        : icon === "mail"
+          ? Mail
+          : icon === "phone"
+            ? Phone
+            : ArrowUpRight;
 
   return (
     <a
@@ -413,8 +422,8 @@ export function CinematicScrollExperience() {
               <ActionLink href={contactLinks.cv} icon="download" download>
                 Download CV
               </ActionLink>
-              <ActionLink href={contactLinks.github} icon="github" variant="secondary">
-                GitHub
+              <ActionLink href={contactLinks.whatsapp} icon="phone" variant="secondary">
+                WhatsApp
               </ActionLink>
             </div>
 
@@ -435,11 +444,13 @@ export function CinematicScrollExperience() {
                 <span className="min-w-0 whitespace-nowrap">akbarsalahudinpurnomo@gmail.com</span>
               </a>
               <a
-                href={contactLinks.phone}
+                href={contactLinks.whatsapp}
+                target="_blank"
+                rel="noreferrer"
                 className="flex min-w-0 items-start gap-2 hover:text-violet-800"
               >
                 <Phone aria-hidden="true" className="h-4 w-4 shrink-0 text-violet-700" />
-                <span>+62 877 8472 7890</span>
+                <span>{contactLinks.phone}</span>
               </a>
             </div>
           </div>
@@ -545,15 +556,20 @@ export function CinematicScrollExperience() {
               Laravel, backend, database, REST API, dan pengembangan aplikasi web
               secara lebih profesional.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ActionLink href={contactLinks.email} icon="mail">
-                Email saya
-              </ActionLink>
-              <ActionLink href={contactLinks.github} icon="github" variant="secondary">
-                GitHub
-              </ActionLink>
-            </div>
             <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-neutral-600">
+              <a href={contactLinks.email} className="inline-flex items-center gap-2 hover:text-violet-800">
+                <Mail aria-hidden="true" className="h-4 w-4" />
+                akbarsalahudinpurnomo@gmail.com
+              </a>
+              <a
+                href={contactLinks.whatsapp}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 hover:text-violet-800"
+              >
+                <Phone aria-hidden="true" className="h-4 w-4" />
+                {contactLinks.phone}
+              </a>
               <a href={contactLinks.cv} download className="inline-flex items-center gap-2 hover:text-violet-800">
                 <FileText aria-hidden="true" className="h-4 w-4" />
                 CV PDF
