@@ -10,12 +10,11 @@ import {
   FileText,
   GitBranch,
   GraduationCap,
-  Layers,
   Mail,
   MapPin,
   Phone,
   ServerCog,
-  ShieldCheck,
+  Wrench,
 } from "lucide-react";
 
 const contactLinks = {
@@ -51,9 +50,9 @@ const skillGroups = [
     items: ["MySQL", "Relational database design"],
   },
   {
-    icon: ShieldCheck,
-    title: "Product flow",
-    items: ["Payment Integration", "Admin Dashboard", "UI/UX Design"],
+    icon: Wrench,
+    title: "Deployment",
+    items: ["GitHub", "Railway", "Vercel"],
   },
 ] as const;
 
@@ -389,22 +388,28 @@ export function CinematicScrollExperience() {
               </ActionLink>
             </div>
 
-            <div className="mt-10 grid gap-3 text-sm font-semibold text-neutral-700 sm:grid-cols-2">
-              <p className="flex items-center gap-2">
-                <MapPin aria-hidden="true" className="h-4 w-4 text-violet-700" />
-                Malang, Jawa Timur
+            <div className="mt-10 grid gap-x-8 gap-y-3 text-sm font-semibold leading-5 text-neutral-700 sm:grid-cols-[1.35fr_0.85fr]">
+              <p className="flex min-w-0 items-start gap-2">
+                <MapPin aria-hidden="true" className="h-4 w-4 shrink-0 text-violet-700" />
+                <span>Malang, Jawa Timur</span>
               </p>
-              <p className="flex items-center gap-2">
-                <GraduationCap aria-hidden="true" className="h-4 w-4 text-violet-700" />
-                D3 Teknologi Informasi, Universitas Brawijaya
+              <p className="flex min-w-0 items-start gap-2">
+                <GraduationCap aria-hidden="true" className="h-4 w-4 shrink-0 text-violet-700" />
+                <span>D3 Teknologi Informasi, Universitas Brawijaya</span>
               </p>
-              <a href={contactLinks.email} className="flex items-center gap-2 hover:text-violet-800">
-                <Mail aria-hidden="true" className="h-4 w-4 text-violet-700" />
-                akbarsalahudinpurnomo@gmail.com
+              <a
+                href={contactLinks.email}
+                className="flex min-w-0 items-start gap-2 hover:text-violet-800"
+              >
+                <Mail aria-hidden="true" className="h-4 w-4 shrink-0 text-violet-700" />
+                <span className="min-w-0 whitespace-nowrap">akbarsalahudinpurnomo@gmail.com</span>
               </a>
-              <a href={contactLinks.phone} className="flex items-center gap-2 hover:text-violet-800">
-                <Phone aria-hidden="true" className="h-4 w-4 text-violet-700" />
-                +62 877 8472 7890
+              <a
+                href={contactLinks.phone}
+                className="flex min-w-0 items-start gap-2 hover:text-violet-800"
+              >
+                <Phone aria-hidden="true" className="h-4 w-4 shrink-0 text-violet-700" />
+                <span>+62 877 8472 7890</span>
               </a>
             </div>
           </div>
@@ -450,7 +455,7 @@ export function CinematicScrollExperience() {
           <SectionHeading
             eyebrow="Keahlian Teknis"
             title="Stack yang biasa saya pakai di project."
-            body="Saya paling sering bekerja dengan Laravel dan MySQL, lalu merapikan frontend memakai HTML, CSS, JavaScript, dan Blade untuk halaman publik maupun admin dashboard."
+            body="Saya biasa membangun fitur web dengan Laravel, menyusun data di MySQL, lalu merapikan tampilan memakai Blade, HTML, CSS, dan JavaScript. Setelah semuanya siap, saya sinkronkan ke GitHub, lalu deploy ke Railway atau Vercel."
           />
 
           <div className="grid gap-3">
@@ -507,29 +512,7 @@ export function CinematicScrollExperience() {
         </div>
       </section>
 
-      <section className="border-y border-neutral-200 bg-[#f7f8fb]">
-        <div className="mx-auto grid max-w-7xl gap-8 px-5 py-16 sm:px-8 lg:grid-cols-[0.9fr_1.1fr] lg:px-10 lg:py-20">
-          <SectionHeading
-            eyebrow="Yang bisa saya bantu"
-            title="Ikut mengerjakan fitur web dari backend sampai tampilan."
-          />
-          <div className="grid gap-4 sm:grid-cols-3">
-            {[
-              ["Backend Laravel", "Membuat route, controller, validasi, query database, dan alur fitur."],
-              ["Admin dashboard", "Merapikan halaman kelola data agar mudah dipakai dan dicek ulang."],
-              ["Frontend dasar", "Menyusun tampilan responsif dengan HTML, CSS, JavaScript, dan Blade."],
-            ].map(([title, body]) => (
-              <article key={title} className="rounded-md border border-neutral-200 bg-white p-5">
-                <Layers aria-hidden="true" className="h-5 w-5 text-violet-700" />
-                <h3 className="mt-5 text-lg font-black">{title}</h3>
-                <p className="mt-3 text-sm leading-6 text-neutral-600">{body}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="contact" className="bg-white">
+      <section id="contact" className="border-t border-neutral-200 bg-[#f7f8fb]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_0.72fr] lg:px-10 lg:py-20">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-700">
