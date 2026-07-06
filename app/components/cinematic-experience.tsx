@@ -80,9 +80,10 @@ const projects = [
       },
     ],
     bullets: [
-      "Mengintegrasikan QRIS/Pakasir, direct crypto, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
+      "Mengintegrasikan QRIS dari Pakasir, direct crypto address wallet, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
       "Membangun admin dashboard untuk produk, paket, stok lisensi, voucher, order, user, downloads, activity log, dan fulfillment license.",
-      "Menambahkan Google login, public guides/downloads, dan HWID reset untuk mengurangi proses manual admin.",
+      "Menambahkan Google login untuk menyimpan lisensi di akun user.",
+      "Menambahkan HWID reset untuk mengurangi proses manual admin.",
     ],
     proof: "Bagian menariknya ada di business logic: payment, inventory lisensi, customer self-service, dan admin operation berada dalam satu alur.",
   },
@@ -540,10 +541,7 @@ export function CinematicScrollExperience() {
       <section id="contact" data-reveal="" className="border-t border-neutral-200 bg-[#f7f8fb]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_0.72fr] lg:px-10 lg:py-20">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-700">
-              Fullstack Developer - Paid Internship
-            </p>
-            <h2 className="mt-4 max-w-3xl text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl">
+            <h2 className="max-w-3xl text-4xl font-black leading-tight tracking-normal text-neutral-950 sm:text-6xl">
               Siap belajar di lingkungan developer profesional.
             </h2>
           </div>
