@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { ScrollReveal } from "./scroll-reveal";
 import {
   ArrowUpRight,
   BadgeCheck,
@@ -293,6 +294,7 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
   return (
     <article
       id={project.name.toLowerCase().replaceAll(" ", "-")}
+      data-reveal=""
       className="grid gap-8 border-t border-neutral-200 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-20"
     >
       <div>
@@ -378,6 +380,8 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
 export function CinematicScrollExperience() {
   return (
     <main className="min-h-screen bg-[#f7f8fb] text-neutral-950">
+      <ScrollReveal />
+
       <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white/92 backdrop-blur">
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
           <a href="#" className="text-sm font-black tracking-normal text-neutral-950">
@@ -463,7 +467,7 @@ export function CinematicScrollExperience() {
         </div>
       </section>
 
-      <section className="border-b border-neutral-200 bg-white">
+      <section data-reveal="" className="border-b border-neutral-200 bg-white">
         <div className="mx-auto grid max-w-7xl gap-3 px-5 py-6 sm:grid-cols-4 sm:px-8 lg:px-10">
           {highlights.map((item) => (
             <div key={item.label} className="border-l border-neutral-200 pl-4">
@@ -476,7 +480,11 @@ export function CinematicScrollExperience() {
         </div>
       </section>
 
-      <section id="skills" className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20">
+      <section
+        id="skills"
+        data-reveal=""
+        className="mx-auto max-w-7xl px-5 py-16 sm:px-8 lg:px-10 lg:py-20"
+      >
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <SectionHeading
             eyebrow="Keahlian Teknis"
@@ -516,7 +524,7 @@ export function CinematicScrollExperience() {
 
       <section id="projects" className="bg-white">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div className="py-16 lg:py-20">
+          <div data-reveal="" className="py-16 lg:py-20">
             <div className="flex items-center gap-3">
               <BriefcaseBusiness aria-hidden="true" className="h-5 w-5 text-violet-700" />
               <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
@@ -538,7 +546,7 @@ export function CinematicScrollExperience() {
         </div>
       </section>
 
-      <section id="contact" className="border-t border-neutral-200 bg-[#f7f8fb]">
+      <section id="contact" data-reveal="" className="border-t border-neutral-200 bg-[#f7f8fb]">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 py-16 sm:px-8 lg:grid-cols-[1fr_0.72fr] lg:px-10 lg:py-20">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.18em] text-violet-700">
