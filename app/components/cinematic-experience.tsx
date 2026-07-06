@@ -551,7 +551,7 @@ export function CinematicScrollExperience() {
           <div className="self-end">
             <p className="text-lg leading-8 text-neutral-700">
               Saya mencari kesempatan internship untuk mengembangkan kemampuan
-              Laravel, backend, database, REST API, dan pengembangan aplikasi web
+              pengembangan aplikasi web
               secara lebih profesional.
             </p>
             <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-neutral-600">
