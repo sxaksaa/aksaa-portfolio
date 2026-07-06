@@ -169,7 +169,7 @@ function ActionLink({
 }: {
   href: string;
   children: React.ReactNode;
-  icon?: "external" | "download" | "github" | "mail" | "phone";
+  icon?: "external" | "download" | "github" | "mail";
   variant?: "primary" | "secondary" | "dark";
   download?: boolean;
 }) {
@@ -180,9 +180,7 @@ function ActionLink({
         ? GithubMark
         : icon === "mail"
           ? Mail
-          : icon === "phone"
-            ? Phone
-            : ArrowUpRight;
+          : ArrowUpRight;
 
   return (
     <a
@@ -422,8 +420,8 @@ export function CinematicScrollExperience() {
               <ActionLink href={contactLinks.cv} icon="download" download>
                 Download CV
               </ActionLink>
-              <ActionLink href={contactLinks.whatsapp} icon="phone" variant="secondary">
-                WhatsApp
+              <ActionLink href={contactLinks.github} icon="github" variant="secondary">
+                GitHub
               </ActionLink>
             </div>
 
