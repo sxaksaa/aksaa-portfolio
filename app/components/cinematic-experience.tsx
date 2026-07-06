@@ -60,8 +60,6 @@ const projects = [
     name: "Aksa Xiterz",
     subtitle: "Digital License Storefront",
     url: "https://aksaxiterz.com",
-    role: "Full Stack Developer",
-    stack: ["Laravel", "PHP", "MySQL", "JavaScript", "QRIS/Pakasir", "Crypto Payment", "Binance Pay"],
     image: "/portfolio-deck/aksa-interface-flow.png",
     imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
     summary:
@@ -92,8 +90,6 @@ const projects = [
     name: "EduVest",
     subtitle: "Video Learning Platform",
     url: "https://eduvest-production.up.railway.app",
-    role: "Full Stack Developer",
-    stack: ["Laravel", "MySQL", "YouTube Embed API", "Course Progress", "Admin Course"],
     image: "/portfolio-deck/eduvest-learning-journey.png",
     imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
     summary:
@@ -124,8 +120,6 @@ const projects = [
     name: "BRL Fashion",
     subtitle: "Fashion E-Commerce",
     url: "https://brl-fashion-production.up.railway.app",
-    role: "Full Stack Developer",
-    stack: ["PHP", "Laravel", "Blade", "MySQL", "Cart", "Checkout"],
     image: "/portfolio-deck/brl-commerce-flow.png",
     imageAlt: "BRL Fashion product detail, cart, and checkout screens",
     summary:
@@ -301,17 +295,14 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
     <article
       id={project.name.toLowerCase().replaceAll(" ", "-")}
       data-reveal=""
-      className="grid gap-8 border-t border-neutral-200 py-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-20"
+      className="grid gap-8 border-t border-neutral-200 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-12 lg:py-14"
     >
       <div>
         <div className="flex items-center gap-4">
           <span className="grid h-11 w-11 place-items-center rounded-md bg-violet-700 font-mono text-sm font-black text-white">
             {project.number}
           </span>
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
-              {project.role}
-            </p>
+          <div className="min-w-0">
             <h3 className="text-3xl font-black tracking-normal text-neutral-950 sm:text-4xl">
               {project.name}
             </h3>
@@ -354,17 +345,6 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
             Yang bisa dilihat
           </p>
           <p className="mt-2 text-sm leading-6 text-neutral-800">{project.proof}</p>
-        </div>
-
-        <div className="mt-7 flex flex-wrap gap-2">
-          {project.stack.map((item) => (
-            <span
-              key={item}
-              className="rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs font-bold text-neutral-800"
-            >
-              {item}
-            </span>
-          ))}
         </div>
 
         <div className="mt-8">
@@ -527,7 +507,7 @@ export function CinematicScrollExperience() {
 
       <section id="projects" className="bg-white">
         <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
-          <div data-reveal="" className="py-16 lg:py-20">
+          <div data-reveal="" className="pt-14 pb-8 lg:pt-16 lg:pb-10">
             <div className="flex items-center gap-3">
               <BriefcaseBusiness aria-hidden="true" className="h-5 w-5 text-violet-700" />
               <p className="text-xs font-black uppercase tracking-[0.18em] text-neutral-500">
