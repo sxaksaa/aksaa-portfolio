@@ -535,8 +535,7 @@ export function CinematicScrollExperience() {
               Tiga project utama yang paling relevan.
             </h2>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-neutral-600">
-              Beberapa project yang paling enak dilihat dulu: storefront lisensi
-              digital, video learning platform, dan e-commerce fashion.
+              Beberapa project favorit saya:
             </p>
           </div>
 
