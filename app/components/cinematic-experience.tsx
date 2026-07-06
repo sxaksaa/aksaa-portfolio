@@ -246,6 +246,49 @@ function SectionHeading({
   );
 }
 
+function WavyLineField() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none relative min-h-[300px] overflow-hidden sm:min-h-[360px] lg:min-h-[560px]"
+    >
+      <svg
+        className="absolute inset-[-8%] h-[116%] w-[116%]"
+        viewBox="0 0 760 620"
+        preserveAspectRatio="none"
+      >
+        <g
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="stroke-violet-300/70"
+          strokeWidth="2.2"
+        >
+          <path d="M-20 52 C86 18 165 72 250 43 C358 6 474 38 556 19 C635 1 691 13 790 -18" />
+          <path d="M-28 92 C74 53 150 114 250 81 C360 45 458 72 560 45 C650 21 710 38 792 8" />
+          <path d="M-18 136 C84 88 170 157 270 124 C380 87 456 116 566 82 C654 55 716 70 796 42" />
+          <path d="M-20 184 C72 126 178 203 286 165 C390 129 470 164 574 121 C650 89 720 100 798 72" />
+          <path d="M-12 232 C72 169 174 250 298 207 C398 172 478 210 586 161 C660 128 725 140 800 106" />
+          <path d="M0 282 C84 210 188 296 314 250 C414 214 486 255 592 203 C670 164 730 178 798 142" />
+          <path d="M8 336 C98 258 205 346 330 294 C430 252 504 302 604 246 C676 206 740 214 800 184" />
+          <path d="M22 390 C112 306 218 394 346 338 C442 296 516 350 612 290 C690 241 746 260 798 230" />
+          <path d="M36 446 C122 358 232 448 362 388 C460 342 530 404 628 338 C700 289 754 310 804 280" />
+          <path d="M48 502 C140 413 250 504 382 436 C475 388 548 458 642 389 C716 333 762 364 806 338" />
+          <path d="M62 560 C154 466 270 558 402 490 C498 440 560 514 656 443 C730 388 774 418 808 394" />
+
+          <path d="M120 -30 C160 58 102 146 146 232 C190 319 122 390 168 480 C194 532 194 575 170 650" />
+          <path d="M190 -34 C242 60 178 152 220 236 C266 326 196 398 250 488 C286 548 276 590 244 654" />
+          <path d="M270 -36 C326 56 258 146 298 236 C340 330 276 394 334 488 C374 554 364 596 330 658" />
+          <path d="M355 -38 C406 48 346 138 386 230 C426 326 370 396 430 486 C474 552 464 594 428 654" />
+          <path d="M438 -36 C488 44 432 128 476 222 C520 319 470 394 530 480 C578 550 570 596 532 652" />
+          <path d="M520 -34 C572 42 520 122 564 212 C614 314 566 390 626 474 C676 544 672 596 638 650" />
+        </g>
+      </svg>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(247,248,251,0)_0%,rgba(247,248,251,0.22)_62%,rgba(247,248,251,0.82)_100%)]" />
+    </div>
+  );
+}
+
 function ProjectCase({ project }: { project: (typeof projects)[number] }) {
   return (
     <article
@@ -414,25 +457,8 @@ export function CinematicScrollExperience() {
             </div>
           </div>
 
-          <div className="grid gap-4">
-            <MediaFrame
-              src="/portfolio-deck/aksa-interface-flow.png"
-              alt="Aksa Xiterz interface flow preview"
-              priority
-              className="aspect-[16/10]"
-            />
-            <div className="grid gap-4 sm:grid-cols-2">
-              <MediaFrame
-                src="/portfolio-deck/eduvest-learning-journey.png"
-                alt="EduVest learning journey preview"
-                className="aspect-[16/9]"
-              />
-              <MediaFrame
-                src="/portfolio-deck/brl-commerce-flow.png"
-                alt="BRL Fashion commerce flow preview"
-                className="aspect-[16/9]"
-              />
-            </div>
+          <div className="relative lg:pl-8">
+            <WavyLineField />
           </div>
         </div>
       </section>
