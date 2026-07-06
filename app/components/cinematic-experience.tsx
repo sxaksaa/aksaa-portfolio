@@ -65,20 +65,6 @@ const projects = [
     imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
     summary:
       "Storefront lisensi digital dengan katalog, paket lisensi, cart checkout, voucher, riwayat pesanan, multi-payment, dan auto-delivery license key.",
-    story: [
-      {
-        label: "Tantangan",
-        text: "Pembelian lisensi digital butuh payment, stok key, dan pengiriman yang tetap sinkron.",
-      },
-      {
-        label: "Solusi",
-        text: "Checkout multi-payment dihubungkan ke status order, stok lisensi, dan auto-delivery.",
-      },
-      {
-        label: "Yang saya buat",
-        text: "Storefront, checkout, admin inventory/order, voucher, verification, dan fulfillment.",
-      },
-    ],
     bullets: [
       "Mengintegrasikan QRIS dari Pakasir, direct crypto address wallet, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
       "Membangun admin dashboard untuk produk, paket, stok lisensi, voucher, order, user, downloads, activity log, dan fulfillment license.",
@@ -96,20 +82,6 @@ const projects = [
     imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
     summary:
       "Platform pembelajaran investasi saham dan kripto dengan autentikasi multi-user, course library, course detail, dashboard pengguna, profile, dan news page.",
-    story: [
-      {
-        label: "Tantangan",
-        text: "Materi investasi perlu alur belajar yang runtut agar pengguna tahu progresnya.",
-      },
-      {
-        label: "Solusi",
-        text: "Course dibuat dengan enrollment, progress materi, dan next material tracking.",
-      },
-      {
-        label: "Yang saya buat",
-        text: "Auth, course library, detail course, YouTube embed, dashboard, dan admin course.",
-      },
-    ],
     bullets: [
       "Membuat enrollment, progress materi, next material tracking, dan alur belajar berbasis video.",
       "Menggunakan YouTube Embed API untuk menampilkan materi pembelajaran dalam platform.",
@@ -126,20 +98,6 @@ const projects = [
     imageAlt: "BRL Fashion product detail, cart, and checkout screens",
     summary:
       "Website e-commerce fashion dengan katalog produk, detail produk, cart, buy now, checkout, proses pembayaran, dan admin panel.",
-    story: [
-      {
-        label: "Tantangan",
-        text: "Produk fashion punya stok per ukuran, jadi checkout harus mencegah pembelian stok kosong.",
-      },
-      {
-        label: "Solusi",
-        text: "Validasi ukuran dan pengurangan stok dibuat dalam alur cart dan checkout.",
-      },
-      {
-        label: "Yang saya buat",
-        text: "Katalog, product detail, cart, buy now, checkout, payment flow, dan admin data.",
-      },
-    ],
     bullets: [
       "Menerapkan validasi stok per ukuran pakaian dan pengurangan stok saat checkout.",
       "Mengelola cart dan order menggunakan database transaction agar proses pembelian lebih aman.",
@@ -322,20 +280,6 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
           {project.summary}
         </p>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          {project.story.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-md border border-neutral-200 bg-neutral-50 p-4"
-            >
-              <p className="text-[11px] font-black uppercase tracking-[0.14em] text-violet-700">
-                {item.label}
-              </p>
-              <p className="mt-2 text-sm leading-6 text-neutral-700">{item.text}</p>
-            </div>
-          ))}
-        </div>
-
         <ul className="mt-6 space-y-3">
           {project.bullets.map((item) => (
             <li key={item} className="flex gap-3 text-sm leading-6 text-neutral-700">
@@ -350,7 +294,7 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
 
         <div className="mt-7 border-l-4 border-violet-700 bg-violet-50 px-5 py-4">
           <p className="text-sm font-bold uppercase tracking-[0.14em] text-violet-900">
-            Yang bisa dilihat
+            Fokus project
           </p>
           <p className="mt-2 text-sm leading-6 text-neutral-800">{project.proof}</p>
         </div>
