@@ -61,7 +61,7 @@ const projects = [
     name: "Aksa Xiterz",
     subtitle: "Digital License Storefront",
     url: "https://aksaxiterz.com",
-    image: "/portfolio-deck/aksa-interface-flow.png",
+    image: "/portfolio-deck/aksa-laptop-preview.png",
     imageAlt: "Aksa Xiterz storefront, downloads, and public guides interface flow",
     bullets: [
       "Mengintegrasikan QRIS dari Pakasir, direct crypto address wallet, dan Binance Pay dengan order sync, pay again, cancel order, serta verifikasi pembayaran otomatis.",
@@ -77,7 +77,7 @@ const projects = [
     name: "EduVest",
     subtitle: "Video Learning Platform",
     url: "https://eduvest-production.up.railway.app",
-    image: "/portfolio-deck/eduvest-learning-journey.png",
+    image: "/portfolio-deck/eduvest-laptop-preview.png",
     imageAlt: "EduVest course list, news, FAQ, and learning journey screens",
     bullets: [
       "Membuat enrollment, progress materi, next material tracking, dan alur belajar berbasis video.",
@@ -92,7 +92,7 @@ const projects = [
     name: "BRL Fashion",
     subtitle: "Fashion E-Commerce",
     url: "https://brl-fashion-production.up.railway.app",
-    image: "/portfolio-deck/brl-commerce-flow.png",
+    image: "/portfolio-deck/brl-fashion-laptop-preview.png",
     imageAlt: "BRL Fashion product detail, cart, and checkout screens",
     bullets: [
       "Menerapkan validasi stok per ukuran pakaian dan pengurangan stok saat checkout.",
@@ -171,7 +171,7 @@ function MediaFrame({
   return (
     <figure
       className={cx(
-        "relative overflow-hidden rounded-md border border-neutral-200 bg-white shadow-[0_18px_55px_rgba(15,23,42,0.10)]",
+        "relative overflow-visible bg-transparent",
         className,
       )}
     >
@@ -253,7 +253,13 @@ function WavyLineField() {
   );
 }
 
-function ProjectCase({ project }: { project: (typeof projects)[number] }) {
+function ProjectCase({
+  project,
+  priority = false,
+}: {
+  project: (typeof projects)[number];
+  priority?: boolean;
+}) {
   return (
     <article
       id={project.name.toLowerCase().replaceAll(" ", "-")}
@@ -303,7 +309,8 @@ function ProjectCase({ project }: { project: (typeof projects)[number] }) {
       <MediaFrame
         src={project.image}
         alt={project.imageAlt}
-        className="aspect-[16/10] lg:aspect-[16/9]"
+        priority={priority}
+        className="aspect-[1311/793]"
       />
     </article>
   );
@@ -470,8 +477,8 @@ export function CinematicScrollExperience() {
             </p>
           </div>
 
-          {projects.map((project) => (
-            <ProjectCase key={project.name} project={project} />
+          {projects.map((project, index) => (
+            <ProjectCase key={project.name} project={project} priority={index === 0} />
           ))}
         </div>
       </section>
